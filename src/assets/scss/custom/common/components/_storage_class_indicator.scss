@@ -1,0 +1,53 @@
+.storage-class-colors {
+  .green-orange-red {
+    background: conic-gradient(green 0.0% 33.0%, orange 33.0% 66.0%, red 66.0%);
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+  }
+
+  .orange-red {
+    background: conic-gradient(red 0.0% 50.0%, orange 50.0%);
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+  }
+
+  .green-red {
+    background: conic-gradient(red 0.0% 50.0%, green 50.0%);
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+  }
+
+  .green-orange {
+    background: conic-gradient(orange 0.0% 50.0%, green 50.0%);
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+  }
+
+  .red {
+    background-color: red;
+    color: red;
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+  }
+
+  .orange {
+    background-color: orange;
+    color: orange;
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+  }
+
+  .green {
+    background-color: green;
+    color: green;
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+  }
+}

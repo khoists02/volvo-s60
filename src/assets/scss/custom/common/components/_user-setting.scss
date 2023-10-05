@@ -1,0 +1,74 @@
+.user-setting {
+  .left-block {
+    margin-right: $size-sm;
+
+    @include mobile-only {
+      width: 0;
+      margin-right: 0;
+    }
+
+    .tab {
+      padding: $size-xs $size-sm;
+
+      &.active {}
+    }
+  }
+}
+
+.permission-group {
+  min-height: 200px;
+
+  .left,
+  .right {
+    height: 100%;
+  }
+
+  @include mobile-only {
+    flex-direction: column;
+
+    .left {
+      margin-right: 0;
+      margin-left: 0;
+      flex: 1;
+    }
+  }
+}
+
+.account-setting {
+  @include tablet-only {
+    align-items: flex-start;
+  }
+
+  @include mobile-only {
+    align-items: flex-start;
+  }
+}
+
+.datetime-format-setting {
+  width: 400px;
+
+  @include mobile-only {
+    margin: $size-xs 0;
+    width: 100%;
+  }
+
+  @include tablet-only {
+    margin: $size-xs 0;
+    width: 100%;
+  }
+}
+
+
+.select-setting {
+  width: 500px;
+
+  @include mobile-only {
+    margin: $size-xs 0;
+    width: 100%;
+  }
+
+  @include tablet-only {
+    margin: $size-xs 0;
+    width: 100%;
+  }
+}

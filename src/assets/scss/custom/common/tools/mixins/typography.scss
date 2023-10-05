@@ -1,0 +1,17 @@
+@mixin overflow-ellipsis($lines: null) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @if ($lines) {
+    // won't work on some browsers
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+
+    /* autoprefixer: ignore next */
+    -webkit-box-orient: vertical;
+  }
+
+  @else {
+    white-space: nowrap;
+  }
+}

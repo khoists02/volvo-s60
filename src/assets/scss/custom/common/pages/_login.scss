@@ -1,0 +1,85 @@
+/* ------------------------------------------------------------------------------
+ *
+ *  # Login and related forms
+ *
+ *  Styles related to user login - logins, registration, password revovery, unlock etc.
+ *
+ * ---------------------------------------------------------------------------- */
+
+// Check if component is enabled
+@if $enable-login {
+
+  // Cover image
+  .login-cover {
+    background-size: cover;
+  }
+
+  // Form
+  .login-form {
+    width: 100%;
+
+    // Tabs
+    .nav-item {
+      @if $enable-rounded {
+        &:first-child .nav-link {
+          border-top-left-radius: $card-inner-border-radius;
+        }
+
+        &:last-child .nav-link {
+          border-top-right-radius: $card-inner-border-radius;
+        }
+      }
+    }
+
+    // Set a fixed width for desktop browsers
+    @include media-breakpoint-up(sm) {
+      width: $login-form-width;
+    }
+  }
+}
+
+.card-header:not([class*='bg-']):not([class*='alpha-']) {
+  background-color: transparent;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom-width: 0px;
+}
+
+.card-header:first-child {
+  border-radius: 0.125rem 0.125rem 0 0;
+}
+
+.header-elements-inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+
+  @include mobile-only {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .header-elements {
+      margin-top: $size-xs;
+    }
+  }
+}
+
+.header-elements-inline .header-elements {
+  display: flex !important;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.text-normal {
+  color: #ffffff;
+
+  &:hover {
+    color: #ffffff;
+  }
+}

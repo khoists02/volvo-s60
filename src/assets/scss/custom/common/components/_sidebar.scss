@@ -1,0 +1,66 @@
+$sidebar-light-xs-menu-bg: darken($sidebar-light-bg, 1%) !default;
+$sidebar-dark-xs-menu-bg: lighten($sidebar-dark-bg, 5%) !default;
+
+.sidebar-main {
+  .sidebar-content {
+
+    .fas,
+    .fab {
+      width: 14px;
+    }
+  }
+}
+
+// Base styles
+.sidebar-mobile-toggler {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: $navbar-border-width solid transparent;
+  border-bottom: $navbar-border-width solid transparent;
+
+  // Links
+  a {
+    padding: $navbar-link-padding-y $navigation-item-padding-x;
+    @include transition(all ease-in-out $component-transition-timer);
+
+    // Add proper spacing if first navbar has optional size
+    .navbar-lg:first-child~.page-content & {
+      padding: $navbar-link-padding-y-lg $navigation-item-padding-x;
+    }
+
+    .navbar-sm:first-child~.page-content & {
+      padding: $navbar-link-padding-y-sm $navigation-item-padding-x;
+    }
+  }
+}
+
+// Toggle secondary sidebar on mobile
+.sidebar-mobile-secondary {
+  .sidebar-secondary {
+    box-shadow: $sidebar-left-mobile-box-shadow;
+
+    &.sidebar-content {
+      left: 0;
+    }
+  }
+}
+
+.secondary-sidebar {
+  overflow-y: auto;
+
+  &.fixed-height {
+    height: calc(100vh - 197px);
+  }
+
+  &.study-sidebar {
+    max-height: calc(100vh - 197px);
+  }
+}
+
+.navbar-brand-xs {
+  display: inline-block;
+  min-width: $sidebar-mini-width;
+  margin-left: 0;
+  text-align: center;
+}

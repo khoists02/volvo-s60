@@ -1,0 +1,243 @@
+.nav {
+  [dir=rtl] & {
+    padding-right: 0;
+  }
+}
+
+.react-search-custom>div>div {
+  [dir=rtl] & {
+    text-align: right;
+  }
+}
+
+.pagination {
+  [dir=rtl] & {
+    padding-right: 0;
+    margin-left: 0;
+    flex-direction: row-reverse;
+  }
+}
+
+.pagination-pager .page-link {
+  [dir=rtl] & {
+    margin-right: $spacer;
+    margin-left: 0;
+    text-align: right;
+  }
+}
+
+.list-icons>*:not(:first-child) {
+  [dir=rtl] & {
+    margin-right: $list-icons-spacer;
+    margin-left: 0;
+  }
+}
+
+// stylelint-disable declaration-no-important
+
+// Margin and Padding
+
+@each $breakpoint in map-keys($grid-breakpoints) {
+  @include media-breakpoint-up($breakpoint) {
+    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+    @each $prop,
+    $abbrev in (margin: m, padding: p) {
+
+      @each $size,
+      $length in $spacers {
+
+        .#{$abbrev}r#{$infix}-#{$size},
+        .#{$abbrev}x#{$infix}-#{$size} {
+          [dir=rtl] & {
+            #{$prop}-left: $length !important;
+          }
+        }
+
+        .#{$abbrev}l#{$infix}-#{$size},
+        .#{$abbrev}x#{$infix}-#{$size} {
+          [dir=rtl] & {
+            #{$prop}-right: $length !important;
+          }
+        }
+      }
+    }
+
+    // Negative margins (e.g., where `.mb-n1` is negative version of `.mb-1`)
+    @each $size,
+    $length in $spacers {
+      @if $size !=0 {
+
+        .mr#{$infix}-n#{$size},
+        .mx#{$infix}-n#{$size} {
+          margin-left: -$length !important;
+        }
+
+        .ml#{$infix}-n#{$size},
+        .mx#{$infix}-n#{$size} {
+          margin-right: -$length !important;
+        }
+      }
+    }
+  }
+}
+
+.breadcrumb-item+.breadcrumb-item,
+a.breadcrumb-elements-item+.breadcrumb-item,
+.breadcrumb-item+a.breadcrumb-elements-item,
+a.breadcrumb-elements-item+a.breadcrumb-elements-item {
+  [dir=rtl] & {
+    padding-right: $breadcrumb-item-padding;
+    padding-left: 0;
+  }
+}
+
+.breadcrumb-item+.breadcrumb-item::before,
+a.breadcrumb-elements-item+.breadcrumb-item::before,
+.breadcrumb-item+a.breadcrumb-elements-item::before,
+a.breadcrumb-elements-item+a.breadcrumb-elements-item::before {
+  [dir=rtl] & {
+    padding-left: $breadcrumb-item-padding;
+    padding-right: 0;
+  }
+}
+
+.navbar-nav {
+  [dir=rtl] & {
+    padding-right: 0;
+  }
+}
+
+.navbar-header .navbar-brand {
+  [dir=rtl] & {
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+
+.text-lg-left {
+  [dir=rtl] & {
+    text-align: right !important;
+  }
+}
+
+.sidebar-expand-md.sidebar-main-resized {
+  [dir=rtl] & {
+    right: 0 !important;
+  }
+}
+
+.sidebar-expand-md.sidebar-main-resized+* {
+  [dir=rtl] & {
+    margin-right: 3.5rem;
+    margin-left: 0;
+  }
+}
+
+.nav-tabs>.nav-item,
+.card-title,
+.account-setting .label-setting,
+.select-setting,
+.react-select-search__menu-list,
+.table-inline th .no-wrap,
+.table-inline td span,
+.form-label,
+.right-block h5,
+.right-block h6,
+h1,
+h2,
+h3,
+h4,
+div,
+strong {
+  [dir=rtl] & {
+    text-align: right;
+  }
+}
+
+.user-setting .left-block {
+  [dir=rtl] & {
+    margin-right: 0;
+    margin-left: 15px;
+  }
+}
+
+@for $i from 1 through length($size-list) {
+  @media only screen and (max-width: $mq-tablet-max) {
+    .#{$tablet-prefix}-p-l-#{nth($size-list, $i)} {
+      [dir=rtl] & {
+        padding-right: nth($size-num, $i);
+      }
+    }
+
+    .#{$tablet-prefix}-p-r-#{nth($size-list, $i)} {
+      [dir=rtl] & {
+        padding-left: nth($size-num, $i);
+      }
+    }
+
+    .#{$tablet-prefix}-m-l-#{nth($size-list, $i)} {
+      [dir=rtl] & {
+        margin-right: nth($size-num, $i);
+      }
+    }
+
+    .#{$tablet-prefix}-m-r-#{nth($size-list, $i)} {
+      [dir=rtl] & {
+        margin-left: nth($size-num, $i);
+      }
+    }
+  }
+}
+
+@for $i from 1 through length($size-list) {
+  @media only screen and (max-width: $mq-mobile-max) {
+    .#{$mobile-prefix}-p-l-#{nth($size-list, $i)} {
+      [dir=rtl] & {
+        padding-right: nth($size-num, $i);
+      }
+
+    }
+
+    .#{$mobile-prefix}-p-r-#{nth($size-list, $i)} {
+      [dir=rtl] & {
+        padding-left: nth($size-num, $i);
+      }
+    }
+
+    .#{$mobile-prefix}-m-l-#{nth($size-list, $i)} {
+      [dir=rtl] & {
+        margin-right: nth($size-num, $i);
+      }
+    }
+
+    .#{$mobile-prefix}-m-r-#{nth($size-list, $i)} {
+      [dir=rtl] & {
+        margin-left: nth($size-num, $i);
+      }
+    }
+  }
+}
+
+.dropdown-item>i,
+.dropdown-item>img,
+.dropdown-header>i,
+.dropdown-header>img {
+  [dir=rtl] & {
+    margin-right: 0;
+    margin-left: 1rem;
+  }
+}
+
+.search-form-btn {
+  [dir=rtl] & {
+    flex-direction: row-reverse;
+  }
+}
+
+.dropdown-toggle:after {
+  [dir=rtl] & {
+    margin-left: 0;
+    margin-right: .46875rem;
+  }
+}

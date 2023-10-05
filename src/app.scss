@@ -1,0 +1,59 @@
+@charset "UTF-8";
+//Theme
+@import 'assets/scss/config';
+@import 'assets/scss/shared/utils/ll-functions';
+@import 'assets/scss/shared/utils/ll-mixins';
+@import 'assets/scss/shared/icons/icomoon/compile/styles';
+@import 'assets/scss/shared/icons/material/compile/styles';
+@import 'assets/scss/shared/icons/fontawesome/compile/styles';
+
+// Core variables and mixins
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+
+// Import template's variables
+@import 'assets/scss/layouts/layout_1/default/variables/variables-core';
+@import 'assets/scss/layouts/layout_1/default/variables/variables-custom';
+@import 'assets/scss/themes/default/bootstrap_limitless/mixins';
+
+@import '~bootstrap/scss/bootstrap';
+
+@import 'assets/scss/themes/default/bootstrap_limitless/reboot';
+@import 'assets/scss/themes/default/bootstrap_limitless/type';
+@import 'assets/scss/themes/default/bootstrap_limitless/code';
+@import 'assets/scss/themes/default/bootstrap_limitless/tables';
+@import 'assets/scss/themes/default/bootstrap_limitless/forms';
+@import 'assets/scss/themes/default/bootstrap_limitless/buttons';
+@import 'assets/scss/themes/default/bootstrap_limitless/dropdown';
+@import 'assets/scss/themes/default/bootstrap_limitless/button-group';
+@import 'assets/scss/themes/default/bootstrap_limitless/input-group';
+@import 'assets/scss/themes/default/bootstrap_limitless/custom-forms';
+@import 'assets/scss/themes/default/bootstrap_limitless/nav';
+@import 'assets/scss/themes/default/bootstrap_limitless/navbar';
+@import 'assets/scss/themes/default/bootstrap_limitless/card';
+@import 'assets/scss/themes/default/bootstrap_limitless/breadcrumb';
+@import 'assets/scss/themes/default/bootstrap_limitless/pagination';
+@import 'assets/scss/themes/default/bootstrap_limitless/badge';
+@import 'assets/scss/themes/default/bootstrap_limitless/alert';
+@import 'assets/scss/themes/default/bootstrap_limitless/progress';
+@import 'assets/scss/themes/default/bootstrap_limitless/media';
+@import 'assets/scss/themes/default/bootstrap_limitless/list-group';
+@import 'assets/scss/themes/default/bootstrap_limitless/close';
+@import 'assets/scss/themes/default/bootstrap_limitless/toasts';
+@import 'assets/scss/themes/default/bootstrap_limitless/modal';
+@import 'assets/scss/themes/default/bootstrap_limitless/tooltip';
+@import 'assets/scss/themes/default/bootstrap_limitless/popover';
+@import 'assets/scss/themes/default/bootstrap_limitless/utilities';
+
+@import 'assets/scss/themes/default/components/ui/header-elements';
+@import 'assets/scss/themes/default/components/misc/progress-buttons';
+
+@import 'assets/scss/layouts/layout_1/default/layout/content';
+@import 'assets/scss/layouts/layout_1/default/layout/header';
+@import 'assets/scss/layouts/layout_1/default/layout/sidebar';
+@import 'assets/scss/layouts/layout_1/default/layout/boxed';
+
+@import 'assets/scss/custom/custom';
+
+// @import 'assets/scss/custom/rtl.scss';

@@ -1,0 +1,46 @@
+.group-btn-sub-menu {
+  display: none;
+  position: absolute;
+
+  right: 0;
+  background: #f0f0f0;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  z-index: 999;
+  top: 40px;
+
+  &.size-sm {
+    min-width: 200px;
+  }
+
+  &.size-xl {
+    min-width: 250px;
+  }
+
+  .group-btn-content {
+    align-items: baseline;
+
+    &>div:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &.show {
+    display: block;
+  }
+}
+
+.dropdown-btn {
+  height: 16px !important;
+  margin-top: 5px !important;
+  padding: 0 !important;
+  background-color: white !important;
+
+  &hover {
+    color: white !important;
+  }
+
+  &:focus {
+    box-shadow: none !important;
+  }
+}

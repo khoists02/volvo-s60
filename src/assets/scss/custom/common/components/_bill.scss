@@ -1,0 +1,39 @@
+.estimate-total {
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+  padding: $size-xs 0;
+}
+
+.border-light-bottom {
+  border-bottom: 1px solid #d1d1d1;
+}
+
+.text-weight {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.text-near-weight {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.bill_header {
+  @include mobile-only {
+    flex-direction: column;
+
+    .bill_info {
+      flex-direction: column;
+      flex: 1;
+      margin-right: 0;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .action {
+      align-items: flex-start;
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+}

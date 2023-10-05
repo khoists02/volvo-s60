@@ -1,0 +1,31 @@
+.center-absolute {
+  @include center-absolute;
+}
+
+.center-x-absolute {
+  @include center-x-absolute;
+}
+
+.center-y-absolute {
+  @include center-y-absolute;
+}
+
+.fullwidth-absolute {
+  @include fullwidth-absolute;
+}
+
+.pos-r {
+  position: relative;
+}
+
+.pos-absolute {
+  position: absolute;
+}
+
+.center-absolute-login-form {
+  width: 100%;
+  position: absolute;
+  left: 50%;
+  top: 72%;
+  transform: translate(-50%, -80%);
+}

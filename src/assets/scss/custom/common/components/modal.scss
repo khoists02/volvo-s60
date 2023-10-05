@@ -1,0 +1,105 @@
+.confirm-modal {
+  .modal-content {
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 100%;
+    padding: 1.25em;
+    border-radius: 0.3125em;
+    background: #fff;
+    font-family: inherit;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+
+  .header-wrapper {
+    display: block;
+    position: relative;
+    max-width: 100%;
+    margin: 0 0 0.4em;
+    padding: 0;
+    color: #595959;
+    font-size: 1.875em;
+    font-weight: 600;
+    text-align: center;
+    text-transform: none;
+    word-wrap: break-word;
+  }
+
+  .modal-header {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .modal-body {
+    padding: 0;
+
+    p {
+      color: #545454;
+      font-size: 1.125em;
+      font-weight: 300;
+      line-height: normal;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  .modal-footer {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin: 1.25em auto 0;
+    z-index: 1;
+    padding: 0;
+    border-radius: 0;
+
+    .ladda-button,
+    .btn {
+      margin: 0.3125em;
+      padding: 0.625em 2em;
+      font-weight: 500;
+      box-shadow: none;
+      font-size: 1.0625em;
+      min-height: 50px;
+      min-width: 118px;
+    }
+  }
+
+  .swal2-icon.swal2-warning {
+    border-color: #facea8;
+    color: #f8bb86;
+  }
+
+  .swal2-icon {
+    position: relative;
+    justify-content: center;
+    width: 5em;
+    height: 5em;
+    margin: 1.25em auto 1.875em;
+    border: 0.25em solid transparent;
+    border-radius: 50%;
+    line-height: 5em;
+    cursor: default;
+    box-sizing: content-box;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    zoom: normal;
+
+    &.swal2-warning::before {
+      content: "!";
+      display: flex;
+      align-items: center;
+      height: 92%;
+      font-size: 3.75em;
+      justify-content: center;
+    }
+  }
+}
+
+.rocketchat-widget {
+  z-index: $zindex-sticky - 6 !important;
+}

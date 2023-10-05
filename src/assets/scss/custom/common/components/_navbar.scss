@@ -1,0 +1,87 @@
+// Misc
+// ------------------------------
+
+// Navbar header - allows to use custom background colors
+// in logo section. Uses negative margins.
+.navbar-header {
+  margin-top: -($navbar-border-width);
+  margin-bottom: -($navbar-border-width);
+  margin-left: -($navbar-padding-x);
+  // margin-right: $navbar-padding-x;
+  border-top: $navbar-border-width solid transparent;
+  border-bottom: $navbar-border-width solid transparent;
+
+  // Dark header
+  &.navbar-dark {
+    border-bottom-color: $navbar-dark-border-color;
+  }
+
+  // Light header
+  &.navbar-light {
+    border-bottom-color: $navbar-light-border-color;
+  }
+
+  // Logo
+  .navbar-brand {
+    margin-left: $navbar-padding-x;
+    margin-right: 0;
+  }
+
+  // When sidebar is collapsed
+  .sidebar-xs & {
+
+    // Hide original logo
+    .navbar-brand-md {
+      display: none;
+    }
+
+    // Show icon logo
+    .navbar-brand-xs {
+      display: inline-block;
+      min-width: $sidebar-mini-width;
+      margin-left: 0;
+      text-align: center;
+    }
+  }
+}
+
+.nav-tabs-bottom .nav-link.active:before {
+  background-color: #ec407a;
+}
+
+.nav-tabs-bottom .nav-link:before {
+  height: 2px;
+  top: auto;
+  bottom: -1px;
+}
+
+.nav-mobile {
+  @include mobile-only {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    width: 18.75rem;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: -20.625rem;
+    box-sizing: content-box;
+    background-color: #252b36;
+    color: #fff;
+    z-index: 1040;
+    margin-bottom: 0;
+
+    &.nav-mobile-expand {
+      left: 0;
+      transition: left ease-in-out 0.15s, right ease-in-out 0.15s;
+      box-shadow: 0.25rem 0 1rem #00000059;
+    }
+
+    .nav-item {
+      .nav-link {
+        color: #ffffff;
+        border-right: none;
+      }
+    }
+  }
+}

@@ -1,0 +1,130 @@
+$color-border: #d1d1d1;
+$color-border-light: #d1d1d1;
+
+.border-left {
+  border-left: 1px solid $color-border;
+}
+
+.border-right {
+  border-right: 1px solid $color-border;
+}
+
+.border-top {
+  border-top: 1px solid $color-border;
+}
+
+.border-bottom {
+  border-bottom: 1px solid $color-border;
+}
+
+.border {
+  border: 1px solid $color-border;
+}
+
+.border-left-none {
+  border-left: 0 !important;
+}
+
+.border-right-none {
+  border-right: 0 !important;
+}
+
+.border-top-none {
+  border-top: 0 !important;
+}
+
+.border-bottom-none {
+  border-bottom: 0 !important;
+}
+
+.border-none {
+  border: 0 !important;
+}
+
+@media only screen and (max-width: $mq-tablet-max) {
+  .#{$tablet-prefix}-border-left {
+    border-left: 1px solid $color-border;
+  }
+
+  .#{$tablet-prefix}-border-right {
+    border-right: 1px solid $color-border;
+  }
+
+  .#{$tablet-prefix}-border-top {
+    border-top: 1px solid $color-border;
+  }
+
+  .#{$tablet-prefix}-border-bottom {
+    border-bottom: 1px solid $color-border;
+  }
+
+  .#{$tablet-prefix}-border {
+    border: 1px solid $color-border;
+  }
+
+  .#{$tablet-prefix}-border-left-none {
+    border-left: 0 !important;
+  }
+
+  .#{$tablet-prefix}-border-right-none {
+    border-right: 0 !important;
+  }
+
+  .#{$tablet-prefix}-border-top-none {
+    border-top: 0 !important;
+  }
+
+  .#{$tablet-prefix}-border-bottom-none {
+    border-bottom: 0 !important;
+  }
+
+  .#{$tablet-prefix}-border-none {
+    border: 0 !important;
+  }
+}
+
+@media only screen and (max-width: $mq-mobile-max) {
+  .#{$mobile-prefix}-border-left {
+    border-left: 1px solid $color-border;
+  }
+
+  .#{$mobile-prefix}-border-right {
+    border-right: 1px solid $color-border;
+  }
+
+  .#{$mobile-prefix}-border-top {
+    border-top: 1px solid $color-border;
+  }
+
+  .#{$mobile-prefix}-border-bottom {
+    border-bottom: 1px solid $color-border;
+  }
+
+  .#{$mobile-prefix}-border {
+    border: 1px solid $color-border;
+  }
+
+  .#{$mobile-prefix}-border-left-none {
+    border-left: 0 !important;
+  }
+
+  .#{$mobile-prefix}-border-right-none {
+    border-right: 0 !important;
+  }
+
+  .#{$mobile-prefix}-border-top-none {
+    border-top: 0 !important;
+  }
+
+  .#{$mobile-prefix}-border-bottom-none {
+    border-bottom: 0 !important;
+  }
+
+  .#{$mobile-prefix}-border-none {
+    border: 0 !important;
+  }
+}
+
+.border-light {
+  border-color: $color-border-light;
+}

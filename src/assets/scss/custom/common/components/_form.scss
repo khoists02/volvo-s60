@@ -1,0 +1,121 @@
+.form-label {
+  @include mobile-only {
+    min-width: 0;
+  }
+}
+
+.form-label-card {
+  width: 215px;
+
+  @include mobile-only {
+    min-width: 0;
+  }
+}
+
+.form-label-small {
+  width: 150px;
+}
+
+.braintree-hosted-fields-invalid {
+  border: 1px solid #ed574a;
+}
+
+.form-label-authories {
+  width: 200px;
+}
+
+.PhoneInputInput {
+  display: block;
+  width: 100%;
+  height: calc(1.5715em + 0.875rem + 2px);
+  padding: 0.4375rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5715;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-content {
+  align-items: center;
+  width: 100%;
+}
+
+.active-group {
+  @include mobile-only {
+    flex-direction: column;
+
+    .form-content {
+      align-items: center;
+      width: 100%;
+    }
+  }
+}
+
+.form-error-consistent {
+  margin-left: 150px;
+  margin-top: -2px;
+
+  @include mobile-only {
+    margin-left: 0;
+  }
+}
+
+.search-form {
+  .bottom-line {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    margin-bottom: 30px;
+    border-bottom-width: 1px !important;
+  }
+
+  .advance-search {
+    padding-bottom: 20px;
+  }
+
+  .form-group-tight {
+    margin-bottom: $size-xxs;
+  }
+}
+
+.search-form-btn {
+  display: flex;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  .btn {
+    @media (max-width: 768px) {
+      margin-top: 10px;
+
+      &:nth-child(2) {
+        margin-left: 0 !important;
+      }
+    }
+
+    &:nth-child(2) {
+      margin-left: 10px;
+    }
+  }
+}
+
+.btn-fixed .ladda-label {
+  display: inline-block;
+  min-width: 100px;
+  width: auto;
+}
+
+.btn-fixed {
+  overflow: visible !important;
+}
+
+.form-label-activate {
+  width: 200px;
+}
+
+.btn-fixed-normal {
+  min-width: 95px;
+}

@@ -1,0 +1,71 @@
+.animated-sidebar {
+
+  &.fadeIn {
+    -webkit-animation: fadeIn 0.5s;
+    /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadeIn 0.5s;
+    /* Firefox < 16 */
+    -ms-animation: fadeIn 0.5s;
+    /* Internet Explorer */
+    -o-animation: fadeIn 0.5s;
+    /* Opera < 12.1 */
+    animation: fadeIn 0.5s;
+  }
+
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translate3d(250px, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+
+/* Firefox < 16 */
+@-moz-keyframes fadeIn {
+  from {
+    transform: translate3d(250px, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadeIn {
+  from {
+    transform: translate3d(250px, 0, 0);
+    transition: 0.25s all ease-in-out;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadeIn {
+  from {
+    transform: translate3d(250px, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadeIn {
+  from {
+    transform: translate3d(250px, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}

@@ -1,0 +1,59 @@
+// DISPLAY
+@media only screen and (min-width: $mq-desktop-min) {
+  .desk-hide {
+    display: none !important;
+  }
+}
+
+@media only screen and (min-width: $mq-tablet-min) and (max-width: $mq-tablet-max) {
+  .tabl-hide {
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: $mq-mobile-max) {
+  .mobi-hide {
+    display: none !important;
+  }
+}
+
+// UTILITIES
+@media only screen and (max-width: $mq-tablet-max) {
+  .tabl-d-block {
+    display: block;
+  }
+
+  .tabl-d-flex {
+    display: flex;
+  }
+}
+
+@media only screen and (max-width: $mq-mobile-max) {
+  .mobi-d-block {
+    display: block;
+  }
+
+  .mobi-d-flex {
+    display: flex;
+  }
+}
+
+.direction-cl-mobile {
+  @include mobile-only {
+    flex-direction: column;
+  }
+
+  @include tablet-only {
+    flex-direction: column;
+  }
+}
+
+.no-padding-mobile {
+  @include mobile-only {
+    padding: 0;
+  }
+
+  @include tablet-only {
+    padding: 0;
+  }
+}
