@@ -1388,3 +1388,34 @@ span.pid-no-wrap {
 .navbar-brand {
   width: 290px;
 }
+
+.w-32px {
+  width: 32px;
+}
+
+.h-32px {
+  height: 32px;
+}
+
+.rounded-circle {
+  border-radius: 50% !important;
+}
+
+.rounded-pill {
+  border-radius: 50rem !important;
+}
+
+.lh-1 {
+  line-height: 1 !important;
+}
+
+.ph-lg-size {
+  font-size: 3rem;
+}
+
+.list-buttons {
+
+  & > .btn {
+    margin-left: 5px;
+  }
+}
