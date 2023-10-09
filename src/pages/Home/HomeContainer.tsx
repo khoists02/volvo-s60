@@ -6,18 +6,19 @@ import BlendIcon from "../../parts/Icons/Bend";
 import StockHistory from "../../components/StockHistory";
 
 const HomeContainer: FC = () => {
+    const [tickerStr, setTickerStr] = useState("BLND");
     const [ticker, setTicker] = useState<ITickerInfo | undefined>(undefined);
     useEffect(() => {
         const getInfo = async () => {
           const rs = await axios.get("/info", {
             params: {
-              ticker: "BLND"
+              ticker: tickerStr
             }
           });
           setTicker({...rs.data, icon: <BlendIcon width={70} height={70} />});
         }
         getInfo();
-      }, []);
+      }, [tickerStr]);
     return (
         <div className="row">
             <div className="col-md-12">
@@ -26,7 +27,7 @@ const HomeContainer: FC = () => {
 
 
             <div className="col-md-12">
-                <StockHistory info={ticker} ticker="BLND" />
+                <StockHistory info={ticker} ticker={tickerStr} />
             </div>
         </div>
     )
