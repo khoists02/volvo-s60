@@ -2,6 +2,7 @@ import React, { FC, useEffect, useMemo, useState } from "react";
 import BlendIcon from "./Icons/Bend";
 import axios from "axios";
 import { ITickerInfo } from "../types/ticker";
+import { format } from "date-fns";
 
 export interface ITickerDropdown {
   name: string;
@@ -64,14 +65,16 @@ const PageHeader: FC = () => {
       return (1 - (parseFloat(ticker.currentPrice) - currentAcc.current / currentAcc.current));
     }
     return 0;
-  }, [ticker, currentAcc])
+  }, [ticker, currentAcc]);
+
+  const currentDate = new Date();
 
   return (
     <div className="page-header page-header-light shadow">
       <div className="page-header-content d-lg-flex">
         <div className="collapse d-lg-block my-lg-auto ms-lg-auto w-100" id="page_header">
           <div className="d-sm-flex align-items-center justify-content-between mb-3 mb-lg-0 ms-lg-3">
-            <div className="dropdown w-100 w-sm-auto">
+            <div className="dropdown  w-sm-auto">
               <span className="d-flex align-items-center text-body lh-1 dropdown-toggle py-sm-2">
                 {tickers[0]?.icon}
                 <div className="me-auto me-lg-1">
@@ -89,6 +92,10 @@ const PageHeader: FC = () => {
                   </div>
                 </span>
               </div>
+            </div>
+
+            <div className="flex-1 justify-content-center text-center">
+              <h5>{format(currentDate, "dd/MM/yyyy HH:mm:ss")}</h5>
             </div>
 
             <div className="d-flex align-items-center mb-3 mb-lg-0 justify-content-end" style={{ width: 250 }}>

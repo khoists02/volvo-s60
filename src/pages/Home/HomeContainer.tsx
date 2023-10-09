@@ -26,7 +26,7 @@ const HomeContainer: FC = () => {
 
 
             <div className="col-md-12">
-                <StockHistory ticker="BLND" />
+                <StockHistory info={ticker} ticker="BLND" />
             </div>
         </div>
     )
