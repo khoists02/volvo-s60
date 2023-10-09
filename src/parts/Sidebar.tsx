@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 const Sidebar: FC = () => {
   const path = useLocation();
   return (
-    <div className="sidebar sidebar-dark sidebar-main sidebar-expand-lg">
+    <div className="sidebar sidebar-dark sidebar-main sidebar-expand-lg sidebar-main-resized">
       <div className="sidebar-content">
         <div className="sidebar-section">
           <div className="nav nav-sidebar">

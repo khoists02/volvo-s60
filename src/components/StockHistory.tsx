@@ -176,7 +176,7 @@ const StockHistory: FC<IStockHistory> = ({
             return (sum / histories.length).toFixed(2);
         }
         return 0;
-    }, [histories])
+    }, [histories]);
 
     const max = useMemo(() => {
         if (histories.length > 0) {
@@ -184,7 +184,7 @@ const StockHistory: FC<IStockHistory> = ({
             return rs;
         }
         return 0;
-    }, [histories])
+    }, [histories]);
 
     const min = useMemo(() => {
         if (histories.length > 0) {
@@ -192,8 +192,7 @@ const StockHistory: FC<IStockHistory> = ({
             return rs;
         }
         return 0;
-    }, [histories])
-
+    }, [histories]);
 
     return (
         <div className="card">
@@ -264,7 +263,7 @@ const StockHistory: FC<IStockHistory> = ({
                     <table className="table text-nowrap">
                         <thead>
                             <tr>
-                                <th></th>
+                                <th style={{ width: 50 }}></th>
                                 <th>Date Time</th>
                                 <th>Open</th>
                                 <th>Close</th>
@@ -275,19 +274,18 @@ const StockHistory: FC<IStockHistory> = ({
                         </thead>
                         <tbody>
                             <tr className="table-light">
-                                <td className="d-flex align-items-center"
-                                    colSpan={7}>
+                                <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100">
                                     {title}
                                     {loading && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
                                     <span className="text-primary ml-2">Expected: {expectedTrated}</span>
                                     <span className="text-success ml-2">Max: {max.toFixed(2)}</span>
                                     <span className="text-danger ml-2">Min: {min.toFixed(2)}</span>
                                     <input placeholder={format(currentDate, "yyyy/MM/dd")} style={{ minWidth: 150 }} type="text" onChange={e => setSpecificDate(e.target.value)} className="form-control ml-2" />
-                                </td>
+                                </div>
                             </tr>
                     
                             <tr className="table-light">
-                                <td colSpan={7} className="d-flex">
+                                <div className="d-flex p-lr-sm p-tb-xs w-100">
                                     <div className="d-flex align-items-center mr-2 cursor-pointer"
                                         onClick={() => {
                                             let days = [...daysFilter];
@@ -353,22 +351,22 @@ const StockHistory: FC<IStockHistory> = ({
                                         <span>Fri</span>
                                         <input checked={daysFilter.includes("FRI")} type="checkbox" className="ml-1" />
                                     </div>
-                                </td>
+                                </div>
                             </tr>
 
                             {filterred.length === 0 && (
                                 <tr className="table-light bg-light">
-                                    <td className="d-flex align-items-center"
-                                        colSpan={7}>
+                                    <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100"
+                                        >
                                         No Data
-                                    </td>
+                                    </div>
                                 </tr>
                             )}
 
 
                             {filterred.map((h) => {
                                 return <tr style={buildBgTr(h)} key={format(new Date(h.date), "dd/MM/yyyy HH:mm:ss")}>
-                                    <td>{format(new Date(h.date), "EEEE")}</td>
+                                    <td style={{ width: 50 }}>{format(new Date(h.date), "EEEE")}</td>
                                     <td>{format(new Date(h.date), "dd/MM/yyyy HH:mm:ss")}</td>
                                     <td>{h.open.toFixed(2)}</td>
                                     <td>{h.close.toFixed(2)}</td>
