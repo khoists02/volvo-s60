@@ -14,7 +14,7 @@ const PageHeader: FC = () => {
             className="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto"
             data-bs-toggle="collapse"
           >
-            <i className="ph-caret-down collapsible-indicator ph-sm m-1"></i>
+            <i className="ph-light ph-caret-down collapsible-indicator ph-sm m-1"></i>
           </a>
         </div>
 
@@ -63,7 +63,7 @@ const PageHeader: FC = () => {
                 href="#"
                 className="btn btn-primary btn-icon w-32px h-32px rounded-pill"
               >
-                <i className="ph-plus"></i>
+                <i className="ph-light ph-plus"></i>
               </a>
 
               <div className="dropdown ms-2">

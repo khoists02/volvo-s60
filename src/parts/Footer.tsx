@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { Link } from "react-router-dom";
 
 const Footer: FC = () => {
   return (
@@ -13,16 +14,15 @@ const Footer: FC = () => {
 
         <ul className="nav">
           <li className="nav-item">
-            <a
-              href="https://kopyov.ticksy.com/"
+            <Link
+              to="https://kopyov.ticksy.com/"
               className="navbar-nav-link navbar-nav-link-icon rounded"
-              target="_blank"
             >
               <div className="d-flex align-items-center mx-md-1">
-                <i className="ph-lifebuoy"></i>
+                <i className="ph-light ph-lifebuoy"></i>
                 <span className="d-none d-md-inline-block ms-2">Support</span>
               </div>
-            </a>
+            </Link>
           </li>
         </ul>
       </div>
