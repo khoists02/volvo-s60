@@ -374,14 +374,7 @@ const StockHistory: FC<IStockHistory> = ({
                                     </div>
                                 </div>
 
-                                {filterred.length === 0 && (
-                                    <div className="table-light bg-light">
-                                        <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100"
-                                        >
-                                            No Data
-                                        </div>
-                                    </div>
-                                )}
+                                
                             </div>
                         )}
 
@@ -389,7 +382,10 @@ const StockHistory: FC<IStockHistory> = ({
 
                             {filterred.map((h) => {
                                 return <tr style={buildBgTr(h)} key={format(new Date(h.date), "dd/MM/yyyy HH:mm:ss")}>
-                                    <td style={{ width: 50 }}>{format(new Date(h.date), "EEEE")}</td>
+                                    <td style={{ width: 50 }} className="d-flex align-items-center">
+                                        <span className="mr-1"><i className="ph-light ph-arrow-fat-right cursor-pointer"></i></span>
+                                        <span>{format(new Date(h.date), "EEEE")}</span>
+                                    </td>
                                     <td>{format(new Date(h.date), "dd/MM/yyyy HH:mm:ss")}</td>
                                     <td>{h.open.toFixed(2)}</td>
                                     <td>{h.close.toFixed(2)}</td>
@@ -398,6 +394,14 @@ const StockHistory: FC<IStockHistory> = ({
                                     <td>{parseFloat(h.adjclose?.toString()).toFixed(2)}</td>
                                 </tr>
                             })}
+                            {filterred.length === 0 && (
+                                    <tr className="">
+                                        <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100"
+                                        >
+                                            No Data
+                                        </div>
+                                    </tr>
+                                )}
                         </tbody>
                     </table>
                 </div>
