@@ -3,6 +3,7 @@ import BlendIcon from "./Icons/Bend";
 import axios from "axios";
 import { ITickerInfo } from "../types/ticker";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 export interface ITickerDropdown {
   name: string;
@@ -12,12 +13,14 @@ export interface ITickerDropdown {
 }
 
 export interface ITickerAccount {
-  balance: number;
-  current: number;
+  balance: string;
+  current: string;
   ticker: string;
+  id?: string;
 }
 
 const PageHeader: FC = () => {
+  const navigate = useNavigate();
   const USDollar = new Intl.NumberFormat('en-US', {
     style: "currency",
     currency: "USD",
@@ -28,8 +31,6 @@ const PageHeader: FC = () => {
   useEffect(() => {
     const getSettings = async () => {
       const rs = await axios.get("/settings");
-      console.log(rs.data)
-
       if (rs.data.length) {
         setTickers([...rs.data.map((x: any) => {
           return {
@@ -61,8 +62,9 @@ const PageHeader: FC = () => {
 
 
   const totalPerc = useMemo(() => {
+    console.log(ticker)
     if (ticker && currentAcc) {
-      return (1 - (parseFloat(ticker.currentPrice) - currentAcc.current / currentAcc.current));
+      return ((parseFloat(ticker.currentPrice) - parseFloat(currentAcc.current)) / parseFloat(currentAcc.current));
     }
     return 0;
   }, [ticker, currentAcc]);
@@ -100,20 +102,26 @@ const PageHeader: FC = () => {
 
             <div className="d-flex align-items-center mb-3 mb-lg-0 justify-content-end" style={{ width: 250 }}>
               <div className="bg-opacity-10 text-primary lh-1 rounded-pill p-2">
-                <i className={`ph-light ph-lg-size ph-scales text-${totalPerc > 0 ? "danger": "success"}`}></i>
+                <i className={`ph-light ph-lg-size ph-scales text-${totalPerc < 0 ? "danger": "success"}`}></i>
               </div>
               <div className="ml-1 flex-1">
-                <h5 className="mb-0">{USDollar.format(currentAcc?.balance || 0)}</h5>
-                <div className="d-flex">
+                <h5 className="mb-0">{USDollar.format(parseFloat(currentAcc?.balance || "") || 0)}</h5>
+                <div className="d-flex align-items-center">
                   <span className="mb-0 d-flex">
-                    <span>{USDollar.format(currentAcc?.current || 0)}</span>
+                    <span>{USDollar.format(parseFloat(currentAcc?.current || "0") || 0)}</span>
                     <span className={`d-flex align-items-center text-danger ml-2`}>
                       <i className={`ph-light ph-arrow-down fs-base lh-base align-top`}></i>
-                      {totalPerc > 0 ? "-": "+"}{totalPerc*100}%
+                      {totalPerc > 0 ? "+": ""}{totalPerc*100}%
                     </span>
+                   
                   </span>
                 </div>
               </div>
+              <i className="ph-light ph-gear ml-1 cursor-pointer ph-sm-size" onClick={() => {
+                navigate("/settings");
+
+              }}></i>
+
             </div>
             {/* <div className="vr d-none d-sm-block flex-shrink-0 my-2 mx-3"></div>
 

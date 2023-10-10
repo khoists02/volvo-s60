@@ -6,6 +6,7 @@ import BlendIcon from "../../parts/Icons/Bend";
 import StockHistory from "../../components/StockHistory";
 
 const HomeContainer: FC = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [tickerStr, setTickerStr] = useState("BLND");
     const [ticker, setTicker] = useState<ITickerInfo | undefined>(undefined);
     useEffect(() => {

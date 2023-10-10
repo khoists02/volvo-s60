@@ -1,17 +1,18 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const Sidebar: FC = () => {
   const path = useLocation();
+  const [collapsed, setCollapsed] = useState(window.innerWidth > 1800 ? false: true);
   return (
-    <div className="sidebar sidebar-dark sidebar-main sidebar-expand-lg sidebar-main-resized">
+    <div className={`sidebar sidebar-dark sidebar-main sidebar-expand-lg ${collapsed ? "sidebar-main-resized" : ""}`}>
       <div className="sidebar-content">
         <div className="sidebar-section">
         <div className="sidebar-section-body d-flex justify-content-center">
 						<h5 className="sidebar-resize-hide flex-grow-1 my-auto">Navigation</h5>
 
 						<div>
-							<button type="button" className="btn btn-flat-white btn-icon btn-sm rounded-pill border-transparent sidebar-control sidebar-main-resize d-none d-lg-inline-flex text-white">
+							<button onClick={() => setCollapsed(!collapsed)} type="button" className="btn btn-flat-white btn-icon btn-sm rounded-pill border-transparent sidebar-control sidebar-main-resize d-none d-lg-inline-flex text-white">
 								<i className="ph-light ph-sm-size ph-arrows-left-right"></i>
 							</button>
 

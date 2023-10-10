@@ -12,7 +12,7 @@ const Navbar: FC = () => {
             type="button"
             className="navbar-toggler sidebar-mobile-main-toggle rounded-pill"
           >
-            <i className="ph-light ph-list"></i>
+            <i className="ph-light ph-sm-size ph-list"></i>
           </button>
         </div>
 

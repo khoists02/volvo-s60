@@ -1,7 +1,7 @@
 import React, { CSSProperties, FC, useCallback, useEffect, useMemo, useState } from "react";
 import { subWeeks, startOfWeek, addHours, format, subMonths, startOfMonth, startOfYear, isSameDay, isMonday, isTuesday, isWednesday, isThursday, isFriday } from "date-fns";
 import axios from "axios";
-import { FORMAT_DISPLAY, FORMAT_QUERY } from "../constants";
+import { FORMAT_DISPLAY, FORMAT_QUERY, FilterType } from "../constants";
 import { ITickerInfo } from "../types/ticker";
 
 export interface IStockHistory {
@@ -34,24 +34,25 @@ const StockHistory: FC<IStockHistory> = ({
     const [daysFilter, setDaysFilter] = useState(["MON", "TUES", "WED", "THUR", "FRI"]);
     const [isGrow, setIsGrow] = useState(false);
     const [loading, setLoading] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [compareType, setCompareType] = useState<"current" | "prev">("current");
     const [specificDay, setSpecificDate] = useState("");
-    const [selectedType, setSelectedType] = useState<"last-week" | "this-week" | "last-month" | "this-month" | "last-6-month" | "range" | "yearly">("last-week");
+    const [selectedType, setSelectedType] = useState<FilterType>(FilterType["this-week"]);
     useEffect(() => {
         const getHistoryByTicker = async () => {
             setLoading(true);
             let start = currentDate;
-            if (selectedType === "last-week") {
+            if (selectedType === FilterType["last-week"]) {
                 start = startDayOfWeek;
-            } else if (selectedType === "last-month") {
+            } else if (selectedType === FilterType["last-month"]) {
                 start = startLastMonth;
-            } else if (selectedType === "this-month") {
+            } else if (selectedType === FilterType["this-month"]) {
                 start = startOfMonth(currentDate)
-            } else if (selectedType === "this-week") {
+            } else if (selectedType === FilterType["this-week"]) {
                 start = startOfWeek(currentDate);
-            } else if (selectedType === "last-6-month") {
+            } else if (selectedType === FilterType["last-6-month"]) {
                 start = startOfMonth(subMonths(currentDate, 6));
-            } else if (selectedType === "yearly") {
+            } else if (selectedType === FilterType["yearly"]) {
                 start = startOfYear(currentDate);
             }
             const rs = await axios.get("/data", {
@@ -71,29 +72,29 @@ const StockHistory: FC<IStockHistory> = ({
 
     const title = useMemo(() => {
         switch (selectedType) {
-            case "last-week":
+            case FilterType["last-week"]:
                 const dateMonday = format(startDayOfWeek, FORMAT_DISPLAY);
                 const currentDateF = format(currentDate, FORMAT_DISPLAY);
                 return `Last Week ${dateMonday} - ${currentDateF}`
-            case "last-month":
+            case FilterType["last-month"]:
                 const s = format(startLastMonth, FORMAT_DISPLAY);
                 const e = format(currentDate, FORMAT_DISPLAY);
                 return `Last Month ${s} - ${e}`
-            case "this-month":
+            case FilterType["this-month"]:
                 const t = format(startOfMonth(currentDate), FORMAT_DISPLAY);
                 const d = format(currentDate, FORMAT_DISPLAY);
                 return `This Month ${t} - ${d}`
-            case "this-week":
+            case FilterType["this-week"]:
                 const c = format(startOfWeek(currentDate), FORMAT_DISPLAY);
                 const b = format(currentDate, FORMAT_DISPLAY);
                 return `This Week ${c} - ${b}`
 
-            case "last-6-month":
+            case FilterType["last-6-month"]:
                 const ch = format(startOfMonth(subMonths(currentDate, 6)), FORMAT_DISPLAY);
                 const bj = format(currentDate, FORMAT_DISPLAY);
                 return `Last 6 Month ${ch} - ${bj}`;
 
-            case "yearly":
+            case FilterType["yearly"]:
                 const hh = format(startOfYear(currentDate), FORMAT_DISPLAY);
                 const gg = format(currentDate, FORMAT_DISPLAY);
                 return `Last 6 Month ${hh} - ${gg}`
@@ -211,47 +212,47 @@ const StockHistory: FC<IStockHistory> = ({
                         </span>
                         <button
                             onClick={() => {
-                                setSelectedType("last-week");
+                                setSelectedType(FilterType["last-week"]);
                             }}
-                            className={`btn btn-${selectedType === "last-week" ? "primary" : "light"} d-flex align-item-center`}>
-                            <span>Last Week</span> {loading && selectedType === "last-week" && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
+                            className={`btn btn-${selectedType === FilterType["last-week"] ? "primary" : "light"} d-flex align-item-center`}>
+                            <span>Last Week</span> {loading && selectedType === FilterType["last-week"] && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
                         </button>
                         <button
                             onClick={() => {
-                                setSelectedType("last-month");
+                                setSelectedType(FilterType["last-month"]);
                             }}
-                            className={`btn btn-${selectedType === "last-month" ? "primary" : "light"} d-flex align-item-center`}>
-                            <span>Last Month</span> {loading && selectedType === "last-month" && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
+                            className={`btn btn-${selectedType === FilterType["last-month"] ? "primary" : "light"} d-flex align-item-center`}>
+                            <span>Last Month</span> {loading && selectedType === FilterType["last-month"] && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
                         </button>
                         <button
                             onClick={() => {
-                                setSelectedType("this-week");
+                                setSelectedType(FilterType["this-week"]);
                             }}
-                            className={`btn btn-${selectedType === "this-week" ? "primary" : "light"} d-flex align-item-center`}>
-                            <span>This Week</span> {loading && selectedType === "this-week" && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
+                            className={`btn btn-${selectedType === FilterType["this-week"] ? "primary" : "light"} d-flex align-item-center`}>
+                            <span>This Week</span> {loading && selectedType === FilterType["this-week"] && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
                         </button>
                         <button
                             onClick={() => {
-                                setSelectedType("this-month");
+                                setSelectedType(FilterType["this-month"]);
                             }}
-                            className={`btn btn-${selectedType === "this-month" ? "primary" : "light"} d-flex align-item-center`}>
-                            <span>This Month</span> {loading && selectedType === "this-month" && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
-                        </button>
-
-                        <button
-                            onClick={() => {
-                                setSelectedType("last-6-month");
-                            }}
-                            className={`btn btn-${selectedType === "last-6-month" ? "primary" : "light"} d-flex align-item-center`}>
-                            <span>Last 6 Month</span> {loading && selectedType === "last-6-month" && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
+                            className={`btn btn-${selectedType === FilterType["this-month"] ? "primary" : "light"} d-flex align-item-center`}>
+                            <span>This Month</span> {loading && selectedType === FilterType["this-month"] && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
                         </button>
 
                         <button
                             onClick={() => {
-                                setSelectedType("yearly");
+                                setSelectedType(FilterType["last-6-month"]);
                             }}
-                            className={`btn btn-${selectedType === "yearly" ? "primary" : "light"} d-flex align-item-center`}>
-                            <span>This Year</span> {loading && selectedType === "yearly" && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
+                            className={`btn btn-${selectedType === FilterType["last-6-month"] ? "primary" : "light"} d-flex align-item-center`}>
+                            <span>Last 6 Month</span> {loading && selectedType === FilterType["last-6-month"] && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
+                        </button>
+
+                        <button
+                            onClick={() => {
+                                setSelectedType(FilterType["yearly"]);
+                            }}
+                            className={`btn btn-${selectedType === FilterType["yearly"] ? "primary" : "light"} d-flex align-item-center`}>
+                            <span>This Year</span> {loading && selectedType === FilterType["yearly"] && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
                         </button>
                         <i className="ph-light ph-gear ml-1 cursor-pointer ph-sm-size"></i>
                     </div>
