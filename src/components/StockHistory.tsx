@@ -29,6 +29,7 @@ const StockHistory: FC<IStockHistory> = ({
     ticker,
     info,
 }) => {
+    const [showAdvanced, setShowAdvanced] = useState(true);
     const [histories, setHistories] = useState<IHistoryResponse[]>([]);
     const [filterred, setFilterred] = useState<IHistoryResponse[]>([]);
     const [daysFilter, setDaysFilter] = useState(["MON", "TUES", "WED", "THUR", "FRI"]);
@@ -139,18 +140,18 @@ const StockHistory: FC<IStockHistory> = ({
         }
 
         rs = rs.filter((x) =>
-                isInDay(new Date(x.date), "MON") ||
-                isInDay(new Date(x.date), "TUES") ||
-                isInDay(new Date(x.date), "WED") ||
-                isInDay(new Date(x.date), "THUR") ||
-                isInDay(new Date(x.date), "FRI")
-            )
+            isInDay(new Date(x.date), "MON") ||
+            isInDay(new Date(x.date), "TUES") ||
+            isInDay(new Date(x.date), "WED") ||
+            isInDay(new Date(x.date), "THUR") ||
+            isInDay(new Date(x.date), "FRI")
+        )
         if (specificDay)
             rs = rs.filter((x) => isSameDay(new Date(x.date), new Date(date)))
 
         setFilterred(rs);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isGrow, histories, info, specificDay, daysFilter]);
 
     const isInDay = (date: Date, type: string) => {
@@ -254,7 +255,9 @@ const StockHistory: FC<IStockHistory> = ({
                             className={`btn btn-${selectedType === FilterType["yearly"] ? "primary" : "light"} d-flex align-item-center`}>
                             <span>This Year</span> {loading && selectedType === FilterType["yearly"] && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
                         </button>
-                        <i className="ph-light ph-gear ml-1 cursor-pointer ph-sm-size"></i>
+                        <i className={`ph-light ph-gear ml-1 cursor-pointer ph-sm-size ${showAdvanced ? "text-success" : ""}`} onClick={() => {
+                            setShowAdvanced(!showAdvanced);
+                        }}></i>
                     </div>
                 </div>
 
@@ -264,7 +267,17 @@ const StockHistory: FC<IStockHistory> = ({
                     <table className="table text-nowrap">
                         <thead>
                             <tr>
-                                <th style={{ width: 50 }}></th>
+                                <th style={{ width: 50 }}>
+                                    {showAdvanced &&
+                                        <input
+                                            placeholder={format(currentDate, "yyyy/MM/dd")}
+                                            style={{ minWidth: 150 }}
+                                            type="text"
+                                            onChange={e => setSpecificDate(e.target.value)}
+                                            className="form-control" />
+                                    }
+                                    
+                                </th>
                                 <th>Date Time</th>
                                 <th>Open</th>
                                 <th>Close</th>
@@ -273,97 +286,106 @@ const StockHistory: FC<IStockHistory> = ({
                                 <th>Adj Close</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr className="table-light">
-                                <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100">
-                                    {title}
-                                    {loading && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
-                                    <span className="text-primary ml-2">Expected: {expectedTrated}</span>
-                                    <span className="text-success ml-2">Max: {max.toFixed(2)}</span>
-                                    <span className="text-danger ml-2">Min: {min.toFixed(2)}</span>
-                                    <input placeholder={format(currentDate, "yyyy/MM/dd")} style={{ minWidth: 150 }} type="text" onChange={e => setSpecificDate(e.target.value)} className="form-control ml-2" />
+                        {showAdvanced && (
+                            <div className="animated fadeInUp">
+                                <div className="table-light">
+                                    <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100">
+                                        {title}
+                                        {loading && <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>}
+
+                                    </div>
                                 </div>
-                            </tr>
-                    
-                            <tr className="table-light">
-                                <div className="d-flex p-lr-sm p-tb-xs w-100">
-                                    <div className="d-flex align-items-center mr-2 cursor-pointer"
-                                        onClick={() => {
+
+                                <div className="table-light">
+                                    <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100">
+                                        <span className="text-primary">Average: {expectedTrated}</span>
+                                        <span className="text-success ml-2">Max: {max.toFixed(2)}</span>
+                                        <span className="text-danger ml-2">Min: {min.toFixed(2)}</span>
+                                    </div>
+                                </div>
+
+                                <div className="table-light">
+                                    <div className="d-flex p-lr-sm p-tb-xs w-100">
+                                        <div className="d-flex align-items-center mr-2 cursor-pointer"
+                                            onClick={() => {
+                                                let days = [...daysFilter];
+                                                if (days.includes("MON")) {
+                                                    days = days.filter((x) => x !== "MON")
+                                                } else {
+                                                    days = ["MON", ...days];
+                                                }
+                                                setDaysFilter(days);
+                                            }}
+                                        >
+                                            <span>Monday</span>
+                                            <input checked={daysFilter.includes("MON")} type="checkbox" className="ml-1" />
+                                        </div>
+                                        <div className="d-flex align-items-center mr-2 cursor-pointer"
+                                            onClick={() => {
+                                                let days = [...daysFilter];
+                                                if (days.includes("TUES")) {
+                                                    days = days.filter((x) => x !== "TUES")
+                                                } else {
+                                                    days = ["TUES", ...days];
+                                                }
+                                                setDaysFilter(days);
+                                            }}>
+                                            <span>Tuesday</span>
+                                            <input checked={daysFilter.includes("TUES")} type="checkbox" className="ml-1" />
+                                        </div>
+                                        <div className="d-flex align-items-center mr-2 cursor-pointer"
+                                            onClick={() => {
+                                                let days = [...daysFilter];
+                                                if (days.includes("WED")) {
+                                                    days = days.filter((x) => x !== "WED")
+                                                } else {
+                                                    days = ["WED", ...days];
+                                                }
+                                                setDaysFilter(days);
+                                            }}>
+                                            <span>Wed</span>
+                                            <input checked={daysFilter.includes("WED")} type="checkbox" className="ml-1" />
+                                        </div>
+                                        <div className="d-flex align-items-center mr-2 cursor-pointer"
+                                            onClick={() => {
+                                                let days = [...daysFilter];
+                                                if (days.includes("THUR")) {
+                                                    days = days.filter((x) => x !== "THUR")
+                                                } else {
+                                                    days = ["THUR", ...days];
+                                                }
+                                                setDaysFilter(days);
+                                            }}>
+                                            <span>Thur</span>
+                                            <input checked={daysFilter.includes("THUR")} type="checkbox" className="ml-1" />
+                                        </div>
+                                        <div className="d-flex align-items-center mr-2 cursor-pointer" onClick={() => {
                                             let days = [...daysFilter];
-                                            if (days.includes("MON")) {
-                                                days = days.filter((x) => x !== "MON")
+                                            if (days.includes("FRI")) {
+                                                days = days.filter((x) => x !== "FRI")
                                             } else {
-                                                days = ["MON", ...days];
+                                                days = ["FRI", ...days];
                                             }
                                             setDaysFilter(days);
-                                        }}
-                                    >
-                                        <span>Monday</span>
-                                        <input checked={daysFilter.includes("MON")} type="checkbox" className="ml-1" />
-                                    </div>
-                                    <div className="d-flex align-items-center mr-2 cursor-pointer"
-                                    onClick={() => {
-                                        let days = [...daysFilter];
-                                        if (days.includes("TUES")) {
-                                            days = days.filter((x) => x !== "TUES")
-                                        } else {
-                                            days = ["TUES", ...days];
-                                        }
-                                        setDaysFilter(days);
-                                    }}>
-                                        <span>Tuesday</span>
-                                        <input checked={daysFilter.includes("TUES")} type="checkbox" className="ml-1" />
-                                    </div>
-                                    <div className="d-flex align-items-center mr-2 cursor-pointer"
-                                     onClick={() => {
-                                        let days = [...daysFilter];
-                                        if (days.includes("WED")) {
-                                            days = days.filter((x) => x !== "WED")
-                                        } else {
-                                            days = ["WED", ...days];
-                                        }
-                                        setDaysFilter(days);
-                                    }}>
-                                        <span>Wed</span>
-                                        <input checked={daysFilter.includes("WED")} type="checkbox" className="ml-1" />
-                                    </div>
-                                    <div className="d-flex align-items-center mr-2 cursor-pointer" 
-                                    onClick={() => {
-                                        let days = [...daysFilter];
-                                        if (days.includes("THUR")) {
-                                            days = days.filter((x) => x !== "THUR")
-                                        } else {
-                                            days = ["THUR", ...days];
-                                        }
-                                        setDaysFilter(days);
-                                    }}>
-                                        <span>Thur</span>
-                                        <input checked={daysFilter.includes("THUR")} type="checkbox" className="ml-1" />
-                                    </div>
-                                    <div className="d-flex align-items-center mr-2 cursor-pointer" onClick={() => {
-                                        let days = [...daysFilter];
-                                        if (days.includes("FRI")) {
-                                            days = days.filter((x) => x !== "FRI")
-                                        } else {
-                                            days = ["FRI", ...days];
-                                        }
-                                        setDaysFilter(days);
-                                    }}>
-                                        <span>Fri</span>
-                                        <input checked={daysFilter.includes("FRI")} type="checkbox" className="ml-1" />
+                                        }}>
+                                            <span>Fri</span>
+                                            <input checked={daysFilter.includes("FRI")} type="checkbox" className="ml-1" />
+                                        </div>
                                     </div>
                                 </div>
-                            </tr>
 
-                            {filterred.length === 0 && (
-                                <tr className="table-light bg-light">
-                                    <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100"
+                                {filterred.length === 0 && (
+                                    <div className="table-light bg-light">
+                                        <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100"
                                         >
-                                        No Data
+                                            No Data
+                                        </div>
                                     </div>
-                                </tr>
-                            )}
+                                )}
+                            </div>
+                        )}
 
+                        <tbody>
 
                             {filterred.map((h) => {
                                 return <tr style={buildBgTr(h)} key={format(new Date(h.date), "dd/MM/yyyy HH:mm:ss")}>

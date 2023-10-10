@@ -111,7 +111,7 @@ const PageHeader: FC = () => {
                     <span>{USDollar.format(parseFloat(currentAcc?.current || "0") || 0)}</span>
                     <span className={`d-flex align-items-center text-danger ml-2`}>
                       <i className={`ph-light ph-arrow-down fs-base lh-base align-top`}></i>
-                      {totalPerc > 0 ? "+": ""}{totalPerc*100}%
+                      {totalPerc > 0 ? "+": ""}{(totalPerc*100).toFixed(2)}%
                     </span>
                    
                   </span>
