@@ -1,5 +1,5 @@
 import React, { CSSProperties, FC, useCallback, useEffect, useMemo, useState } from "react";
-import { subWeeks, startOfWeek, addHours, format, subMonths, startOfMonth, startOfYear, isSameDay, isMonday, isTuesday, isWednesday, isThursday, isFriday } from "date-fns";
+import { subWeeks, startOfWeek, addHours, format, subMonths, startOfMonth, startOfYear, isSameDay, isMonday, isTuesday, isWednesday, isThursday, isFriday, addDays } from "date-fns";
 import axios from "axios";
 import { FORMAT_DISPLAY, FORMAT_QUERY, FilterType } from "../constants";
 import { ITickerInfo } from "../types/ticker";
@@ -32,7 +32,9 @@ const StockHistory: FC<IStockHistory> = ({
     const [showAdvanced, setShowAdvanced] = useState(true);
     const [histories, setHistories] = useState<IHistoryResponse[]>([]);
     const [filterred, setFilterred] = useState<IHistoryResponse[]>([]);
+    const [dailyData, setDailyData] = useState<IHistoryResponse[]>([]);
     const [daysFilter, setDaysFilter] = useState(["MON", "TUES", "WED", "THUR", "FRI"]);
+    const [selectedDate, setSelectedDate] = useState(format(new Date(), "yyyy/MM/dd"));
     const [isGrow, setIsGrow] = useState(false);
     const [loading, setLoading] = useState(false);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -40,6 +42,7 @@ const StockHistory: FC<IStockHistory> = ({
     const [specificDay, setSpecificDate] = useState("");
     const [selectedType, setSelectedType] = useState<FilterType>(FilterType["this-week"]);
     useEffect(() => {
+        setSelectedDate("");
         const getHistoryByTicker = async () => {
             setLoading(true);
             let start = currentDate;
@@ -196,6 +199,46 @@ const StockHistory: FC<IStockHistory> = ({
         return 0;
     }, [histories]);
 
+    useEffect(() => {
+        if (selectedDate) {
+            const getDaily = async () => {
+                const start = format(new Date(selectedDate), "yyyy-MM-dd");
+
+                const end = format(addDays(new Date(selectedDate), 1), "yyyy-MM-dd");
+                console.log({ start, end });
+                const res = await axios.get("/daily", {
+
+                    params: {
+                        ticker: "BLND",
+                        start,
+                        end,
+                        interval: "15m"
+                    }
+                })
+                console.log(res.data);
+                if (res.data) {
+                    const dailyRs: IHistoryResponse[] = [];
+                    res.data.forEach((r: any) => {
+                        dailyRs.push({
+                            open: r["Open"],
+                            date: new Date(selectedDate).getMilliseconds(),
+                            close: r["Close"],
+                            low: r["Low"],
+                            high: r["High"],
+                            ticker: "BLND",
+                            volume: 0,
+                            adjclose: 0
+                        })
+                    })
+                    setDailyData(dailyRs);
+                }
+            }
+
+            getDaily();
+
+        }
+    }, [selectedDate]);
+
     return (
         <div className="card">
             <div className="card-header">
@@ -267,7 +310,7 @@ const StockHistory: FC<IStockHistory> = ({
                     <table className="table text-nowrap">
                         <thead>
                             <tr>
-                                <th style={{ width: 50 }}>
+                                <th >
                                     {showAdvanced &&
                                         <input
                                             placeholder={format(currentDate, "yyyy/MM/dd")}
@@ -276,7 +319,7 @@ const StockHistory: FC<IStockHistory> = ({
                                             onChange={e => setSpecificDate(e.target.value)}
                                             className="form-control" />
                                     }
-                                    
+
                                 </th>
                                 <th>Date Time</th>
                                 <th>Open</th>
@@ -373,35 +416,61 @@ const StockHistory: FC<IStockHistory> = ({
                                         </div>
                                     </div>
                                 </div>
-
-                                
                             </div>
                         )}
-
                         <tbody>
-
                             {filterred.map((h) => {
-                                return <tr style={buildBgTr(h)} key={format(new Date(h.date), "dd/MM/yyyy HH:mm:ss")}>
-                                    <td style={{ width: 50 }} className="d-flex align-items-center">
-                                        <span className="mr-1"><i className="ph-light ph-arrow-fat-right cursor-pointer"></i></span>
-                                        <span>{format(new Date(h.date), "EEEE")}</span>
-                                    </td>
-                                    <td>{format(new Date(h.date), "dd/MM/yyyy HH:mm:ss")}</td>
-                                    <td>{h.open.toFixed(2)}</td>
-                                    <td>{h.close.toFixed(2)}</td>
-                                    <td>{h.high.toFixed(2)}</td>
-                                    <td>{h.low.toFixed(2)}</td>
-                                    <td>{parseFloat(h.adjclose?.toString()).toFixed(2)}</td>
-                                </tr>
+                                return (
+                                    <>
+                                        <tr style={buildBgTr(h)} className="cursor-pointer" key={format(new Date(h.date), "dd/MM/yyyy HH:mm:ss")} onClick={() => {
+                                            if (selectedDate === format(new Date(h.date), "yyyy/MM/dd")) {
+                                                setSelectedDate("");
+                                            } else {
+                                                setSelectedDate(format(new Date(h.date), "yyyy/MM/dd"))
+                                            }
+                                        }}>
+                                            <td className="d-flex align-items-center">
+                                                {(selectedType === FilterType["this-week"] || selectedType === FilterType["last-week"]) && (
+                                                    <span className="mr-1">
+
+                                                        <i className={`ph-light ph-arrow-fat-${selectedDate === format(new Date(h.date), "yyyy/MM/dd") ? "down text-secondary" : "right"} cursor-pointer`} >
+                                                        </i>
+                                                    </span>
+                                                )}
+
+                                                <span>{format(new Date(h.date), "EEEE")}</span>
+                                            </td>
+                                            <td>{format(new Date(h.date), "dd/MM/yyyy HH:mm:ss")}</td>
+                                            <td>{h.open.toFixed(2)}</td>
+                                            <td>{h.close.toFixed(2)}</td>
+                                            <td>{h.high.toFixed(2)}</td>
+                                            <td>{h.low.toFixed(2)}</td>
+                                            <td>{parseFloat(h.adjclose?.toString()).toFixed(2)}</td>
+                                        </tr>
+                                        {selectedDate === format(new Date(h.date), "yyyy/MM/dd") && (
+                                           dailyData.map((h) => {
+                                            return <tr key={h.date} className="tr-tree">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>{h.open.toFixed(2)}</td>
+                                                    <td>{h.close.toFixed(2)}</td>
+                                                    <td>{h.high.toFixed(2)}</td>
+                                                    <td>{h.low.toFixed(2)}</td>
+                                                    <th></th>
+                                                </tr>
+                                            })
+                                        )}
+                                    </>
+                                )
                             })}
                             {filterred.length === 0 && (
-                                    <tr className="">
-                                        <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100"
-                                        >
-                                            No Data
-                                        </div>
-                                    </tr>
-                                )}
+                                <tr className="">
+                                    <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100"
+                                    >
+                                        No Data
+                                    </div>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>

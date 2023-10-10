@@ -62,7 +62,6 @@ const PageHeader: FC = () => {
 
 
   const totalPerc = useMemo(() => {
-    console.log(ticker)
     if (ticker && currentAcc) {
       return ((parseFloat(ticker.currentPrice) - parseFloat(currentAcc.current)) / parseFloat(currentAcc.current));
     }

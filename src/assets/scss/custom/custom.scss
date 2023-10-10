@@ -1443,3 +1443,5 @@ span.pid-no-wrap {
   white-space: nowrap!important;
   border: 0!important;
 }
+
+.tr-tree:first-child, .tr-tree:last-child { margin-top: 10px; }
