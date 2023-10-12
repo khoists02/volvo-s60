@@ -13,7 +13,6 @@ const HistoriesDetails: FC = () => {
   let timer = useRef<NodeJS.Timer | null>(null);
   const [tickerStr, setTickerStr] = useState(id?.toUpperCase());
   const [count, setCount] = useState(0);
-  // const timer = Node.time
   const [ticker, setTicker] = useState<ITickerInfo | undefined>(undefined);
 
   const [loading, setLoading] = useState(false);

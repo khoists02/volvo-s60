@@ -1,12 +1,31 @@
 import axios from "axios";
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useRef } from "react";
 import { ITickerInfo } from "../../types/ticker";
 import { useNavigate } from "react-router-dom";
 
 const FavoriteContainer: FC = () => {
     const navigate = useNavigate();
+    const current = new Date();
+    const hour: number = current.getHours();
+    let timer = useRef<NodeJS.Timer | null>(null);
     const [loading, setLoading] = useState(false);
     const [favorites, setFavorites] = useState<ITickerInfo[]>([]);
+    useEffect(() => {
+        timer.current = setInterval(() => {
+            if (hour > 21) {
+                getList();
+            }
+        }, 1000 * 30); // 10s
+        const getList = async () => {
+            setLoading(true);
+            const rs = await axios.get("/favorites", { params: { ticker: "BLND" } });
+            setFavorites(rs.data.content || []);
+            setLoading(false);
+        }
+        return () => {
+            if (timer.current) clearInterval(timer.current)
+        }
+    }, [hour]);
     useEffect(() => {
 
         const getList = async () => {
@@ -42,6 +61,14 @@ const FavoriteContainer: FC = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {loading && (
+
+                                        <tr>
+                                            <td colSpan={4}>
+                                                <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
+                                            </td>
+                                        </tr>
+                                    )}
                                     {favorites.map((f) => {
                                         return (
                                             <tr
@@ -58,14 +85,7 @@ const FavoriteContainer: FC = () => {
                                             </tr>
                                         )
                                     })}
-                                    {loading && (
 
-                                        <tr>
-                                            <td colSpan={4}>
-                                                <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
-                                            </td>
-                                        </tr>
-                                    )}
                                 </tbody>
                             </table>
                         </div>
