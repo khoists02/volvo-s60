@@ -13,14 +13,15 @@ const HistoriesDetails: FC = () => {
   let timer = useRef<NodeJS.Timer | null>(null);
   const [tickerStr, setTickerStr] = useState(id?.toUpperCase());
   const [count, setCount] = useState(0);
+  const current = new Date();
+  const hour: number = current.getHours();
   const [ticker, setTicker] = useState<ITickerInfo | undefined>(undefined);
 
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     timer.current = setInterval(() => {
-      setCount(count + 1);
-      getInfo();
-    }, 1000 * 60 * 15)
+      if (hour>= 20) getInfo();
+    }, 1000 * 60 * 5)
     const getInfo = async () => {
       setLoading(true);
       const rs = await axios.get("/info", {

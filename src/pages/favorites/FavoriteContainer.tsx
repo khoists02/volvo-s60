@@ -12,10 +12,10 @@ const FavoriteContainer: FC = () => {
     const [favorites, setFavorites] = useState<ITickerInfo[]>([]);
     useEffect(() => {
         timer.current = setInterval(() => {
-            if (hour > 21) {
+            if (hour >= 21) {
                 getList();
             }
-        }, 1000 * 30); // 10s
+        }, 1000 * 30); // 10s, after 21h every day
         const getList = async () => {
             setLoading(true);
             const rs = await axios.get("/favorites", { params: { ticker: "BLND" } });
