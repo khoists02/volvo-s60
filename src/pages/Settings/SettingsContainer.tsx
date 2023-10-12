@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const SettingsContainer: FC = () => {
     const navigate = useNavigate();
-    const [currentAcc, setCurrentAcc] = useState<ITickerAccount>({ ticker: "", balance: "0", current: "0", id: "" });
+    const [currentAcc, setCurrentAcc] = useState<ITickerAccount>({ ticker: "", balance: "0", current: "0", id: "", count: 0 });
     useEffect(() => {
         const getCurrentAcc = async () => {
             const rs = await axios.get("/account", { params: { ticker: "BLND" } });
@@ -34,14 +34,20 @@ const SettingsContainer: FC = () => {
                     }} />
                 </div>
 
+                <div className="form-group row">
+                    <label htmlFor="count" className="col-md-2">Count</label>
+                    <input type="text" className="form-control col-md-5" readOnly value={currentAcc?.count}  />
+                </div>
+
                 <div className="form-group">
                     <button className="btn btn-primary" type="button" onClick={async () => {
                         await axios.put("/account", {
                             id: currentAcc.id,
                             balance: parseFloat(currentAcc.balance),
                             current: parseFloat(currentAcc.current),
+                            count: parseFloat(currentAcc.balance) / parseFloat(currentAcc.current)
                         });
-                        navigate("/home");
+                        navigate("/histories/" + currentAcc.ticker);
                     }}>Save</button>
                 </div>
             </div>

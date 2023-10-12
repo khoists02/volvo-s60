@@ -23,9 +23,16 @@ const Sidebar: FC = () => {
 					</div>
           <div className="nav nav-sidebar">
             <div className="nav-item">
-              <Link to="/home" className={`nav-link ${path.pathname === "/home" ? "active": ""}`}>
+              <Link to="/histories" className={`nav-link ${path.pathname === "/histories" ? "active": ""}`}>
                 <i className="ph-light ph-sm-size ph-swatches"></i>
-                <span>Home</span>
+                <span>Histories</span>
+              </Link>
+            </div>
+
+            <div className="nav-item">
+              <Link to="/favorites" className={`nav-link ${path.pathname === "/favorites" ? "active": ""}`}>
+                <i className="ph-light ph-sm-size ph-star"></i>
+                <span>Favorites</span>
               </Link>
             </div>
           </div>

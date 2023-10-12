@@ -16,7 +16,7 @@ function App() {
         <Sidebar />
         <div className="content-wrapper">
           <div className="content-inner">
-            {path.pathname === "/home" && <PageHeader />}
+            {path.pathname.includes("/histories/") && <PageHeader />}
             <div className="content pt-3">
               <AppRoutes />
             </div>

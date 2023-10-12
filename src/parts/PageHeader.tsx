@@ -2,8 +2,9 @@ import React, { FC, useEffect, useMemo, useState } from "react";
 import BlendIcon from "./Icons/Bend";
 import axios from "axios";
 import { ITickerInfo } from "../types/ticker";
-import { format } from "date-fns";
-import { useNavigate } from "react-router-dom";
+// import { format } from "date-fns";
+import { useLocation, useNavigate } from "react-router-dom";
+import CustomerDropdown, { ICustomer } from "../components/CustomerDropdown";
 
 export interface ITickerDropdown {
   name: string;
@@ -17,14 +18,25 @@ export interface ITickerAccount {
   current: string;
   ticker: string;
   id?: string;
+  count: number;
 }
 
 const PageHeader: FC = () => {
+  const options: ICustomer[] = [{
+    icon: <BlendIcon width={32} height={32} />,
+    ticker: "BLND",
+    name: "Blend Labs, Inc."
+  }];
+  const [selected, setSelected] = useState<ICustomer | undefined>(options.find((p) => p.ticker === "BLND"));
   const navigate = useNavigate();
+  const path = useLocation();
+  const pathArr = path.pathname.split("/").filter((p) => p !== "");
+  const tickerPr = pathArr[1] || "";
   const USDollar = new Intl.NumberFormat('en-US', {
     style: "currency",
     currency: "USD",
   });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [tickers, setTickers] = useState<ITickerDropdown[]>([]);
   const [currentAcc, setCurrentAcc] = useState<ITickerAccount | null>(null);
   const [ticker, setTicker] = useState<ITickerInfo | undefined>(undefined);
@@ -53,12 +65,15 @@ const PageHeader: FC = () => {
           ticker: "BLND"
         }
       });
-      setTicker({...rs.data, icon: <BlendIcon width={70} height={70} />});
+      setTicker({ ...rs.data, icon: <BlendIcon width={70} height={70} /> });
     }
-    getInfo();
-    getSettings();
-    getCurrentAcc();
-  }, []);
+    if (tickerPr) {
+      getInfo();
+      getSettings();
+      getCurrentAcc();
+    }
+
+  }, [tickerPr]);
 
 
   const totalPerc = useMemo(() => {
@@ -68,40 +83,18 @@ const PageHeader: FC = () => {
     return 0;
   }, [ticker, currentAcc]);
 
-  const currentDate = new Date();
-
   return (
     <div className="page-header page-header-light shadow">
       <div className="page-header-content d-lg-flex">
         <div className="collapse d-lg-block my-lg-auto ms-lg-auto w-100" id="page_header">
           <div className="d-sm-flex align-items-center justify-content-between mb-3 mb-lg-0 ms-lg-3">
-            <div className="dropdown  w-sm-auto">
-              <span className="d-flex align-items-center text-body lh-1 dropdown-toggle py-sm-2">
-                {tickers[0]?.icon}
-                <div className="me-auto me-lg-1">
-                  <div className="fs-sm text-muted mb-1">Customer</div>
-                  <div className="fw-semibold">{tickers[0]?.sub}</div>
-                </div>
-              </span>
-
-              <div className="dropdown-menu dropdown-menu-lg-end w-100 w-lg-auto wmin-300 wmin-sm-350 pt-0">
-                <span className="dropdown-item active py-2">
-                  <BlendIcon width={50} height={50} />
-                  <div>
-                    <div className="fw-semibold">Tesla Motors Inc</div>
-                    <div className="fs-sm text-muted">42 users</div>
-                  </div>
-                </span>
-              </div>
-            </div>
-
-            <div className="flex-1 justify-content-center text-center">
-              <h5>{format(currentDate, "dd/MM/yyyy HH:mm:ss")}</h5>
-            </div>
+            <CustomerDropdown options={options} selected={selected as ICustomer} onChange={(value: ICustomer) => {
+              setSelected(value);
+            }} />
 
             <div className="d-flex align-items-center mb-3 mb-lg-0 justify-content-end" style={{ width: 250 }}>
               <div className="bg-opacity-10 text-primary lh-1 rounded-pill p-2">
-                <i className={`ph-light ph-lg-size ph-scales text-${totalPerc < 0 ? "danger": "success"}`}></i>
+                <i className={`ph-light ph-lg-size ph-scales text-${totalPerc < 0 ? "danger" : "success"}`}></i>
               </div>
               <div className="ml-1 flex-1">
                 <h5 className="mb-0">{USDollar.format(parseFloat(currentAcc?.balance || "") || 0)}</h5>
@@ -110,9 +103,9 @@ const PageHeader: FC = () => {
                     <span>{USDollar.format(parseFloat(currentAcc?.current || "0") || 0)}</span>
                     <span className={`d-flex align-items-center text-danger ml-2`}>
                       <i className={`ph-light ph-arrow-down fs-base lh-base align-top`}></i>
-                      {totalPerc > 0 ? "+": ""}{(totalPerc*100).toFixed(2)}%
+                      {totalPerc > 0 ? "+" : ""}{(totalPerc * 100).toFixed(2)}%
                     </span>
-                   
+
                   </span>
                 </div>
               </div>

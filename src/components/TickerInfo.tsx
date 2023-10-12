@@ -2,8 +2,10 @@ import React, { FC, useEffect, useState } from "react";
 import { ITickerInfo } from "../types/ticker";
 import { convertToInternationalCurrencySystem } from "../helpers";
 
-const TickerInfo: FC<{ ticker?: ITickerInfo }> = ({
+const TickerInfo: FC<{ ticker?: ITickerInfo; reload?: () => void; loading: boolean }> = ({
     ticker,
+    loading,
+    reload,
 }) => {
     const currentDate = new Date();
     const [percent, setPercent] = useState<number>(0);
@@ -17,6 +19,7 @@ const TickerInfo: FC<{ ticker?: ITickerInfo }> = ({
         <div className="card">
             <div className="card-header d-sm-flex align-items-sm-center py-sm-0">
                 <h5 className="py-sm-2 my-sm-1">{ticker?.shortName}</h5>
+               {loading && ticker && <i className="ph-light ph-sm-size ph-spinner spinner"></i>} 
             </div>
 
             <div className="card-body d-lg-flex align-items-lg-center justify-content-lg-between flex-lg-wrap">
@@ -27,10 +30,9 @@ const TickerInfo: FC<{ ticker?: ITickerInfo }> = ({
                     <div className="ml-1">
                         <div className="d-flex align-items-center">
                             <h5 className="mb-0">{ticker?.currentPrice}</h5>
-
-                            <span className={`text-${percent >= 0 ? "success": "danger"} ml-2`}>
-                                <i className={`ph-light ph-arrow-${percent >= 0 ? "up": "down"} fs-base lh-base align-top`}></i>
-                                {percent >= 0 ? "+": "-"}{percent.toFixed(2)}%
+                            <i className={`ph-light ph-arrow-${percent >= 0 ? "up": "down"} text-${percent >= 0 ? "success": "danger"} fs-base lh-base align-top p-lr-xxs`}></i>
+                            <span className={`text-${percent >= 0 ? "success": "danger"}`}>
+                                {percent >= 0 ? "+": ""}{percent.toFixed(2)}%
                             </span>
                         </div>
 
@@ -38,9 +40,14 @@ const TickerInfo: FC<{ ticker?: ITickerInfo }> = ({
                             <span className="">Prev Close</span>
                             <span className="ml-2">{ticker?.previousClose}</span>
                         </div>
-                        <div>
+                        <div className="d-flex align-items-center">
                             <span className="d-inline-block bg-success rounded-pill p-1 mr-1"></span>
                             <span className="text-muted">{currentDate.toDateString()}</span>
+                            <span className="ml-1 cursor-pointer" onClick={() => {
+                                if (reload) reload();
+                            }}>
+                                <i className=" ph-light ph-sm-size ph-arrow-clockwise"></i>
+                                </span>
                         </div>
 
                     </div>

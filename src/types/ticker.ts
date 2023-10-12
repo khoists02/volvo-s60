@@ -3,6 +3,7 @@ export interface ITickerInfo {
     currentPrice: string;
     shortName: string;
     longName: string;
-    icon: React.ReactElement;
+    icon?: React.ReactElement;
     previousClose: string;
+    symbol?: string;
 }
