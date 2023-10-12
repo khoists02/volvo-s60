@@ -1428,23 +1428,28 @@ span.pid-no-wrap {
 
 .list-buttons {
 
-  & > .btn {
+  &>.btn {
     margin-left: 5px;
   }
 }
-.visually-hidden, .visually-hidden-focusable:not(:focus):not(:focus-within) {
-  position: absolute!important;
-  width: 1px!important;
-  height: 1px!important;
-  padding: 0!important;
-  margin: -1px!important;
-  overflow: hidden!important;
-  clip: rect(0,0,0,0)!important;
-  white-space: nowrap!important;
-  border: 0!important;
+
+.visually-hidden,
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
-.tr-tree:first-child, .tr-tree:last-child { margin-top: 10px; }
+.tr-tree:first-child,
+.tr-tree:last-child {
+  margin-top: 10px;
+}
 
 .spinner {
   display: inline-block;
@@ -1452,19 +1457,65 @@ span.pid-no-wrap {
   animation: rotation 1s linear infinite;
 }
 
-@-moz-keyframes rotation { 
-  100% { -moz-transform: rotate(360deg); } 
-}
-@-webkit-keyframes rotation { 
-  100% { -webkit-transform: rotate(360deg); } 
-}
-@keyframes rotation { 
-  100% { 
-      -webkit-transform: rotate(360deg); 
-      transform:rotate(360deg); 
-  } 
+@-moz-keyframes rotation {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
 }
 
-.dropdown-item > img {
+@-webkit-keyframes rotation {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes rotation {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.dropdown-item>img {
   max-height: 2.375rem !important;
+}
+
+.offcanvas {
+  position: fixed;
+  bottom: 0;
+  z-index: 1045;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  max-width: 100%;
+  visibility: hidden;
+  background-color: #fff;
+  background-clip: padding-box;
+  outline: 0;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.125);
+  transition: -webkit-transform calc(0.15 * 2) ease-in-out;
+  transition: transform calc(0.15 * 2) ease-in-out;
+  transition: transform calc(0.15 * 2) ease-in-out, -webkit-transform calc(0.15 * 2) ease-in-out;
+}
+
+.offcanvas-end {
+  top: 0;
+  right: 0;
+  width: 380px;
+  -webkit-transform: translateX(100%);
+  transform: translateX(100%);
+}
+
+.offcanvas.hiding, .offcanvas.show, .offcanvas.showing {
+  visibility: visible;
+}
+
+.offcanvas.show:not(.hiding), .offcanvas.showing {
+  -webkit-transform: none;
+  transform: none;
+}
+
+.offcanvas-body {
+  overflow-y: auto;
 }
