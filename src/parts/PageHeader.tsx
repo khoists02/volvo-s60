@@ -22,17 +22,21 @@ export interface ITickerAccount {
 }
 
 const PageHeader: FC = () => {
-  const options: ICustomer[] = [{
-    icon: <BlendIcon width={32} height={32} />,
-    ticker: "BLND",
-    name: "Blend Labs, Inc."
-  }];
-  const [selected, setSelected] = useState<ICustomer | undefined>(options.find((p) => p.ticker === "BLND"));
+  const options: ICustomer[] = [
+    {
+      icon: <BlendIcon width={32} height={32} />,
+      ticker: "BLND",
+      name: "Blend Labs, Inc.",
+    },
+  ];
+  const [selected, setSelected] = useState<ICustomer | undefined>(
+    options.find((p) => p.ticker === "BLND"),
+  );
   const navigate = useNavigate();
   const path = useLocation();
   const pathArr = path.pathname.split("/").filter((p) => p !== "");
   const tickerPr = pathArr[1] || "";
-  const USDollar = new Intl.NumberFormat('en-US', {
+  const USDollar = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
   });
@@ -44,41 +48,44 @@ const PageHeader: FC = () => {
     const getSettings = async () => {
       const rs = await axios.get("/settings");
       if (rs.data.length) {
-        setTickers([...rs.data.map((x: any) => {
-          return {
-            ...x,
-            sub: x.short,
-            name: x.short,
-            icon: <BlendIcon width={80} height={80} />
-          }
-        })])
-
+        setTickers([
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ...rs.data.map((x: any) => {
+            return {
+              ...x,
+              sub: x.short,
+              name: x.short,
+              icon: <BlendIcon width={80} height={80} />,
+            };
+          }),
+        ]);
       }
-    }
+    };
     const getCurrentAcc = async () => {
       const rs = await axios.get("/account", { params: { ticker: "BLND" } });
       setCurrentAcc(rs.data);
-    }
+    };
     const getInfo = async () => {
       const rs = await axios.get("/info", {
         params: {
-          ticker: "BLND"
-        }
+          ticker: "BLND",
+        },
       });
       setTicker({ ...rs.data, icon: <BlendIcon width={70} height={70} /> });
-    }
+    };
     if (tickerPr) {
       getInfo();
       getSettings();
       getCurrentAcc();
     }
-
   }, [tickerPr]);
-
 
   const totalPerc = useMemo(() => {
     if (ticker && currentAcc) {
-      return ((parseFloat(ticker.currentPrice) - parseFloat(currentAcc.current)) / parseFloat(currentAcc.current));
+      return (
+        (parseFloat(ticker.currentPrice) - parseFloat(currentAcc.current)) /
+        parseFloat(currentAcc.current)
+      );
     }
     return 0;
   }, [ticker, currentAcc]);
@@ -86,34 +93,59 @@ const PageHeader: FC = () => {
   return (
     <div className="page-header page-header-light shadow">
       <div className="page-header-content d-lg-flex">
-        <div className="collapse d-lg-block my-lg-auto ms-lg-auto w-100" id="page_header">
+        <div
+          className="collapse d-lg-block my-lg-auto ms-lg-auto w-100"
+          id="page_header"
+        >
           <div className="d-sm-flex align-items-center justify-content-between mb-3 mb-lg-0 ms-lg-3">
-            <CustomerDropdown options={options} selected={selected as ICustomer} onChange={(value: ICustomer) => {
-              setSelected(value);
-            }} />
+            <CustomerDropdown
+              options={options}
+              selected={selected as ICustomer}
+              onChange={(value: ICustomer) => {
+                setSelected(value);
+              }}
+            />
 
-            <div className="d-flex align-items-center mb-3 mb-lg-0 justify-content-end" style={{ width: 250 }}>
+            <div
+              className="d-flex align-items-center mb-3 mb-lg-0 justify-content-end"
+              style={{ width: 250 }}
+            >
               <div className="bg-opacity-10 text-primary lh-1 rounded-pill p-2">
-                <i className={`ph-light ph-lg-size ph-scales text-${totalPerc < 0 ? "danger" : "success"}`}></i>
+                <i
+                  className={`ph-light ph-lg-size ph-scales text-${
+                    totalPerc < 0 ? "danger" : "success"
+                  }`}
+                ></i>
               </div>
               <div className="ml-1 flex-1">
-                <h5 className="mb-0">{USDollar.format(parseFloat(currentAcc?.balance || "") || 0)}</h5>
+                <h5 className="mb-0">
+                  {USDollar.format(parseFloat(currentAcc?.balance || "") || 0)}
+                </h5>
                 <div className="d-flex align-items-center">
                   <span className="mb-0 d-flex">
-                    <span>{USDollar.format(parseFloat(currentAcc?.current || "0") || 0)}</span>
-                    <span className={`d-flex align-items-center text-danger ml-2`}>
-                      <i className={`ph-light ph-arrow-down fs-base lh-base align-top`}></i>
-                      {totalPerc > 0 ? "+" : ""}{(totalPerc * 100).toFixed(2)}%
+                    <span>
+                      {USDollar.format(
+                        parseFloat(currentAcc?.current || "0") || 0,
+                      )}
                     </span>
-
+                    <span
+                      className={`d-flex align-items-center text-danger ml-2`}
+                    >
+                      <i
+                        className={`ph-light ph-arrow-down fs-base lh-base align-top`}
+                      ></i>
+                      {totalPerc > 0 ? "+" : ""}
+                      {(totalPerc * 100).toFixed(2)}%
+                    </span>
                   </span>
                 </div>
               </div>
-              <i className="ph-light ph-gear ml-1 cursor-pointer ph-sm-size" onClick={() => {
-                navigate("/settings");
-
-              }}></i>
-
+              <i
+                className="ph-light ph-gear ml-1 cursor-pointer ph-sm-size"
+                onClick={() => {
+                  navigate("/settings");
+                }}
+              ></i>
             </div>
             {/* <div className="vr d-none d-sm-block flex-shrink-0 my-2 mx-3"></div>
 
@@ -135,7 +167,6 @@ const PageHeader: FC = () => {
 									</a>
 								</div> */}
           </div>
-
         </div>
       </div>
 

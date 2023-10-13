@@ -32,9 +32,14 @@ const Navbar: FC<{ show: boolean; toggle: (show: boolean) => void }> = ({
         <div className="flex-1"></div>
         <ul className="nav flex-row justify-content-end order-1 order-lg-2">
           <li className="nav-item">
-            <span className="navbar-nav-link navbar-nav-link-icon rounded-pill" onClick={() => toggle(!show)}>
+            <span
+              className="navbar-nav-link navbar-nav-link-icon rounded-pill"
+              onClick={() => toggle(!show)}
+            >
               <i className="ph-light ph-sm-size ph-bell"></i>
-              <span className="badge bg-yellow text-black position-absolute top-0 end-0 translate-middle-top zindex-1 rounded-pill mt-1 me-1">2</span>
+              <span className="badge bg-yellow text-black position-absolute top-0 end-0 translate-middle-top zindex-1 rounded-pill mt-1 me-1">
+                2
+              </span>
             </span>
           </li>
         </ul>

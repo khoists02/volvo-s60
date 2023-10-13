@@ -26,15 +26,44 @@ function App() {
           <Footer />
         </div>
       </div>
-      <div className={`offcanvas offcanvas-end ${showNoti ? "show" : ""}`} id="notification">
+      <div
+        className={`offcanvas offcanvas-end ${showNoti ? "show" : ""}`}
+        id="notification"
+      >
         <div className="offcanvas-header py-0 d-flex justify-content-between">
           <h5 className="offcanvas-title pt-3 pb-3 pl-3">Activity</h5>
-          <button type="button" onClick={() => setShowNoti(false)} className="btn btn-light btn-sm btn-icon border-transparent rounded-pill mt-3 mb-3 mr-3">
+          <button
+            type="button"
+            onClick={() => setShowNoti(false)}
+            className="btn btn-light btn-sm btn-icon border-transparent rounded-pill mt-3 mb-3 mr-3"
+          >
             <i className="ph-light ph-sm-size ph-x"></i>
           </button>
         </div>
         <div className="offcanvas-body p-0">
-          
+          <div className="bg-light fw-medium py-2 px-3">New notifications</div>
+          <div className="p-3">
+            <div className="d-flex align-items-start mb-3">
+              <span className="status-indicator-container me-3">
+                <img
+                  src="../../../assets/images/demo/users/face1.jpg"
+                  className="w-40px h-40px rounded-pill"
+                  alt=""
+                />
+                <span className="status-indicator bg-success"></span>
+              </span>
+              <div className="flex-fill">
+                <div>
+                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                  Natus, deserunt iure neque temporibus veritatis, suscipit
+                  voluptate asperiores doloribus laudantium veniam libero harum
+                  enim dignissimos tempore consequatur quaerat itaque
+                  consectetur rerum.
+                </div>
+                <div className="fs-sm text-muted mt-1">2 hours ago</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>
