@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-pascal-case */
 import { Route, Routes, Navigate } from "react-router-dom";
-import SettingRouter from "./pages/Settings";
-import { HistoryRoute } from "./pages/Histories";
+import SettingRouter from "./pages/settings";
+import { HistoryRoute } from "./pages/histories";
 import { FavoriteRoute } from "./pages/favorites";
 
 const AppRoutes = () => {

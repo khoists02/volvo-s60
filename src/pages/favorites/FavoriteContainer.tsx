@@ -58,20 +58,17 @@ const FavoriteContainer: FC = () => {
               <table className="table text-nowrap no-border">
                 <thead>
                   <tr>
-                    <th></th>
+                    <th>
+                      {loading && (
+                        <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
+                      )}
+                    </th>
                     <th>Ticker</th>
                     <th>Current Price</th>
                     <th>Previous Price</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {loading && (
-                    <tr>
-                      <td colSpan={4}>
-                        <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
-                      </td>
-                    </tr>
-                  )}
                   {favorites.map((f) => {
                     return (
                       <tr
