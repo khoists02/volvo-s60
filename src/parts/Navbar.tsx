@@ -2,11 +2,16 @@ import React, { FC } from "react";
 import LogoIcon from "../assets/images/logo_icon.svg";
 import LogoTxtLight from "../assets/images/logo_text_light.svg";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { IRootState } from "../config/reducers";
 
 const Navbar: FC<{ show: boolean; toggle: (show: boolean) => void }> = ({
   show,
   toggle,
 }) => {
+  const { count, loading } = useSelector(
+    (state: IRootState) => state.notiReducer,
+  );
   return (
     <div className="navbar navbar-dark navbar-expand-lg navbar-static border-bottom border-bottom-white border-opacity-10">
       <div className="container-fluid">
@@ -36,9 +41,14 @@ const Navbar: FC<{ show: boolean; toggle: (show: boolean) => void }> = ({
               className="navbar-nav-link navbar-nav-link-icon rounded-pill"
               onClick={() => toggle(!show)}
             >
-              <i className="ph-light ph-sm-size ph-bell"></i>
+              {loading ? (
+                <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
+              ) : (
+                <i className="ph-light ph-sm-size ph-bell"></i>
+              )}
+
               <span className="badge bg-yellow text-black position-absolute top-0 end-0 translate-middle-top zindex-1 rounded-pill mt-1 me-1">
-                2
+                {count}
               </span>
             </span>
           </li>

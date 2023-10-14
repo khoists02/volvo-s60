@@ -1,6 +1,8 @@
 import { combineReducers } from "redux";
-
-const rootReducer = combineReducers({});
+import notiReducer from "../reducers/ducks/slices/notificationSlice";
+const rootReducer = combineReducers({
+  notiReducer,
+});
 
 export type IRootState = ReturnType<typeof rootReducer>;
 export default rootReducer;

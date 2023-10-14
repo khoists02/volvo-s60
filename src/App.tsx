@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./app.scss";
 import Sidebar from "./parts/Sidebar";
 import Navbar from "./parts/Navbar";
@@ -6,10 +6,26 @@ import Footer from "./parts/Footer";
 import AppRoutes from "./routes";
 import PageHeader from "./parts/PageHeader";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { IRootState } from "./config/reducers";
+import { useAppDispatch } from "./config/store";
+import {
+  getAllNoti,
+  getCountNoti,
+} from "./reducers/ducks/operators/notificationOperator";
+import axios from "axios";
 
 function App() {
   const path = useLocation();
+  const dispatch = useAppDispatch();
+  const { entities, loading, count } = useSelector(
+    (state: IRootState) => state.notiReducer,
+  );
 
+  useEffect(() => {
+    dispatch(getAllNoti());
+    dispatch(getCountNoti());
+  }, [dispatch]);
   const [showNoti, setShowNoti] = useState(false);
   return (
     <>
@@ -43,29 +59,82 @@ function App() {
           </button>
         </div>
         <div className="offcanvas-body p-0">
-          <div className="bg-light fw-medium py-2 px-3">New notifications</div>
-          <div className="p-3">
-            <div className="d-flex align-items-start mb-3">
-              <span className="status-indicator-container me-3">
-                <img
-                  src="../../../assets/images/demo/users/face1.jpg"
-                  className="w-40px h-40px rounded-pill"
-                  alt=""
-                />
-                <span className="status-indicator bg-success"></span>
+          <div className="bg-light fw-medium py-2 px-3 d-flex align-items-center">
+            New notifications
+            {count > 0 && (
+              <span
+                className="ml-2 badge badge-secondary cursor-pointer"
+                onClick={async () => {
+                  const ids = entities.filter((x) => !x.read).map((x) => x.id);
+                  ids.forEach(async (id) => {
+                    await axios.put(`/notifications/${id}/read`);
+                    dispatch(getCountNoti());
+                    dispatch(getAllNoti());
+                  });
+                }}
+              >
+                Mark all read
               </span>
-              <div className="flex-fill">
-                <div>
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Natus, deserunt iure neque temporibus veritatis, suscipit
-                  voluptate asperiores doloribus laudantium veniam libero harum
-                  enim dignissimos tempore consequatur quaerat itaque
-                  consectetur rerum.
-                </div>
-                <div className="fs-sm text-muted mt-1">2 hours ago</div>
-              </div>
-            </div>
+            )}
+            <span
+              className="badge badge-primary ml-2 cursor-pointer"
+              onClick={() => {
+                dispatch(getAllNoti());
+                dispatch(getCountNoti());
+              }}
+            >
+              {loading && (
+                <i className="ph-light ph-spinner ph-sm-size spinner mr-2"></i>
+              )}
+              Reload
+            </span>
           </div>
+          {entities.map((entity) => {
+            return (
+              <div
+                onClick={async () => {
+                  await axios.put(`/notifications/${entity.id}/read`);
+                  dispatch(getCountNoti());
+                  dispatch(getAllNoti());
+                }}
+                className="pl-3 pr-3 mt-2"
+                key={entity.id}
+              >
+                <div className="d-flex align-items-start mb-3">
+                  <span className="status-indicator-container me-3">
+                    <img
+                      src="../../../assets/images/demo/users/face1.jpg"
+                      className="w-40px h-40px rounded-pill"
+                      alt=""
+                    />
+                    <span className="status-indicator bg-success"></span>
+                  </span>
+                  <div className="flex-fill">
+                    <div>
+                      The {entity.ticker} has been{" "}
+                      <span
+                        className={`p-lr-xxs ${
+                          entity.per < 0 ? "text-danger" : "text-success"
+                        }`}
+                      >
+                        {entity.per < 0 ? "decrease" : "increase"}
+                        {entity.per}%
+                      </span>
+                      and close is {entity.close}
+                    </div>
+                    <div className="fs-sm text-muted mt-1">
+                      {entity.updatedAt}
+                    </div>
+                    {!entity.read && (
+                      <span className="badge badge-primary cursor-pointer">
+                        Read
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </>
