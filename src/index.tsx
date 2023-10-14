@@ -8,7 +8,7 @@ import store from "./config/store";
 import setupAxiosInterceptors from "./config/axios-interceptor";
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );
 setupAxiosInterceptors();
 root.render(
@@ -20,7 +20,7 @@ root.render(
         </Provider>
       </React.Suspense>
     </React.StrictMode>
-  </BrowserRouter>
+  </BrowserRouter>,
 );
 
 // If you want to start measuring performance in your app, pass a function

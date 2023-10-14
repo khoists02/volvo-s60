@@ -3,7 +3,7 @@ import React, { FC, useState, useEffect, useRef } from "react";
 import TickerInfo from "../../components/TickerInfo";
 import { ITickerInfo } from "../../types/ticker";
 import axios from "axios";
-import BlendIcon from "../../parts/Icons/Bend";
+import BlendIcon from "../../parts/icons/Bend";
 import StockHistory from "../../components/StockHistory";
 import { useParams } from "react-router-dom";
 import { addDays } from "date-fns";

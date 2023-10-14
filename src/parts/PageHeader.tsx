@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
-import BlendIcon from "./Icons/Bend";
+import BlendIcon from "./icons/Bend";
 import axios from "axios";
 import { ITickerInfo } from "../types/ticker";
 // import { format } from "date-fns";
