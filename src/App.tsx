@@ -14,7 +14,7 @@ import {
   getCountNoti,
 } from "./reducers/ducks/operators/notificationOperator";
 import axios from "axios";
-import { addDays, format } from "date-fns";
+import { addDays, format, isSaturday, isSunday } from "date-fns";
 import { HistoryAction } from "./reducers/ducks/slices/historySlice";
 import { ITickerInfo } from "./types/ticker";
 
@@ -61,7 +61,13 @@ function App() {
 
     timerTicker.current = setInterval(
       () => {
-        if (hour >= 20 && hourNext <= 5) getStock(); // 20PM td - 5PM tmr
+        if (
+          hour >= 20 &&
+          hourNext <= 5 &&
+          !isSaturday(new Date()) &&
+          !isSunday(new Date())
+        )
+          getStock(); // 20PM td - 5PM tmr
       },
       1000 * 60 * 5, // 5mn
     );
