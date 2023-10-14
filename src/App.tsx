@@ -12,7 +12,6 @@ import { useAppDispatch } from "./config/store";
 import {
   getAllNoti,
   getCountNoti,
-  getFavoritesTimer,
 } from "./reducers/ducks/operators/notificationOperator";
 import axios from "axios";
 import { addDays, format } from "date-fns";
@@ -31,33 +30,19 @@ function App() {
     (state: IRootState) => state.notiReducer,
   );
 
-  const { entitiesTimer } = useSelector(
+  const { entities: list } = useSelector(
     (state: IRootState) => state.historyReducer,
   );
 
   useEffect(() => {
-    timerTicker.current = setInterval(
-      () => {
-        if (hour >= 20 && hourNext <= 5) dispatch(getFavoritesTimer()); // 20PM td - 5PM tmr
-      },
-      1000 * 60 * 5, // 5mn
-    );
-
-    return () => {
-      if (timerTicker.current) clearInterval(timerTicker.current);
-      dispatch(HistoryAction.clear());
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
-
-  useEffect(() => {
     const getStock = async () => {
-      const blnd = entitiesTimer.find((x) => x.symbol === "BLND");
+      const blnd = list.find((x) => x.symbol === "BLND");
       if (blnd) {
         const { previousClose, currentPrice, symbol } = blnd;
         const per =
           (parseFloat(currentPrice) - parseFloat(previousClose)) /
           parseFloat(previousClose);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const dataRequest = {
           ticker: symbol,
           per: parseFloat(per.toFixed(2)),
@@ -67,11 +52,25 @@ function App() {
             "HH:mm:ss",
           )}`,
         };
-        await axios.post("/notifications", dataRequest);
+        // await axios.post("/notifications", dataRequest);
+        // eslint-disable-next-line no-console
+        console.log({ dataRequest });
       }
     };
-    if (entitiesTimer.length > 0) getStock();
-  }, [entitiesTimer]);
+
+    timerTicker.current = setInterval(
+      () => {
+        if (hour >= 20 && hourNext <= 5 && list.length > 0) getStock(); // 20PM td - 5PM tmr
+      },
+      1000 * 60 * 5, // 5mn
+    );
+
+    return () => {
+      if (timerTicker.current) clearInterval(timerTicker.current);
+      dispatch(HistoryAction.clear());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, list]);
 
   useEffect(() => {
     dispatch(getAllNoti());
