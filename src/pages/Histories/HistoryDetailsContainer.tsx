@@ -6,6 +6,7 @@ import axios from "axios";
 import BlendIcon from "../../parts/Icons/Bend";
 import StockHistory from "../../components/StockHistory";
 import { useParams } from "react-router-dom";
+import { addDays } from "date-fns";
 
 const HistoriesDetails: FC = () => {
   const tickerPr = useParams();
@@ -14,7 +15,9 @@ const HistoriesDetails: FC = () => {
   const [tickerStr, setTickerStr] = useState(id?.toUpperCase());
   const [count, setCount] = useState(0);
   const current = new Date();
+  const nextDay = addDays(current, 1);
   const hour: number = current.getHours();
+  const hourNext: number = nextDay.getHours();
   const [ticker, setTicker] = useState<ITickerInfo | undefined>(undefined);
 
   const [loading, setLoading] = useState(false);
@@ -32,9 +35,9 @@ const HistoriesDetails: FC = () => {
     getInfo();
     timer.current = setInterval(
       () => {
-        if (hour >= 20) getInfo();
+        if (hour >= 20 && hourNext <= 5) getInfo(); // 20PM td - 5PM tmr
       },
-      1000 * 60 * 5,
+      1000 * 60 * 5, // 5mn
     );
 
     return () => {

@@ -179,13 +179,6 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
     } else {
       rs = his;
     }
-
-    // if (isDown && !isGrow) {
-    //     rs = his.filter((x) => x.adjclose < parseFloat(parseFloat(info?.currentPrice || "0").toFixed(2)))
-    // } else {
-    //     rs = his;
-    // }
-
     rs = rs.filter(
       (x) =>
         isInDay(new Date(x.date), "MON") ||
