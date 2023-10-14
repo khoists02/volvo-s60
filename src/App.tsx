@@ -16,6 +16,7 @@ import {
 import axios from "axios";
 import { addDays, format } from "date-fns";
 import { HistoryAction } from "./reducers/ducks/slices/historySlice";
+import { ITickerInfo } from "./types/ticker";
 
 function App() {
   const path = useLocation();
@@ -30,37 +31,37 @@ function App() {
     (state: IRootState) => state.notiReducer,
   );
 
-  const { entities: list } = useSelector(
-    (state: IRootState) => state.historyReducer,
-  );
-
   useEffect(() => {
     const getStock = async () => {
-      const blnd = list.find((x) => x.symbol === "BLND");
+      const rs = await axios.get("/info?ticker=BLND");
+      const blnd: ITickerInfo = rs.data;
       if (blnd) {
         const { previousClose, currentPrice, symbol } = blnd;
         const per =
-          (parseFloat(currentPrice) - parseFloat(previousClose)) /
-          parseFloat(previousClose);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const dataRequest = {
-          ticker: symbol,
-          per: parseFloat(per.toFixed(2)),
-          close: parseFloat(currentPrice),
-          updatedAt: `${format(new Date(), "yyyy-MM-dd")} ${format(
-            new Date(),
-            "HH:mm:ss",
-          )}`,
-        };
-        // await axios.post("/notifications", dataRequest);
-        // eslint-disable-next-line no-console
-        console.log({ dataRequest });
+          ((parseFloat(currentPrice) - parseFloat(previousClose)) /
+            parseFloat(previousClose)) *
+          100;
+        if (Math.abs(per) > 5) {
+          const dataRequest = {
+            ticker: symbol,
+            per: parseFloat(per.toFixed(2)),
+            close: parseFloat(currentPrice),
+            updatedAt: `${format(new Date(), "yyyy-MM-dd")} ${format(
+              new Date(),
+              "HH:mm:ss",
+            )}`,
+          };
+          await axios.post("/notifications", dataRequest);
+          // reload
+          dispatch(getAllNoti());
+          dispatch(getCountNoti());
+        }
       }
     };
 
     timerTicker.current = setInterval(
       () => {
-        if (hour >= 20 && hourNext <= 5 && list.length > 0) getStock(); // 20PM td - 5PM tmr
+        if (hour >= 20 && hourNext <= 5) getStock(); // 20PM td - 5PM tmr
       },
       1000 * 60 * 5, // 5mn
     );
@@ -70,7 +71,7 @@ function App() {
       dispatch(HistoryAction.clear());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, list]);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(getAllNoti());
