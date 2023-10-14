@@ -1519,3 +1519,10 @@ span.pid-no-wrap {
 .offcanvas-body {
   overflow-y: auto;
 }
+
+.no-border {
+  td, th {
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+  }
+}

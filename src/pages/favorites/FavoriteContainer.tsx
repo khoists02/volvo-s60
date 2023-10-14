@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { FC, useState, useEffect, useRef } from "react";
 import { ITickerInfo } from "../../types/ticker";
 import { useNavigate } from "react-router-dom";
+import { getStyleStock } from "../../helpers";
 
 const FavoriteContainer: FC = () => {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ const FavoriteContainer: FC = () => {
           </div>
           <div className="card-body">
             <div className="table-responsive">
-              <table className="table text-nowrap">
+              <table className="table text-nowrap no-border">
                 <thead>
                   <tr>
                     <th></th>
@@ -74,11 +75,10 @@ const FavoriteContainer: FC = () => {
                   {favorites.map((f) => {
                     return (
                       <tr
-                        className={`bg-${
-                          f.currentPrice > f.previousClose
-                            ? "success"
-                            : "danger"
-                        } text-white`}
+                        style={getStyleStock(
+                          parseFloat(f.currentPrice),
+                          parseFloat(f.previousClose),
+                        )}
                         onClick={() => navigate(`/histories/${f.symbol}`)}
                         key={f.shortName}
                       >
