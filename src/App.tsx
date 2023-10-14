@@ -27,7 +27,9 @@ function App() {
         </div>
       </div>
       <div
-        className={`offcanvas offcanvas-end ${showNoti ? "show" : ""}`}
+        className={`offcanvas offcanvas-end ${
+          showNoti ? "show animated fadeInRight" : ""
+        }`}
         id="notification"
       >
         <div className="offcanvas-header py-0 d-flex justify-content-between">

@@ -1526,3 +1526,21 @@ span.pid-no-wrap {
     border-bottom: 0 !important;
   }
 }
+
+.animated {
+  animation-duration: .5s;
+
+  &.fadeInRight {
+    animation-name: fadeInRight;
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(300px);
+  }
+  to {
+    opacity: 1;
+  }
+}
