@@ -19,6 +19,7 @@ export const getStyleStock = (
   close: number,
   previousClose: number,
 ): CSSProperties => {
+  if (!previousClose) return {};
   const x = 10;
   if (close === previousClose) {
     // light
