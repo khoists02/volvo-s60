@@ -75,13 +75,7 @@ function App() {
 
     timerTicker.current = setInterval(
       () => {
-        if (
-          hour >= 20 &&
-          hourNext <= 5 &&
-          !isSaturday(new Date()) &&
-          !isSunday(new Date())
-        )
-          getStock(); // 20PM td - 5PM tmr
+        if (hour >= 20 && hourNext <= 5 && !isSunday(new Date())) getStock(); // 20PM td - 5PM tmr
       },
       1000 * 60 * 5, // 5mn
     );
