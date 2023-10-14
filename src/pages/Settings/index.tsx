@@ -4,9 +4,9 @@ import SettingsContainer from "./SettingsContainer";
 
 const SettingRouter: FC = () => {
     return (
-        <Routes>
-            <Route path="/" element={<SettingsContainer />} />
-        </Routes>
+      <Routes>
+        <Route path="/" element={<SettingsContainer />} />
+      </Routes>
     )
 }
 
