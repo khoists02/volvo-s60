@@ -1,42 +1,26 @@
-import axios from "axios";
-import React, { FC, useState, useEffect, useRef } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { ITickerInfo } from "../../types/ticker";
 import { useNavigate } from "react-router-dom";
 import { getStyleStock } from "../../helpers";
+import { useAppDispatch } from "../../config/store";
+import { getFavorites } from "../../reducers/ducks/operators/notificationOperator";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../config/reducers";
 
 const FavoriteContainer: FC = () => {
   const navigate = useNavigate();
-  const current = new Date();
-  const hour: number = current.getHours();
-  const timer = useRef<NodeJS.Timer | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { entities, loading } = useSelector(
+    (state: IRootState) => state.historyReducer,
+  );
   const [favorites, setFavorites] = useState<ITickerInfo[]>([]);
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    const getList = async () => {
-      setLoading(true);
-      const rs = await axios.get("/favorites", { params: { ticker: "BLND" } });
-      setFavorites(rs.data.content || []);
-      setLoading(false);
-    };
-    timer.current = setInterval(() => {
-      if (hour >= 21) {
-        getList();
-      }
-    }, 1000 * 30); // 10s, after 21h every day
+    dispatch(getFavorites());
+  }, [dispatch]);
 
-    return () => {
-      if (timer.current) clearInterval(timer.current);
-    };
-  }, [hour]);
   useEffect(() => {
-    const getList = async () => {
-      setLoading(true);
-      const rs = await axios.get("/favorites", { params: { ticker: "BLND" } });
-      setFavorites(rs.data.content || []);
-      setLoading(false);
-    };
-    getList();
-  }, []);
+    setFavorites(entities);
+  }, [entities]);
 
   const per = (item: ITickerInfo) => {
     return `${(
@@ -50,8 +34,22 @@ const FavoriteContainer: FC = () => {
     <div className="row">
       <div className="col-lg-12">
         <div className="card">
-          <div className="card-header">
+          <div className="card-header d-flex justify-content-between align-items-center">
             <h5>Favorites</h5>
+
+            <span
+              className={`badge badge-primary ${
+                loading ? "cursor-not-allowed" : "cursor-pointer"
+              } d-flex align-items-center`}
+              onClick={() => {
+                if (!loading) dispatch(getFavorites());
+              }}
+            >
+              {loading && (
+                <i className="ph-light ph-spinner ph-sm-size spinner mr-2"></i>
+              )}
+              <span>Reload</span>
+            </span>
           </div>
           <div className="card-body">
             <div className="table-responsive">

@@ -12,16 +12,66 @@ import { useAppDispatch } from "./config/store";
 import {
   getAllNoti,
   getCountNoti,
+  getFavoritesTimer,
 } from "./reducers/ducks/operators/notificationOperator";
 import axios from "axios";
+import { addDays, format } from "date-fns";
+import { HistoryAction } from "./reducers/ducks/slices/historySlice";
 
 function App() {
   const path = useLocation();
   const timer = useRef<NodeJS.Timer | null>(null);
+  const timerTicker = useRef<NodeJS.Timer | null>(null);
   const dispatch = useAppDispatch();
+  const current = new Date();
+  const nextDay = addDays(current, 1);
+  const hour: number = current.getHours();
+  const hourNext: number = nextDay.getHours();
   const { entities, loading, count } = useSelector(
     (state: IRootState) => state.notiReducer,
   );
+
+  const { entitiesTimer } = useSelector(
+    (state: IRootState) => state.historyReducer,
+  );
+
+  useEffect(() => {
+    timerTicker.current = setInterval(
+      () => {
+        if (hour >= 20 && hourNext <= 5) dispatch(getFavoritesTimer()); // 20PM td - 5PM tmr
+      },
+      1000 * 60 * 5, // 5mn
+    );
+
+    return () => {
+      if (timerTicker.current) clearInterval(timerTicker.current);
+      dispatch(HistoryAction.clear());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
+
+  useEffect(() => {
+    const getStock = async () => {
+      const blnd = entitiesTimer.find((x) => x.symbol === "BLND");
+      if (blnd) {
+        const { previousClose, currentPrice, symbol } = blnd;
+        const per =
+          (parseFloat(currentPrice) - parseFloat(previousClose)) /
+          parseFloat(previousClose);
+        const dataRequest = {
+          ticker: symbol,
+          per: parseFloat(per.toFixed(2)),
+          close: parseFloat(currentPrice),
+          updatedAt: `${format(new Date(), "yyyy-MM-dd")} ${format(
+            new Date(),
+            "HH:mm:ss",
+          )}`,
+        };
+        await axios.post("/notifications", dataRequest);
+      }
+    };
+    if (entitiesTimer.length > 0) getStock();
+  }, [entitiesTimer]);
 
   useEffect(() => {
     dispatch(getAllNoti());
