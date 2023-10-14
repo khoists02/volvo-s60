@@ -1,11 +1,4 @@
-import React, {
-  CSSProperties,
-  FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import {
   subWeeks,
   startOfWeek,
@@ -26,6 +19,7 @@ import axios from "axios";
 import { FORMAT_DISPLAY, FORMAT_QUERY, FilterType } from "../constants";
 import { ITickerInfo } from "../types/ticker";
 import Select from "react-select";
+import { getStyleStock } from "../helpers";
 
 export interface IStockHistory {
   ticker: string;
@@ -149,42 +143,6 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
         return "";
     }
   }, [selectedType]);
-
-  const buildBgTr = useCallback(
-    (close: number, isNormal: boolean): CSSProperties => {
-      if (!info || !isNormal) return {};
-      const closed =
-        compareType === "current" ? info?.previousClose || "0" : "0";
-
-      if (parseFloat(closed).toFixed(2) === close.toFixed(2)) {
-        // light
-        return { backgroundColor: "#f0f2f5" };
-      }
-
-      if (parseFloat(parseFloat(closed).toFixed(2)) > close) {
-        // danger
-        const per = (parseFloat(closed) - close) * 10;
-        return {
-          color: per > 0.6 ? "#ffffff" : "#333333",
-          backgroundColor: `rgb(239 83 80 / ${per >= 1 ? 1 : per.toFixed(2)})`,
-        };
-      }
-
-      if (parseFloat(parseFloat(closed).toFixed(2)) < close) {
-        // success
-        const per = (close - parseFloat(closed)) * 10;
-        return {
-          color: per > 0.6 ? "#ffffff" : "#333333",
-          backgroundColor: `rgb(37 179 114 / ${
-            per >= 1 ? 1 : per.toFixed(2)
-          }) `,
-        };
-      }
-
-      return {};
-    },
-    [compareType, info],
-  );
 
   const isInDay = (date: Date, type: string) => {
     switch (type) {
@@ -619,11 +577,9 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
                 return (
                   <>
                     <tr
-                      style={buildBgTr(
+                      style={getStyleStock(
                         h.adjclose,
-                        selectedDate ===
-                          format(new Date(h.date), "yyyy/MM/dd") ||
-                          !selectedDate,
+                        parseFloat(info?.previousClose as string) || 0,
                       )}
                       className="cursor-pointer"
                       key={format(new Date(h.date), "dd/MM/yyyy HH:mm:ss")}
@@ -675,7 +631,10 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
                       dailyData.map((h) => {
                         return (
                           <tr
-                            style={buildBgTr(h.close, true)}
+                            style={getStyleStock(
+                              h.close,
+                              parseFloat(info?.previousClose as string) || 0,
+                            )}
                             key={h.date}
                             className="tr-tree"
                           >
