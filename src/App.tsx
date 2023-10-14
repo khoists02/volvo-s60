@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./app.scss";
 import Sidebar from "./parts/Sidebar";
 import Navbar from "./parts/Navbar";
@@ -17,6 +17,7 @@ import axios from "axios";
 
 function App() {
   const path = useLocation();
+  const timer = useRef<NodeJS.Timer | null>(null);
   const dispatch = useAppDispatch();
   const { entities, loading, count } = useSelector(
     (state: IRootState) => state.notiReducer,
@@ -25,6 +26,15 @@ function App() {
   useEffect(() => {
     dispatch(getAllNoti());
     dispatch(getCountNoti());
+
+    timer.current = setInterval(() => {
+      dispatch(getAllNoti());
+      dispatch(getCountNoti());
+    }, 1000 * 60); // 10s, after 21h every day
+
+    return () => {
+      if (timer.current) clearInterval(timer.current);
+    };
   }, [dispatch]);
   const [showNoti, setShowNoti] = useState(false);
   return (
@@ -89,6 +99,12 @@ function App() {
               Reload
             </span>
           </div>
+          {loading && (
+            <div className="p-3">
+              <i className="ph-light ph-spinner ph-sm-size spinner mr-2"></i>
+            </div>
+          )}
+
           {entities.map((entity) => {
             return (
               <div
