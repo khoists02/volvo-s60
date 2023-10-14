@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState, useRef } from "react";
 import "./app.scss";
 import Sidebar from "./parts/Sidebar";
@@ -16,7 +17,6 @@ import {
 import axios from "axios";
 import { addDays, format, isSaturday, isSunday } from "date-fns";
 import { HistoryAction } from "./reducers/ducks/slices/historySlice";
-import { ITickerInfo } from "./types/ticker";
 
 function App() {
   const path = useLocation();
@@ -33,29 +33,43 @@ function App() {
 
   useEffect(() => {
     const getStock = async () => {
-      const rs = await axios.get("/info?ticker=BLND");
-      const blnd: ITickerInfo = rs.data;
-      if (blnd) {
-        const { previousClose, currentPrice, symbol } = blnd;
-        const per =
-          ((parseFloat(currentPrice) - parseFloat(previousClose)) /
-            parseFloat(previousClose)) *
-          100;
-        if (Math.abs(per) > 5) {
-          const dataRequest = {
-            ticker: symbol,
-            per: parseFloat(per.toFixed(2)),
-            close: parseFloat(currentPrice),
-            updatedAt: `${format(new Date(), "yyyy-MM-dd")} ${format(
-              new Date(),
-              "HH:mm:ss",
-            )}`,
-          };
-          await axios.post("/notifications", dataRequest);
-          // reload
-          dispatch(getAllNoti());
-          dispatch(getCountNoti());
-        }
+      const inRs = await axios.get("/info", {
+        params: {
+          ticker: "BLND",
+        },
+      });
+      const prevClose = inRs.data.previousClose
+        ? parseFloat(inRs.data.previousClose)
+        : 0;
+      const rs = await axios.get("/daily", {
+        params: {
+          ticker: "BLND",
+          start: format(new Date(), "yyyy-MM-dd"),
+          end: format(addDays(new Date(), 1), "yyyy-MM-dd"),
+          interval: "5m",
+        },
+      });
+      const arrays = rs.data || [];
+      if (arrays.length > 0) {
+        arrays.forEach(async (item: any) => {
+          const per = ((parseFloat(item.Close) - prevClose) / prevClose) * 100;
+          if (Math.abs(per) > 5) {
+            // more than 5%
+            const dataRequest = {
+              ticker: "BLND",
+              per: parseFloat(per.toFixed(2)),
+              close: parseFloat(item.Close),
+              updatedAt: `${format(new Date(), "yyyy-MM-dd")} ${format(
+                new Date(),
+                "HH:mm:ss",
+              )}`,
+            };
+            await axios.post("/notifications", dataRequest);
+            // reload
+            dispatch(getAllNoti());
+            dispatch(getCountNoti());
+          }
+        });
       }
     };
 

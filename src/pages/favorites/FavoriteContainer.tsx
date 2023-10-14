@@ -79,7 +79,11 @@ const FavoriteContainer: FC = () => {
                       >
                         <td>
                           <i
-                            className={`text-white ph-light ph-sm-size ph-trend-${
+                            className={`text-${
+                              f.currentPrice > f.previousClose
+                                ? "success"
+                                : "danger"
+                            } ph-light ph-sm-size ph-trend-${
                               f.currentPrice > f.previousClose ? "up" : "down"
                             }`}
                           ></i>
