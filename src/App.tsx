@@ -15,7 +15,7 @@ import {
   getCountNoti,
 } from "./reducers/ducks/operators/notificationOperator";
 import axios from "axios";
-import { addDays, format, isSaturday, isSunday } from "date-fns";
+import { addDays, format, isSunday } from "date-fns";
 import { HistoryAction } from "./reducers/ducks/slices/historySlice";
 
 function App() {
