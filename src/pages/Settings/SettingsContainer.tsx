@@ -84,6 +84,9 @@ const SettingsContainer: FC = () => {
           >
             Save
           </button>
+          <button className="btn btn-light ml-2" onClick={() => navigate(-1)}>
+            Back
+          </button>
         </div>
       </div>
     </div>
