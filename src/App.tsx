@@ -107,15 +107,7 @@ function App() {
 
           {entities.map((entity) => {
             return (
-              <div
-                onClick={async () => {
-                  await axios.put(`/notifications/${entity.id}/read`);
-                  dispatch(getCountNoti());
-                  dispatch(getAllNoti());
-                }}
-                className="pl-3 pr-3 mt-2"
-                key={entity.id}
-              >
+              <div className="pl-3 pr-3 mt-2" key={entity.id}>
                 <div className="d-flex align-items-start mb-3">
                   <span className="status-indicator-container me-3">
                     <img
@@ -142,7 +134,14 @@ function App() {
                       {entity.updatedAt}
                     </div>
                     {!entity.read && (
-                      <span className="badge badge-primary cursor-pointer">
+                      <span
+                        onClick={async () => {
+                          await axios.put(`/notifications/${entity.id}/read`);
+                          dispatch(getCountNoti());
+                          dispatch(getAllNoti());
+                        }}
+                        className="badge badge-primary cursor-pointer"
+                      >
                         Read
                       </span>
                     )}
