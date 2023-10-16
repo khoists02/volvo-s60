@@ -8,18 +8,16 @@ import StockHistory from "../../components/StockHistory";
 import { useParams } from "react-router-dom";
 import { addDays } from "date-fns";
 
-const HistoriesDetails: FC = () => {
+const TickerDetails: FC = () => {
   const tickerPr = useParams();
   const id = tickerPr.id;
   const timer = useRef<NodeJS.Timer | null>(null);
   const [tickerStr, setTickerStr] = useState(id?.toUpperCase());
-  const [count, setCount] = useState(0);
   const current = new Date();
   const nextDay = addDays(current, 1);
   const hour: number = current.getHours();
   const hourNext: number = nextDay.getHours();
   const [ticker, setTicker] = useState<ITickerInfo | undefined>(undefined);
-
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     const getInfo = async () => {
@@ -74,4 +72,4 @@ const HistoriesDetails: FC = () => {
   );
 };
 
-export default HistoriesDetails;
+export default TickerDetails;

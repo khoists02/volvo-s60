@@ -14,6 +14,8 @@ import {
   isThursday,
   isFriday,
   addDays,
+  endOfMonth,
+  endOfWeek,
 } from "date-fns";
 import axios from "axios";
 import { FORMAT_DISPLAY, FORMAT_QUERY, FilterType } from "../constants";
@@ -82,10 +84,13 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
     const getHistoryByTicker = async () => {
       setLoading(true);
       let start = currentDate;
+      let end = addDays(currentDate, 1);
       if (selectedType === FilterType["last-week"]) {
         start = startDayOfWeek;
+        end = endOfWeek(startDayOfWeek);
       } else if (selectedType === FilterType["last-month"]) {
         start = startLastMonth;
+        end = endOfMonth(startLastMonth);
       } else if (selectedType === FilterType["this-month"]) {
         start = startOfMonth(currentDate);
       } else if (selectedType === FilterType["this-week"]) {
@@ -99,7 +104,7 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
         params: {
           ticker: ticker,
           start: format(start, FORMAT_QUERY),
-          end: format(addDays(currentDate, 1), FORMAT_QUERY),
+          end: format(end, FORMAT_QUERY),
         },
       });
       setHistories(rs.data);
@@ -324,32 +329,6 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
 
             <button
               onClick={() => {
-                setSelectedType(FilterType["last-week"]);
-              }}
-              className={`btn btn-${
-                selectedType === FilterType["last-week"] ? "primary" : "light"
-              } d-flex align-item-center`}
-            >
-              <span>Last Week</span>{" "}
-              {loading && selectedType === FilterType["last-week"] && (
-                <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
-              )}
-            </button>
-            <button
-              onClick={() => {
-                setSelectedType(FilterType["last-month"]);
-              }}
-              className={`btn btn-${
-                selectedType === FilterType["last-month"] ? "primary" : "light"
-              } d-flex align-item-center`}
-            >
-              <span>Last Month</span>{" "}
-              {loading && selectedType === FilterType["last-month"] && (
-                <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
-              )}
-            </button>
-            <button
-              onClick={() => {
                 setSelectedType(FilterType["this-week"]);
               }}
               className={`btn btn-${
@@ -363,6 +342,19 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
             </button>
             <button
               onClick={() => {
+                setSelectedType(FilterType["last-week"]);
+              }}
+              className={`btn btn-${
+                selectedType === FilterType["last-week"] ? "primary" : "light"
+              } d-flex align-item-center`}
+            >
+              <span>Last Week</span>{" "}
+              {loading && selectedType === FilterType["last-week"] && (
+                <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
+              )}
+            </button>
+            <button
+              onClick={() => {
                 setSelectedType(FilterType["this-month"]);
               }}
               className={`btn btn-${
@@ -371,6 +363,19 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
             >
               <span>This Month</span>{" "}
               {loading && selectedType === FilterType["this-month"] && (
+                <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
+              )}
+            </button>
+            <button
+              onClick={() => {
+                setSelectedType(FilterType["last-month"]);
+              }}
+              className={`btn btn-${
+                selectedType === FilterType["last-month"] ? "primary" : "light"
+              } d-flex align-item-center`}
+            >
+              <span>Last Month</span>{" "}
+              {loading && selectedType === FilterType["last-month"] && (
                 <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
               )}
             </button>
@@ -439,11 +444,11 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
                 <th>Adj Close</th>
               </tr>
             </thead>
-            {showAdvanced && (
+            {showAdvanced && filterred.length > 0 && (
               <div className="animated fadeInUp">
                 <div className="table-light">
                   <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100">
-                    {title}
+                    <h4>{title}</h4>
                     {loading && (
                       <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
                     )}
@@ -451,9 +456,12 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
                 </div>
 
                 <div className="table-light">
-                  <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100">
-                    <span className="text-primary">
-                      Average: {expectedTrated}
+                  <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100 font-weight font-h4">
+                    <span className="text-secondary">
+                      Current: {info?.currentPrice}
+                    </span>
+                    <span className="text-primary ml-2">
+                      Avg: {expectedTrated}
                     </span>
                     <span className="text-success ml-2">
                       Max: {max.toFixed(2)}
@@ -566,6 +574,14 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
               </div>
             )}
             <tbody>
+              {loading && (
+                <tr>
+                  <td colSpan={7}>
+                    <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
+                  </td>
+                </tr>
+              )}
+
               {filterred.map((h) => {
                 return (
                   <>
@@ -611,13 +627,31 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
                         )}
 
                         <span>{format(new Date(h.date), "EEEE")}</span>
+                        <span className="ml-2">
+                          {format(new Date(h.date), "dd-MM-yyyy")}
+                        </span>
                       </td>
                       <td>{format(new Date(h.date), "dd/MM/yyyy HH:mm:ss")}</td>
                       <td>{h.open.toFixed(2)}</td>
                       <td>{h.high.toFixed(2)}</td>
                       <td>{h.low.toFixed(2)}</td>
                       <td>{h.close.toFixed(3)}</td>
-                      <td>{parseFloat(h.adjclose?.toString()).toFixed(3)}</td>
+                      <td>
+                        <span>
+                          {parseFloat(h.adjclose?.toString()).toFixed(3)}
+                        </span>
+                        {min === parseFloat(h.adjclose?.toString()) && (
+                          <span className="cursor-pointer badge badge-secondary text-white ml-2">
+                            KeyIn
+                          </span>
+                        )}
+
+                        {max === parseFloat(h.adjclose?.toString()) && (
+                          <span className="cursor-pointer badge badge-white text-success ml-2">
+                            KeyOut
+                          </span>
+                        )}
+                      </td>
                     </tr>
                     {selectedDate === format(new Date(h.date), "yyyy/MM/dd") &&
                       // eslint-disable-next-line @typescript-eslint/no-shadow

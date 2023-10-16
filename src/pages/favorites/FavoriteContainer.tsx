@@ -1,7 +1,10 @@
 import React, { FC, useState, useEffect } from "react";
 import { ITickerInfo } from "../../types/ticker";
 import { useNavigate } from "react-router-dom";
-import { getStyleStock } from "../../helpers";
+import {
+  convertToInternationalCurrencySystem,
+  getStyleStock,
+} from "../../helpers";
 import { useAppDispatch } from "../../config/store";
 import { getFavorites } from "../../reducers/ducks/operators/notificationOperator";
 import { useSelector } from "react-redux";
@@ -64,6 +67,10 @@ const FavoriteContainer: FC = () => {
                     <th>Ticker</th>
                     <th>Current Price</th>
                     <th>Previous Price</th>
+                    <th>Volume</th>
+                    <th>Type</th>
+                    <th>Recommendation Key</th>
+                    {/* <th>Recommendation Target</th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -74,19 +81,25 @@ const FavoriteContainer: FC = () => {
                           parseFloat(f.currentPrice),
                           parseFloat(f.previousClose),
                         )}
-                        onClick={() => navigate(`/histories/${f.symbol}`)}
+                        onClick={() => navigate(`/tickers/${f.symbol}`)}
                         key={f.shortName}
                       >
                         <td>
-                          <i
-                            className={`text-${
-                              f.currentPrice > f.previousClose
-                                ? "success"
-                                : "danger"
-                            } ph-light ph-sm-size ph-trend-${
-                              f.currentPrice > f.previousClose ? "up" : "down"
-                            }`}
-                          ></i>
+                          {loading && (
+                            <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
+                          )}
+
+                          {!loading && (
+                            <i
+                              className={`text-${
+                                f.currentPrice > f.previousClose
+                                  ? "success"
+                                  : "danger"
+                              } ph-light ph-sm-size ph-trend-${
+                                f.currentPrice > f.previousClose ? "up" : "down"
+                              }`}
+                            ></i>
+                          )}
                         </td>
                         <td>{f.shortName}</td>
                         <td>
@@ -94,6 +107,12 @@ const FavoriteContainer: FC = () => {
                           <span className="ml-1">({per(f)})</span>
                         </td>
                         <td>{f.previousClose}</td>
+                        <td>
+                          {convertToInternationalCurrencySystem(f.marketCap)}
+                        </td>
+                        <td>{f.industryDisp}</td>
+                        <td>{f.recommendationKey}</td>
+                        {/* <td>{f.recommendationMean}</td> */}
                       </tr>
                     );
                   })}

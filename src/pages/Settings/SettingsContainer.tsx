@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { FC, useEffect, useState } from "react";
-import { ITickerAccount } from "../../parts/PageHeader";
 import { useNavigate } from "react-router-dom";
+import { ITickerAccount } from "../../types/ticker";
 
 const SettingsContainer: FC = () => {
   const navigate = useNavigate();
@@ -11,6 +11,7 @@ const SettingsContainer: FC = () => {
     current: "0",
     id: "",
     count: 0,
+    priceIn: 0,
   });
   useEffect(() => {
     const getCurrentAcc = async () => {
@@ -55,6 +56,23 @@ const SettingsContainer: FC = () => {
         </div>
 
         <div className="form-group row">
+          <label htmlFor="current" className="col-md-2">
+            Price In
+          </label>
+          <input
+            type="number"
+            className="form-control col-md-5"
+            value={currentAcc?.priceIn}
+            onChange={(e) => {
+              setCurrentAcc({
+                ...currentAcc,
+                priceIn: parseFloat(e.target.value || "0"),
+              });
+            }}
+          />
+        </div>
+
+        <div className="form-group row">
           <label htmlFor="count" className="col-md-2">
             Count
           </label>
@@ -75,11 +93,15 @@ const SettingsContainer: FC = () => {
                 id: currentAcc.id,
                 balance: parseFloat(currentAcc.balance),
                 current: parseFloat(currentAcc.current),
-                count:
-                  parseFloat(currentAcc.balance) /
-                  parseFloat(currentAcc.current),
+                priceIn: currentAcc.priceIn,
+                count: parseFloat(
+                  (
+                    parseFloat(currentAcc.balance) /
+                    parseFloat(currentAcc.current)
+                  ).toFixed(1),
+                ),
               });
-              navigate("/histories/" + currentAcc.ticker);
+              navigate("/tickers/" + currentAcc.ticker);
             }}
           >
             Save

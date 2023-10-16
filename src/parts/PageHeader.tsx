@@ -1,25 +1,9 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
 import BlendIcon from "./icons/Bend";
 import axios from "axios";
-import { ITickerInfo } from "../types/ticker";
-// import { format } from "date-fns";
+import { ITickerAccount, ITickerDropdown, ITickerInfo } from "../types/ticker";
 import { useLocation, useNavigate } from "react-router-dom";
 import CustomerDropdown, { ICustomer } from "../components/CustomerDropdown";
-
-export interface ITickerDropdown {
-  name: string;
-  icon: React.ReactElement;
-  sub?: string;
-  ticker?: string;
-}
-
-export interface ITickerAccount {
-  balance: string;
-  current: string;
-  ticker: string;
-  id?: string;
-  count: number;
-}
 
 const PageHeader: FC = () => {
   const options: ICustomer[] = [
@@ -112,12 +96,12 @@ const PageHeader: FC = () => {
             >
               <div className="bg-opacity-10 text-primary lh-1 rounded-pill p-2">
                 <i
-                  className={`ph-light ph-lg-size ph-scales text-${
-                    totalPerc < 0 ? "danger" : "success"
-                  }`}
+                  className={`ph-light ph-md-size ph-trend-${
+                    totalPerc < 0 ? "down" : "up"
+                  } text-${totalPerc < 0 ? "danger" : "success"}`}
                 ></i>
               </div>
-              <div className="ml-1 flex-1">
+              <div className="ml-1 flex-1 p-tb-xxs">
                 <h5 className="mb-0">
                   {USDollar.format(parseFloat(currentAcc?.balance || "") || 0)}
                 </h5>
@@ -138,6 +122,12 @@ const PageHeader: FC = () => {
                       {(totalPerc * 100).toFixed(2)}%
                     </span>
                   </span>
+                </div>
+                <div>
+                  @
+                  {parseFloat(currentAcc?.count as unknown as string).toFixed(
+                    2,
+                  )}
                 </div>
               </div>
               <i

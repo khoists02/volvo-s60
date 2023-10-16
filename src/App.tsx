@@ -54,7 +54,7 @@ function App() {
         arrays.forEach(async (item: any) => {
           const per = ((parseFloat(item.Close) - prevClose) / prevClose) * 100;
           if (Math.abs(per) > 5) {
-            // more than 5%
+            // increase or decrease more than (+ or -) 5%
             const dataRequest = {
               ticker: "BLND",
               per: parseFloat(per.toFixed(2)),
@@ -108,7 +108,7 @@ function App() {
         <Sidebar />
         <div className="content-wrapper">
           <div className="content-inner">
-            {path.pathname.includes("/histories/") && <PageHeader />}
+            {path.pathname.includes("/tickers/") && <PageHeader />}
             <div className="content pt-3">
               <AppRoutes />
             </div>
