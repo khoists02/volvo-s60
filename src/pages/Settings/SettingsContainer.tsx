@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { FC, useEffect, useState } from "react";
-import { ITickerAccount } from "../../parts/PageHeader";
 import { useNavigate } from "react-router-dom";
+import { ITickerAccount } from "../../types/ticker";
 
 const SettingsContainer: FC = () => {
   const navigate = useNavigate();
