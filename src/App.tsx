@@ -51,25 +51,24 @@ function App() {
       });
       const arrays = rs.data || [];
       if (arrays.length > 0) {
-        arrays.forEach(async (item: any) => {
-          const per = ((parseFloat(item.Close) - prevClose) / prevClose) * 100;
-          if (Math.abs(per) > 5) {
-            // increase or decrease more than (+ or -) 5%
-            const dataRequest = {
-              ticker: "BLND",
-              per: parseFloat(per.toFixed(2)),
-              close: parseFloat(item.Close),
-              updatedAt: `${format(new Date(), "yyyy-MM-dd")} ${format(
-                new Date(),
-                "HH:mm:ss",
-              )}`,
-            };
-            await axios.post("/notifications", dataRequest);
-            // reload
-            dispatch(getAllNoti());
-            dispatch(getCountNoti());
-          }
-        });
+        const item = arrays[arrays.length - 1];
+        const per = ((parseFloat(item.Close) - prevClose) / prevClose) * 100;
+        if (Math.abs(per) > 5) {
+          // increase or decrease more than (+ or -) 5%
+          const dataRequest = {
+            ticker: "BLND",
+            per: parseFloat(per.toFixed(2)),
+            close: parseFloat(item.Close),
+            updatedAt: `${format(new Date(), "yyyy-MM-dd")} ${format(
+              new Date(),
+              "HH:mm:ss",
+            )}`,
+          };
+          await axios.post("/notifications", dataRequest);
+          // reload
+          dispatch(getAllNoti());
+          dispatch(getCountNoti());
+        }
       }
     };
 
