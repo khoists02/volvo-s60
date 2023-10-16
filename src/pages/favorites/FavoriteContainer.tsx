@@ -78,7 +78,12 @@ const FavoriteContainer: FC = () => {
                         key={f.shortName}
                       >
                         <td>
-                          <i
+                          {loading && (
+                            <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
+                          )}
+
+                          {!loading && (
+                            <i
                             className={`text-${
                               f.currentPrice > f.previousClose
                                 ? "success"
@@ -87,6 +92,7 @@ const FavoriteContainer: FC = () => {
                               f.currentPrice > f.previousClose ? "up" : "down"
                             }`}
                           ></i>
+                          )}
                         </td>
                         <td>{f.shortName}</td>
                         <td>

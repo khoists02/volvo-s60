@@ -324,6 +324,19 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
 
             <button
               onClick={() => {
+                setSelectedType(FilterType["this-week"]);
+              }}
+              className={`btn btn-${
+                selectedType === FilterType["this-week"] ? "primary" : "light"
+              } d-flex align-item-center`}
+            >
+              <span>This Week</span>{" "}
+              {loading && selectedType === FilterType["this-week"] && (
+                <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
+              )}
+            </button>
+            <button
+              onClick={() => {
                 setSelectedType(FilterType["last-week"]);
               }}
               className={`btn btn-${
@@ -345,19 +358,6 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
             >
               <span>Last Month</span>{" "}
               {loading && selectedType === FilterType["last-month"] && (
-                <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
-              )}
-            </button>
-            <button
-              onClick={() => {
-                setSelectedType(FilterType["this-week"]);
-              }}
-              className={`btn btn-${
-                selectedType === FilterType["this-week"] ? "primary" : "light"
-              } d-flex align-item-center`}
-            >
-              <span>This Week</span>{" "}
-              {loading && selectedType === FilterType["this-week"] && (
                 <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
               )}
             </button>
