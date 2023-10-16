@@ -15,7 +15,7 @@ import {
   getCountNoti,
 } from "./reducers/ducks/operators/notificationOperator";
 import axios from "axios";
-import { addDays, format, isSunday } from "date-fns";
+import { addDays, addHours, format, isSunday } from "date-fns";
 import { HistoryAction } from "./reducers/ducks/slices/historySlice";
 
 function App() {
@@ -24,7 +24,8 @@ function App() {
   const timerTicker = useRef<NodeJS.Timer | null>(null);
   const dispatch = useAppDispatch();
   const current = new Date();
-  const nextDay = addDays(current, 1);
+  const nextDay = addDays(addHours(current, 0), 1);
+  nextDay.setHours(0);
   const hour: number = current.getHours();
   const hourNext: number = nextDay.getHours();
   const { entities, loading, count } = useSelector(

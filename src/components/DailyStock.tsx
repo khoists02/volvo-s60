@@ -1,4 +1,4 @@
-import { addDays, format, isSunday } from "date-fns";
+import { addDays, addHours, format, isSunday } from "date-fns";
 import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import { getStyleStock } from "../helpers";
 import { useSelector } from "react-redux";
@@ -16,7 +16,8 @@ interface IDailyStock {
 const DailyStock: FC<IDailyStock> = ({ ticker }) => {
   const timer = useRef<NodeJS.Timer | null>(null);
   const currentDate = new Date();
-  const nextDate = addDays(currentDate, 1);
+  const nextDate = addDays(addHours(currentDate, 0), 1);
+  nextDate.setHours(0);
   const hour: number = currentDate.getHours();
   const hourNext: number = nextDate.getHours();
   const [openMarket, setOpenMarket] = useState(false);
@@ -45,14 +46,19 @@ const DailyStock: FC<IDailyStock> = ({ ticker }) => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    // run first time ok
+    if (hour >= 20 && hourNext <= 5 && !isSunday(new Date()))
+      setOpenMarket(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     timer.current = setInterval(
       () => {
         if (hour >= 20 && hourNext <= 5 && !isSunday(new Date())) {
-          if (!openMarket && dailyData.length > 0) setOpenMarket(true);
           fetchData();
-        } else {
-          setOpenMarket(false); // TODO:
         }
       },
       1000 * 60 * 5, // 5mn after 20PM - 5AM next day

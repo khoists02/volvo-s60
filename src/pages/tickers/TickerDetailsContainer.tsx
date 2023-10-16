@@ -6,7 +6,7 @@ import axios from "axios";
 import BlendIcon from "../../parts/icons/Bend";
 import StockHistory from "../../components/StockHistory";
 import { useParams } from "react-router-dom";
-import { addDays } from "date-fns";
+import { addDays, addHours } from "date-fns";
 import DailyStock from "../../components/DailyStock";
 
 const TickerDetails: FC = () => {
@@ -15,7 +15,8 @@ const TickerDetails: FC = () => {
   const timer = useRef<NodeJS.Timer | null>(null);
   const [tickerStr, setTickerStr] = useState(id?.toUpperCase());
   const current = new Date();
-  const nextDay = addDays(current, 1);
+  const nextDay = addDays(addHours(current, 0), 1);
+  nextDay.setHours(0);
   const hour: number = current.getHours();
   const hourNext: number = nextDay.getHours();
   const [ticker, setTicker] = useState<ITickerInfo | undefined>(undefined);
