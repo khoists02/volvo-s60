@@ -52,7 +52,7 @@ const DailyStock: FC<IDailyStock> = ({ ticker }) => {
           if (!openMarket && dailyData.length > 0) setOpenMarket(true);
           fetchData();
         } else {
-          setOpenMarket(false);
+          setOpenMarket(false); // TODO:
         }
       },
       1000 * 60 * 5, // 5mn after 20PM - 5AM next day

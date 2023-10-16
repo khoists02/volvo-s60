@@ -54,17 +54,19 @@ const TickerInfo: FC<{
               <span className="d-inline-block bg-success rounded-pill p-1 mr-1"></span>
               <span className="text-muted">{currentDate.toDateString()}</span>
               <span
-                className="ml-1 cursor-pointer"
+                className="badge badge-primary ml-1 cursor-pointer d-flex align-items-center"
                 onClick={() => {
                   if (reload) reload();
                 }}
               >
-                <i className=" ph-light ph-sm-size ph-arrow-clockwise"></i>
+                {loading && (
+                  <i className="ph-light ph-spinner ph-sm-size spinner mr-1"></i>
+                )}
+                <span>Reload</span>
               </span>
             </div>
           </div>
         </div>
-
         <div className="d-flex align-items-center mb-3 mb-lg-0">
           <div className="bg-opacity-10 text-primary lh-1 rounded-pill p-2">
             <i className="ph-light ph-lg-size ph-currency-circle-dollar"></i>

@@ -11,7 +11,7 @@ interface CustomAxiosError extends AxiosError {
   config: CustomAxiosRequestConfig;
 }
 
-const TIMEOUT = 1 * 60 * 1000;
+const TIMEOUT = 1 * 60 * 1000; // 1ph
 axios.defaults.timeout = TIMEOUT;
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
