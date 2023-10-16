@@ -10,7 +10,7 @@ export interface ITickerInfo {
   ebitdaMargins?: number;
   operatingMargins?: number;
   revenueGrowth?: number;
-  operatingCashflow?: number; 
+  operatingCashflow?: number;
   freeCashflow?: number;
   grossProfits?: number;
   returnOnEquity?: number;
@@ -111,4 +111,5 @@ export interface ITickerAccount {
   ticker: string;
   id?: string;
   count: number;
+  priceIn: number;
 }

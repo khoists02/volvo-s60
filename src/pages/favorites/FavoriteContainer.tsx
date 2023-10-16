@@ -81,7 +81,7 @@ const FavoriteContainer: FC = () => {
                           parseFloat(f.currentPrice),
                           parseFloat(f.previousClose),
                         )}
-                        onClick={() => navigate(`/histories/${f.symbol}`)}
+                        onClick={() => navigate(`/tickers/${f.symbol}`)}
                         key={f.shortName}
                       >
                         <td>
