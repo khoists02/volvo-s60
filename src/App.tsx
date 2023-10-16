@@ -74,9 +74,9 @@ function App() {
 
     timerTicker.current = setInterval(
       () => {
-        if (hour >= 20 && hourNext <= 5 && !isSunday(new Date())) getStock(); // 20PM td - 5PM tmr
+        if (hour >= 20 && hourNext <= 5 && !isSunday(new Date())) getStock();
       },
-      1000 * 60 * 5, // 5mn
+      1000 * 60 * 5, // 5mn after 20PM - 5AM next day
     );
 
     return () => {
@@ -93,7 +93,7 @@ function App() {
     timer.current = setInterval(() => {
       dispatch(getAllNoti());
       dispatch(getCountNoti());
-    }, 1000 * 60); // 10s, after 21h every day
+    }, 1000 * 60); // after 1ph
 
     return () => {
       if (timer.current) clearInterval(timer.current);

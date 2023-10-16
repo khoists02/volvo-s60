@@ -2,6 +2,9 @@ import axios from "axios";
 import { AppThunk } from "../../../config/store";
 import { NotificationActions } from "../slices/notificationSlice";
 import { HistoryAction } from "../slices/historySlice";
+import { DailyActions } from "../slices/dailySlice";
+import { ITickerInfo } from "../../../types/ticker";
+import { IHistoryResponse } from "../../../components/StockHistory";
 
 export const getAllNoti = (): AppThunk => async (dispatch) => {
   try {
@@ -46,3 +49,60 @@ export const getFavoritesTimer = (): AppThunk => async (dispatch) => {
     dispatch(HistoryAction.getAllFail());
   }
 };
+
+export const getTickerInfo =
+  (ticker: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(DailyActions.getTickerStart());
+      const response = await axios.get("/info", {
+        params: { ticker },
+      });
+      dispatch(DailyActions.getTickerSuccess(response.data as ITickerInfo));
+    } catch (error) {
+      dispatch(DailyActions.getTickerFail());
+    }
+  };
+
+export const getDailyDataByTicker =
+  (ticker: string, start: string, end: string, interval: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(DailyActions.getDailyDataStart());
+      const res = await axios.get("/daily", {
+        params: {
+          ticker: ticker,
+          start,
+          end,
+          interval,
+        },
+      });
+      if (res.data) {
+        const dailyRs: IHistoryResponse[] = [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        res.data.forEach((r: any) => {
+          dailyRs.push({
+            open: r.Open,
+            date: new Date().getMilliseconds(),
+            close: r.Close,
+            low: r.Low,
+            high: r.High,
+            ticker: ticker,
+            volume: 0,
+            adjclose: 0,
+          });
+        });
+
+        dispatch(
+          DailyActions.getDailyDataSuccess(
+            dailyRs.reverse().map((x, index) => {
+              const t = (index + 1) * 15;
+              return { ...x, timeline: t.toString() };
+            }),
+          ),
+        );
+      }
+    } catch (error) {
+      dispatch(DailyActions.getDailyDataFail());
+    }
+  };

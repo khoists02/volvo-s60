@@ -7,6 +7,7 @@ import BlendIcon from "../../parts/icons/Bend";
 import StockHistory from "../../components/StockHistory";
 import { useParams } from "react-router-dom";
 import { addDays } from "date-fns";
+import DailyStock from "../../components/DailyStock";
 
 const TickerDetails: FC = () => {
   const tickerPr = useParams();
@@ -64,7 +65,9 @@ const TickerDetails: FC = () => {
           }}
         />
       </div>
-
+      <div className="col-md-12 m-tb-sm">
+        <DailyStock ticker={tickerStr || ""} />
+      </div>
       <div className="col-md-12">
         <StockHistory info={ticker} ticker={tickerStr || ""} />
       </div>
