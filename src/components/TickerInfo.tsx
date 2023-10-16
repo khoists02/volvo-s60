@@ -46,7 +46,7 @@ const TickerInfo: FC<{
               </span>
             </div>
 
-            <div className="">
+            <div className="font-h4">
               <span className="">Prev Close</span>
               <span className="ml-2">{ticker?.previousClose}</span>
             </div>
