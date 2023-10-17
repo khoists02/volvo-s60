@@ -65,8 +65,7 @@ const TickerDetails: FC = () => {
         // eslint-disable-next-line no-console
         console.log("current hour", hour);
         setHour(new Date().getHours());
-        if (hour >= 20 || (hour >= 0 && hour <= 5))
-          dispatch(getTickerInfo(tickerStr as string)); // 20PM td - 5PM tmr
+        dispatch(getTickerInfo(tickerStr as string));
       },
       1000 * 60 * 1, // 1mn
     );
