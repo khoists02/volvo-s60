@@ -8,6 +8,8 @@ import StockHistory from "../../components/StockHistory";
 import { useParams } from "react-router-dom";
 import { addDays } from "date-fns";
 import DailyStock from "../../components/DailyStock";
+import { HOLIDAYS } from "../../constants";
+import format from "date-fns/format";
 
 const TickerDetails: FC = () => {
   const tickerPr = useParams();
@@ -35,7 +37,7 @@ const TickerDetails: FC = () => {
       () => {
         // eslint-disable-next-line no-console
         console.log("current hour", hour);
-        setHour(current.getHours());
+        setHour(new Date().getHours());
         if (hour >= 20 || (hour >= 0 && hour <= 5)) getInfo(); // 20PM td - 5PM tmr
       },
       1000 * 60 * 5, // 5mn
@@ -67,9 +69,12 @@ const TickerDetails: FC = () => {
           }}
         />
       </div>
-      <div className="col-md-12 m-tb-sm">
-        <DailyStock ticker={tickerStr || ""} />
-      </div>
+      {!HOLIDAYS.includes(format(new Date(), "yyyy-MM-dd")) && (
+        <div className="col-md-12 m-tb-sm">
+          <DailyStock ticker={tickerStr || ""} />
+        </div>
+      )}
+
       <div className="col-md-12">
         <StockHistory info={ticker} ticker={tickerStr || ""} />
       </div>

@@ -57,7 +57,7 @@ const DailyStock: FC<IDailyStock> = ({ ticker }) => {
       () => {
         // eslint-disable-next-line no-console
         console.log("current hour", hour);
-        setHour(currentDate.getHours());
+        setHour(new Date().getHours());
         if ((hour >= 20 || (hour >= 0 && hour <= 5)) && !isSunday(new Date())) {
           fetchData();
         }

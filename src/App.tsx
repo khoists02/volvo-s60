@@ -30,7 +30,7 @@ function App() {
   );
 
   useEffect(() => {
-    const getStock = async () => {
+    const pushNotification = async () => {
       const inRs = await axios.get("/info", {
         params: {
           ticker: "BLND",
@@ -74,9 +74,9 @@ function App() {
       () => {
         // eslint-disable-next-line no-console
         console.log("current hour", hour);
-        setHour(current.getHours());
+        setHour(new Date().getHours());
         if ((hour >= 20 || (hour >= 0 && hour <= 5)) && !isSunday(new Date()))
-          getStock();
+          pushNotification();
       },
       1000 * 60 * 5, // 5mn after 20PM - 5AM next day
     );
