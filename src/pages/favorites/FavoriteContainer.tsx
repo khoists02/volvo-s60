@@ -49,7 +49,7 @@ const FavoriteContainer: FC = () => {
               }}
             >
               {loading && (
-                <i className="ph-light ph-spinner ph-sm-size spinner mr-2"></i>
+                <i className="ph-light ph-spinner ph-xs-size spinner mr-2"></i>
               )}
               <span>Reload</span>
             </span>
@@ -129,6 +129,15 @@ const FavoriteContainer: FC = () => {
                               e.stopPropagation();
                               // eslint-disable-next-line no-console
                               console.log("calculator function");
+                            }}
+                          ></i>
+
+                          <i
+                            className="ph-light ph-sm-size ph-currency-circle-dollar cursor-pointer ml-2"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              navigate(`/bidasks/${f.symbol}`);
                             }}
                           ></i>
                         </td>

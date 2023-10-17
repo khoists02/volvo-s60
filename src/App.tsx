@@ -159,7 +159,7 @@ function App() {
               }}
             >
               {loading && (
-                <i className="ph-light ph-spinner ph-sm-size spinner mr-2"></i>
+                <i className="ph-light ph-spinner ph-xs-size spinner mr-2"></i>
               )}
               Reload
             </span>

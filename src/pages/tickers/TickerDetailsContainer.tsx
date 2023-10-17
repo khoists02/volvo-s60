@@ -2,11 +2,9 @@
 import React, { FC, useState, useEffect, useRef } from "react";
 import TickerInfo from "../../components/TickerInfo";
 import { ITickerInfo } from "../../types/ticker";
-import axios from "axios";
 import BlendIcon from "../../parts/icons/Bend";
 import StockHistory from "../../components/StockHistory";
 import { useParams } from "react-router-dom";
-import { addDays } from "date-fns";
 import DailyStock from "../../components/DailyStock";
 import { HOLIDAYS } from "../../constants";
 import format from "date-fns/format";
@@ -15,6 +13,8 @@ import { IRootState } from "../../config/reducers";
 import { useAppDispatch } from "../../config/store";
 import { getTickerInfo } from "../../reducers/ducks/operators/notificationOperator";
 import { BidAndAskPrice } from "../../components/BidAndAksPrice";
+import axios from "axios";
+import { IBidAsk } from "../../types/notification";
 
 const TickerDetails: FC = () => {
   const dispatch = useAppDispatch();
@@ -30,7 +30,34 @@ const TickerDetails: FC = () => {
   );
   useEffect(() => {
     setTicker({ ...tickerInfo, icon: <BlendIcon width={70} height={70} /> });
+
+    const postBidAsk = async (body: IBidAsk) => {
+      try {
+        await axios.post("/bidasks", body);
+      } catch {}
+    };
+
+    if (tickerInfo) {
+      if (
+        tickerInfo?.ask !== 0 &&
+        tickerInfo?.bid !== 0 &&
+        tickerInfo.bidSize &&
+        tickerInfo.bidSize > 0 &&
+        tickerInfo.bidSize &&
+        tickerInfo.bidSize > 0
+      ) {
+        postBidAsk({
+          ticker: tickerInfo.symbol as string,
+          bid: tickerInfo?.bid as number,
+          ask: tickerInfo?.ask as number,
+          bidSize: tickerInfo?.bidSize as number,
+          askSize: tickerInfo?.askSize as number,
+          updatedAt: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+        });
+      }
+    }
   }, [tickerInfo]);
+
   useEffect(() => {
     dispatch(getTickerInfo(tickerStr as string));
     timer.current = setInterval(

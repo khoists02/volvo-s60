@@ -89,7 +89,7 @@ const DailyStock: FC<IDailyStock> = ({ ticker }) => {
                 Reload
               </span>
               {(loading || dailyLoading) && (
-                <i className="ph-light ph-spinner ph-sm-size spinner"></i>
+                <i className="ph-light ph-spinner ph-xs-size spinner"></i>
               )}
               <span className="ml-2">Interval: 5m</span>
             </h5>

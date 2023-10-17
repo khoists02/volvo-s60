@@ -61,7 +61,7 @@ const TickerInfo: FC<{
                 }}
               >
                 {loading && (
-                  <i className="ph-light ph-spinner ph-sm-size spinner mr-1"></i>
+                  <i className="ph-light ph-spinner ph-xs-size spinner mr-1"></i>
                 )}
                 <span>Reload</span>
               </span>

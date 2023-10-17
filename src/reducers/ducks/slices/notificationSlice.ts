@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { INotification } from "../../../types/notification";
+import { IBidAsk, INotification } from "../../../types/notification";
 
 const initialState = {
   entities: [] as INotification[],
   loading: false as boolean,
+  loadingBidAsk: false as boolean,
   count: 0 as number,
+  bidasks: [] as IBidAsk[],
 };
 
 const notificationSlice = createSlice({
@@ -24,6 +26,16 @@ const notificationSlice = createSlice({
     getCountSuccess(state, action: PayloadAction<number>) {
       state.count = action.payload;
       state.loading = false;
+    },
+    getBidAskStart(state) {
+      state.loadingBidAsk = true;
+    },
+    getBidAskSuccess(state, action: PayloadAction<IBidAsk[]>) {
+      state.bidasks = action.payload;
+      state.loadingBidAsk = false;
+    },
+    getBidAskFail(state) {
+      state.loadingBidAsk = false;
     },
   },
 });

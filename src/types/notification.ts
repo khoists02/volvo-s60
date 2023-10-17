@@ -6,3 +6,13 @@ export interface INotification {
   ticker: string;
   read: boolean;
 }
+
+export interface IBidAsk {
+  id?: string;
+  updatedAt?: string;
+  ticker: string;
+  ask: number;
+  askSize: number;
+  bid: number;
+  bidSize: number;
+}
