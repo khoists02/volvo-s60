@@ -6,7 +6,7 @@ import axios from "axios";
 import BlendIcon from "../../parts/icons/Bend";
 import StockHistory from "../../components/StockHistory";
 import { useParams } from "react-router-dom";
-import { addDays, addHours } from "date-fns";
+import { addDays } from "date-fns";
 import DailyStock from "../../components/DailyStock";
 
 const TickerDetails: FC = () => {
@@ -15,10 +15,8 @@ const TickerDetails: FC = () => {
   const timer = useRef<NodeJS.Timer | null>(null);
   const [tickerStr, setTickerStr] = useState(id?.toUpperCase());
   const current = new Date();
-  const nextDay = addDays(addHours(current, 0), 1);
-  nextDay.setHours(0);
-  const hour: number = current.getHours();
-  const hourNext: number = nextDay.getHours();
+  const nextDay = addDays(current, 1);
+  const [hour, setHour] = useState(current.getHours());
   const [ticker, setTicker] = useState<ITickerInfo | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -35,7 +33,10 @@ const TickerDetails: FC = () => {
     getInfo();
     timer.current = setInterval(
       () => {
-        if (hour >= 20 && hourNext <= 5) getInfo(); // 20PM td - 5PM tmr
+        // eslint-disable-next-line no-console
+        console.log("current hour", hour);
+        setHour(current.getHours());
+        if (hour >= 20 || (hour >= 0 && hour <= 5)) getInfo(); // 20PM td - 5PM tmr
       },
       1000 * 60 * 5, // 5mn
     );
@@ -44,7 +45,7 @@ const TickerDetails: FC = () => {
       if (timer.current) clearInterval(timer.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tickerStr]);
+  }, [tickerStr, hour]);
   return (
     <div className="row">
       <div className="col-md-12">

@@ -17,9 +17,7 @@ const DailyStock: FC<IDailyStock> = ({ ticker }) => {
   const timer = useRef<NodeJS.Timer | null>(null);
   const currentDate = new Date();
   const nextDate = addDays(addHours(currentDate, 0), 1);
-  nextDate.setHours(0);
-  const hour: number = currentDate.getHours();
-  const hourNext: number = nextDate.getHours();
+  const [hour, setHour] = useState(currentDate.getHours());
   const [openMarket, setOpenMarket] = useState(false);
   const dispatch = useAppDispatch();
   const {
@@ -49,7 +47,7 @@ const DailyStock: FC<IDailyStock> = ({ ticker }) => {
 
   useEffect(() => {
     // run first time ok
-    if (hour >= 20 && hourNext <= 5 && !isSunday(new Date()))
+    if ((hour >= 20 || (hour >= 0 && hour <= 5)) && !isSunday(new Date()))
       setOpenMarket(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -57,7 +55,10 @@ const DailyStock: FC<IDailyStock> = ({ ticker }) => {
   useEffect(() => {
     timer.current = setInterval(
       () => {
-        if (hour >= 20 && hourNext <= 5 && !isSunday(new Date())) {
+        // eslint-disable-next-line no-console
+        console.log("current hour", hour);
+        setHour(currentDate.getHours());
+        if ((hour >= 20 || (hour >= 0 && hour <= 5)) && !isSunday(new Date())) {
           fetchData();
         }
       },
@@ -68,7 +69,8 @@ const DailyStock: FC<IDailyStock> = ({ ticker }) => {
       if (timer.current) clearInterval(timer.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, openMarket, dailyData]);
+  }, [hour]);
+
   return (
     <div className="card">
       <div className="card-header d-flex align-items-center justify-content-between">

@@ -15,7 +15,7 @@ import {
   getCountNoti,
 } from "./reducers/ducks/operators/notificationOperator";
 import axios from "axios";
-import { addDays, addHours, format, isSunday } from "date-fns";
+import { addDays, format, isSunday } from "date-fns";
 import { HistoryAction } from "./reducers/ducks/slices/historySlice";
 
 function App() {
@@ -24,10 +24,7 @@ function App() {
   const timerTicker = useRef<NodeJS.Timer | null>(null);
   const dispatch = useAppDispatch();
   const current = new Date();
-  const nextDay = addDays(addHours(current, 0), 1);
-  nextDay.setHours(0);
-  const hour: number = current.getHours();
-  const hourNext: number = nextDay.getHours();
+  const [hour, setHour] = useState(current.getHours());
   const { entities, loading, count } = useSelector(
     (state: IRootState) => state.notiReducer,
   );
@@ -75,7 +72,11 @@ function App() {
 
     timerTicker.current = setInterval(
       () => {
-        if (hour >= 20 && hourNext <= 5 && !isSunday(new Date())) getStock();
+        // eslint-disable-next-line no-console
+        console.log("current hour", hour);
+        setHour(current.getHours());
+        if ((hour >= 20 || (hour >= 0 && hour <= 5)) && !isSunday(new Date()))
+          getStock();
       },
       1000 * 60 * 5, // 5mn after 20PM - 5AM next day
     );
@@ -85,7 +86,7 @@ function App() {
       dispatch(HistoryAction.clear());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [hour]);
 
   useEffect(() => {
     dispatch(getAllNoti());
