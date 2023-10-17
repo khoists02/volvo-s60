@@ -72,6 +72,7 @@ const FavoriteContainer: FC = () => {
                     <th>Ask</th>
                     <th>Type</th>
                     <th>Recommendation Key</th>
+                    <th></th>
                     {/* <th>Recommendation Target</th> */}
                   </tr>
                 </thead>
@@ -119,10 +120,18 @@ const FavoriteContainer: FC = () => {
                           {f.ask} ({f.askSize})
                         </td>
                         <td>{f.industryDisp}</td>
+                        <td>{f.recommendationKey}</td>
                         <td>
-                          {f.recommendationKey} {f.recommendationMean}
+                          <i
+                            className="ph-light ph-sm-size ph-calculator cursor-pointer"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              // eslint-disable-next-line no-console
+                              console.log("calculator function");
+                            }}
+                          ></i>
                         </td>
-                        {/* <td>{f.recommendationMean}</td> */}
                       </tr>
                     );
                   })}

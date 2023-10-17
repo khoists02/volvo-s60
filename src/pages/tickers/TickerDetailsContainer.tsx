@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { IRootState } from "../../config/reducers";
 import { useAppDispatch } from "../../config/store";
 import { getTickerInfo } from "../../reducers/ducks/operators/notificationOperator";
+import { BidAndAskPrice } from "../../components/BidAndAksPrice";
 
 const TickerDetails: FC = () => {
   const dispatch = useAppDispatch();
@@ -64,6 +65,10 @@ const TickerDetails: FC = () => {
           <DailyStock ticker={tickerStr || ""} />
         </div>
       )}
+
+      <div className="col-md-12">
+        <BidAndAskPrice ticker={ticker} />
+      </div>
 
       <div className="col-md-12">
         <StockHistory info={ticker} ticker={tickerStr || ""} />
