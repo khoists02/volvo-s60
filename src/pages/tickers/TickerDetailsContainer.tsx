@@ -15,6 +15,7 @@ import { getTickerInfo } from "../../reducers/ducks/operators/notificationOperat
 import { BidAndAskPrice } from "../../components/BidAndAksPrice";
 import axios from "axios";
 import { IBidAsk } from "../../types/notification";
+import { New } from "../../components/New";
 
 const TickerDetails: FC = () => {
   const dispatch = useAppDispatch();
@@ -98,6 +99,10 @@ const TickerDetails: FC = () => {
 
       <div className="col-md-12">
         <StockHistory info={ticker} ticker={tickerStr || ""} />
+      </div>
+
+      <div className="col-md-12">
+        <New ticker={tickerStr as string} />
       </div>
     </div>
   );

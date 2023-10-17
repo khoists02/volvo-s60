@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IBidAsk, INotification } from "../../../types/notification";
+import { INew } from "../../../types/ticker";
 
 const initialState = {
   entities: [] as INotification[],
@@ -7,6 +8,8 @@ const initialState = {
   loadingBidAsk: false as boolean,
   count: 0 as number,
   bidasks: [] as IBidAsk[],
+  news: [] as INew[],
+  loadingNews: false,
 };
 
 const notificationSlice = createSlice({
@@ -35,6 +38,16 @@ const notificationSlice = createSlice({
       state.loadingBidAsk = false;
     },
     getBidAskFail(state) {
+      state.loadingBidAsk = false;
+    },
+    getNewsStart(state) {
+      state.loadingNews = true;
+    },
+    getNewsSuccess(state, action: PayloadAction<INew[]>) {
+      state.news = action.payload;
+      state.loadingNews = false;
+    },
+    getNewsFail(state) {
       state.loadingBidAsk = false;
     },
   },

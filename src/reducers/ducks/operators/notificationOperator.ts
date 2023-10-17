@@ -30,6 +30,20 @@ export const getBidAskNoti =
     }
   };
 
+export const getNewsNoti =
+  (ticker: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(NotificationActions.getNewsStart());
+      const response = await axios.get("/recommendations", {
+        params: { ticker },
+      });
+      dispatch(NotificationActions.getNewsSuccess(response.data));
+    } catch (error) {
+      dispatch(NotificationActions.getNewsFail());
+    }
+  };
+
 export const getCountNoti = (): AppThunk => async (dispatch) => {
   try {
     dispatch(NotificationActions.getAllStart());

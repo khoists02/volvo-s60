@@ -114,3 +114,9 @@ export interface ITickerAccount {
   priceIn: number;
   priceOut: number;
 }
+
+export interface INew {
+  title?: string;
+  link?: string;
+  publisher?: string;
+}
