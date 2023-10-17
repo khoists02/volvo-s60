@@ -28,16 +28,12 @@ function App() {
   const { entities, loading, count } = useSelector(
     (state: IRootState) => state.notiReducer,
   );
+  const { ticker } = useSelector((state: IRootState) => state.dailyReducer);
 
   useEffect(() => {
     const pushNotification = async () => {
-      const inRs = await axios.get("/info", {
-        params: {
-          ticker: "BLND",
-        },
-      });
-      const prevClose = inRs.data.previousClose
-        ? parseFloat(inRs.data.previousClose)
+      const prevClose = ticker?.previousClose
+        ? parseFloat(ticker?.previousClose)
         : 0;
       const rs = await axios.get("/daily", {
         params: {
@@ -47,7 +43,7 @@ function App() {
           interval: "5m",
         },
       });
-      const arrays = rs.data || [];
+      const arrays = rs.data?.reverse() || [];
       if (arrays.length > 0) {
         const item = arrays[arrays.length - 1];
         const per = ((parseFloat(item.Close) - prevClose) / prevClose) * 100;
@@ -86,7 +82,7 @@ function App() {
       dispatch(HistoryAction.clear());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hour]);
+  }, [hour, ticker]);
 
   useEffect(() => {
     dispatch(getAllNoti());
