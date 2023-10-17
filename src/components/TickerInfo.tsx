@@ -21,7 +21,11 @@ const TickerInfo: FC<{
   return (
     <div className="card">
       <div className="card-header d-sm-flex align-items-sm-center py-sm-0">
-        <h5 className="py-sm-2 my-sm-1">{ticker?.shortName}</h5>
+        <h5 className="py-sm-2 my-sm-1">
+          <div className={`${loading ? "skeleton-box" : ""}`}>
+            <span>{ticker?.shortName}</span>
+          </div>
+        </h5>
         {loading && ticker && (
           <i className="ph-light ph-sm-size ph-spinner spinner"></i>
         )}
