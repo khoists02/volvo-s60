@@ -430,6 +430,130 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
             ></i>
           </div>
         </div>
+
+        {showAdvanced && filterred.length > 0 && (
+          <div className="animated fadeInUp">
+            <div className="table-light">
+              <div className="d-flex align-items-center p-tb-xs w-100">
+                <h4>{title}</h4>
+                {loading && (
+                  <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
+                )}
+              </div>
+            </div>
+
+            <div className="table-light">
+              <div className="d-flex align-items-center p-tb-xs w-100 font-weight font-h4">
+                <span className="text-secondary">
+                  Current: {info?.currentPrice}
+                </span>
+                <span className="text-primary ml-2">Avg: {expectedTrated}</span>
+                <span className="text-success ml-2">Max: {max.toFixed(2)}</span>
+                <span className="text-danger ml-2">Min: {min.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <div className="table-light">
+              <div className="d-flex p-tb-xs w-100">
+                <div
+                  className="d-flex align-items-center mr-2 cursor-pointer"
+                  onClick={() => {
+                    let days = [...daysFilter];
+                    if (days.includes("MON")) {
+                      days = days.filter((x) => x !== "MON");
+                    } else {
+                      days = ["MON", ...days];
+                    }
+                    setDaysFilter(days);
+                  }}
+                >
+                  <span>Monday</span>
+                  <input
+                    checked={daysFilter.includes("MON")}
+                    type="checkbox"
+                    className="ml-1"
+                  />
+                </div>
+                <div
+                  className="d-flex align-items-center mr-2 cursor-pointer"
+                  onClick={() => {
+                    let days = [...daysFilter];
+                    if (days.includes("TUES")) {
+                      days = days.filter((x) => x !== "TUES");
+                    } else {
+                      days = ["TUES", ...days];
+                    }
+                    setDaysFilter(days);
+                  }}
+                >
+                  <span>Tuesday</span>
+                  <input
+                    checked={daysFilter.includes("TUES")}
+                    type="checkbox"
+                    className="ml-1"
+                  />
+                </div>
+                <div
+                  className="d-flex align-items-center mr-2 cursor-pointer"
+                  onClick={() => {
+                    let days = [...daysFilter];
+                    if (days.includes("WED")) {
+                      days = days.filter((x) => x !== "WED");
+                    } else {
+                      days = ["WED", ...days];
+                    }
+                    setDaysFilter(days);
+                  }}
+                >
+                  <span>Wed</span>
+                  <input
+                    checked={daysFilter.includes("WED")}
+                    type="checkbox"
+                    className="ml-1"
+                  />
+                </div>
+                <div
+                  className="d-flex align-items-center mr-2 cursor-pointer"
+                  onClick={() => {
+                    let days = [...daysFilter];
+                    if (days.includes("THUR")) {
+                      days = days.filter((x) => x !== "THUR");
+                    } else {
+                      days = ["THUR", ...days];
+                    }
+                    setDaysFilter(days);
+                  }}
+                >
+                  <span>Thur</span>
+                  <input
+                    checked={daysFilter.includes("THUR")}
+                    type="checkbox"
+                    className="ml-1"
+                  />
+                </div>
+                <div
+                  className="d-flex align-items-center mr-2 cursor-pointer"
+                  onClick={() => {
+                    let days = [...daysFilter];
+                    if (days.includes("FRI")) {
+                      days = days.filter((x) => x !== "FRI");
+                    } else {
+                      days = ["FRI", ...days];
+                    }
+                    setDaysFilter(days);
+                  }}
+                >
+                  <span>Fri</span>
+                  <input
+                    checked={daysFilter.includes("FRI")}
+                    type="checkbox"
+                    className="ml-1"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       <div className="card-body">
         <div className="table-responsive">
@@ -445,135 +569,6 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
                 <th>Adj Close</th>
               </tr>
             </thead>
-            {showAdvanced && filterred.length > 0 && (
-              <div className="animated fadeInUp">
-                <div className="table-light">
-                  <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100">
-                    <h4>{title}</h4>
-                    {loading && (
-                      <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
-                    )}
-                  </div>
-                </div>
-
-                <div className="table-light">
-                  <div className="d-flex align-items-center p-lr-sm p-tb-xs w-100 font-weight font-h4">
-                    <span className="text-secondary">
-                      Current: {info?.currentPrice}
-                    </span>
-                    <span className="text-primary ml-2">
-                      Avg: {expectedTrated}
-                    </span>
-                    <span className="text-success ml-2">
-                      Max: {max.toFixed(2)}
-                    </span>
-                    <span className="text-danger ml-2">
-                      Min: {min.toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="table-light">
-                  <div className="d-flex p-lr-sm p-tb-xs w-100">
-                    <div
-                      className="d-flex align-items-center mr-2 cursor-pointer"
-                      onClick={() => {
-                        let days = [...daysFilter];
-                        if (days.includes("MON")) {
-                          days = days.filter((x) => x !== "MON");
-                        } else {
-                          days = ["MON", ...days];
-                        }
-                        setDaysFilter(days);
-                      }}
-                    >
-                      <span>Monday</span>
-                      <input
-                        checked={daysFilter.includes("MON")}
-                        type="checkbox"
-                        className="ml-1"
-                      />
-                    </div>
-                    <div
-                      className="d-flex align-items-center mr-2 cursor-pointer"
-                      onClick={() => {
-                        let days = [...daysFilter];
-                        if (days.includes("TUES")) {
-                          days = days.filter((x) => x !== "TUES");
-                        } else {
-                          days = ["TUES", ...days];
-                        }
-                        setDaysFilter(days);
-                      }}
-                    >
-                      <span>Tuesday</span>
-                      <input
-                        checked={daysFilter.includes("TUES")}
-                        type="checkbox"
-                        className="ml-1"
-                      />
-                    </div>
-                    <div
-                      className="d-flex align-items-center mr-2 cursor-pointer"
-                      onClick={() => {
-                        let days = [...daysFilter];
-                        if (days.includes("WED")) {
-                          days = days.filter((x) => x !== "WED");
-                        } else {
-                          days = ["WED", ...days];
-                        }
-                        setDaysFilter(days);
-                      }}
-                    >
-                      <span>Wed</span>
-                      <input
-                        checked={daysFilter.includes("WED")}
-                        type="checkbox"
-                        className="ml-1"
-                      />
-                    </div>
-                    <div
-                      className="d-flex align-items-center mr-2 cursor-pointer"
-                      onClick={() => {
-                        let days = [...daysFilter];
-                        if (days.includes("THUR")) {
-                          days = days.filter((x) => x !== "THUR");
-                        } else {
-                          days = ["THUR", ...days];
-                        }
-                        setDaysFilter(days);
-                      }}
-                    >
-                      <span>Thur</span>
-                      <input
-                        checked={daysFilter.includes("THUR")}
-                        type="checkbox"
-                        className="ml-1"
-                      />
-                    </div>
-                    <div
-                      className="d-flex align-items-center mr-2 cursor-pointer"
-                      onClick={() => {
-                        let days = [...daysFilter];
-                        if (days.includes("FRI")) {
-                          days = days.filter((x) => x !== "FRI");
-                        } else {
-                          days = ["FRI", ...days];
-                        }
-                        setDaysFilter(days);
-                      }}
-                    >
-                      <span>Fri</span>
-                      <input
-                        checked={daysFilter.includes("FRI")}
-                        type="checkbox"
-                        className="ml-1"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
             <tbody>
               {loading && (
                 <tr>
@@ -606,7 +601,7 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
                         }
                       }}
                     >
-                      <td className="d-flex align-items-center">
+                      <td className="d-flex align-items-center border-none">
                         {(selectedType === FilterType["this-week"] ||
                           selectedType === FilterType["last-month"] ||
                           selectedType === FilterType["this-month"] ||

@@ -14,6 +14,7 @@ const SettingsContainer: FC = () => {
     id: "",
     count: 0,
     priceIn: 0,
+    priceOut: 0,
   });
   useEffect(() => {
     const getCurrentAcc = async () => {
@@ -75,6 +76,23 @@ const SettingsContainer: FC = () => {
         </div>
 
         <div className="form-group row">
+          <label htmlFor="current" className="col-md-2">
+            Price Out
+          </label>
+          <input
+            type="number"
+            className="form-control col-md-5"
+            value={currentAcc?.priceOut}
+            onChange={(e) => {
+              setCurrentAcc({
+                ...currentAcc,
+                priceOut: parseFloat(e.target.value || "0"),
+              });
+            }}
+          />
+        </div>
+
+        <div className="form-group row">
           <label htmlFor="count" className="col-md-2">
             Count
           </label>
@@ -120,6 +138,7 @@ const SettingsContainer: FC = () => {
                 balance: parseFloat(currentAcc.balance),
                 current: parseFloat(currentAcc.current),
                 priceIn: currentAcc.priceIn,
+                priceOut: currentAcc.priceOut,
                 count: parseFloat(
                   (
                     parseFloat(currentAcc.balance) /

@@ -51,19 +51,6 @@ const TickerInfo: FC<{
               <span className="ml-2">{ticker?.previousClose}</span>
             </div>
 
-            {/* <div className="font-h4">
-              <span className="">Bid</span>
-              <span className="ml-2">
-                {ticker?.bid} ({ticker?.bidSize})
-              </span>
-            </div>
-
-            <div className="font-h4">
-              <span className="">Ask</span>
-              <span className="ml-2">
-                {ticker?.ask} ({ticker?.askSize})
-              </span>
-            </div> */}
             <div className="d-flex align-items-center">
               <span className="d-inline-block bg-success rounded-pill p-1 mr-1"></span>
               <span className="text-muted">{currentDate.toDateString()}</span>
@@ -78,6 +65,13 @@ const TickerInfo: FC<{
                 )}
                 <span>Reload</span>
               </span>
+            </div>
+
+            <div>
+              {ticker?.recommendationMean ===
+                parseFloat(ticker?.currentPrice as string) && (
+                <span className="badge badge-success m-t-xxs">Sold now</span>
+              )}
             </div>
           </div>
         </div>

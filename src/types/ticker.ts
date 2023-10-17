@@ -112,4 +112,5 @@ export interface ITickerAccount {
   id?: string;
   count: number;
   priceIn: number;
+  priceOut: number;
 }
