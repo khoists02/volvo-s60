@@ -106,18 +106,37 @@ const FavoriteContainer: FC = () => {
                         </td>
                         <td>{f.shortName}</td>
                         <td>
-                          {f.currentPrice}
-                          <span className="ml-1">({per(f)})</span>
+                          <div className={`${loading ? "skeleton-box" : ""}`}>
+                            <span>
+                              {" "}
+                              {f.currentPrice}
+                              <span className="ml-1">({per(f)})</span>
+                            </span>
+                          </div>
                         </td>
-                        <td>{f.previousClose}</td>
+                        <td>
+                          <div className={`${loading ? "skeleton-box" : ""}`}>
+                            <span> {f.previousClose}</span>
+                          </div>
+                        </td>
                         <td>
                           {convertToInternationalCurrencySystem(f.marketCap)}
                         </td>
                         <td>
-                          {f.bid} ({f.bidSize})
+                          <div className={`${loading ? "skeleton-box" : ""}`}>
+                            <span>
+                              {" "}
+                              {f.bid} ({f.bidSize})
+                            </span>
+                          </div>
                         </td>
                         <td>
-                          {f.ask} ({f.askSize})
+                          <div className={`${loading ? "skeleton-box" : ""}`}>
+                            <span>
+                              {" "}
+                              {f.ask} ({f.askSize})
+                            </span>
+                          </div>
                         </td>
                         <td>{f.industryDisp}</td>
                         <td>{f.recommendationKey}</td>
