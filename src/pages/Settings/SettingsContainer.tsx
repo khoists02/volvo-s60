@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ITickerAccount } from "../../types/ticker";
+import { HOLIDAYS } from "../../constants";
+import format from "date-fns/format";
 
 const SettingsContainer: FC = () => {
   const navigate = useNavigate();
@@ -82,6 +84,30 @@ const SettingsContainer: FC = () => {
             readOnly
             value={currentAcc?.count}
           />
+        </div>
+
+        <div className="form-group row">
+          <div className="col-md-2">
+            <span className="">Holidays</span>
+          </div>
+          <div className="col-md-5">
+            <span>
+              {HOLIDAYS.map((item) => {
+                return (
+                  <span
+                    className={`mr-1 mb-1 p-xs badge badge-${
+                      format(new Date(), "yyyy-MM-dd") === item
+                        ? "secondary text-white"
+                        : "light"
+                    }`}
+                    key={item}
+                  >
+                    {item}
+                  </span>
+                );
+              })}
+            </span>
+          </div>
         </div>
 
         <div className="form-group">
