@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useRef } from "react";
 import { ITickerInfo } from "../../types/ticker";
 import { useNavigate } from "react-router-dom";
 import {
@@ -12,6 +12,7 @@ import { IRootState } from "../../config/reducers";
 
 const FavoriteContainer: FC = () => {
   const navigate = useNavigate();
+  const timer = useRef<NodeJS.Timer | null>(null);
   const { entities, loading } = useSelector(
     (state: IRootState) => state.historyReducer,
   );
@@ -20,6 +21,20 @@ const FavoriteContainer: FC = () => {
   useEffect(() => {
     dispatch(getFavorites());
   }, [dispatch]);
+
+  useEffect(() => {
+    timer.current = setInterval(
+      () => {
+        dispatch(getFavorites());
+      },
+      1000 * 60 * 5, // 5mn
+    );
+
+    return () => {
+      if (timer.current) clearInterval(timer.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     setFavorites(entities);

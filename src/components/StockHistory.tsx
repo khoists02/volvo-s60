@@ -435,7 +435,16 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
           <div className="animated fadeInUp">
             <div className="table-light">
               <div className="d-flex align-items-center p-tb-xs w-100">
-                <h4>{title}</h4>
+                <div
+                  style={{ height: "2em", width: 400 }}
+                  className={`${loading ? "skeleton-box" : ""}`}
+                >
+                  <span>
+                    {" "}
+                    <h4>{title}</h4>
+                  </span>
+                </div>
+
                 {loading && (
                   <i className="ph-light ph-spinner ph-sm-size spinner ml-2"></i>
                 )}
