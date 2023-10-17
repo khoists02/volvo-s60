@@ -41,7 +41,7 @@ const TickerDetails: FC = () => {
         if (hour >= 20 || (hour >= 0 && hour <= 5))
           dispatch(getTickerInfo(tickerStr as string)); // 20PM td - 5PM tmr
       },
-      1000 * 60 * 5, // 5mn
+      1000 * 60 * 1, // 1mn
     );
 
     return () => {
@@ -67,7 +67,7 @@ const TickerDetails: FC = () => {
       )}
 
       <div className="col-md-12">
-        <BidAndAskPrice ticker={ticker} />
+        <BidAndAskPrice loading={loading} ticker={ticker} />
       </div>
 
       <div className="col-md-12">

@@ -3,21 +3,34 @@ import { ITickerInfo } from "../types/ticker";
 
 interface IBidAndAskPrice {
   ticker?: ITickerInfo;
+  loading: boolean;
 }
 
-export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker }) => {
+export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker, loading }) => {
   const [currentTicker, setCurrentTicker] = useState<ITickerInfo | null>(null);
   useEffect(() => {
     setCurrentTicker(ticker as ITickerInfo);
   }, [ticker]);
   return (
     <div className="card">
-      <div className="card-header">
+      <div className="card-header d-flex">
         <h5 className="title">Bid v Ask</h5>
+        {loading && (
+          <i className="ph-light ph-sm-size ph-spinner spinner mr-1"></i>
+        )}
       </div>
       <div className="card-body">
         <div className="d-flex justify-content-between">
-          <div className="bid flex-1 mr-2">
+          <div
+            className={`bid flex-1 mr-2 ${
+              currentTicker?.bid !== 0 &&
+              currentTicker?.bidSize !== undefined &&
+              currentTicker?.askSize !== undefined &&
+              currentTicker?.bidSize > currentTicker?.askSize
+                ? "bg-success text-white"
+                : ""
+            }`}
+          >
             <div className="">
               <span className="badge badge-secondary">Buyer</span>
               <span className="ml-2">{currentTicker?.bid}</span>
@@ -41,7 +54,16 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker }) => {
               )}
             </div>
           </div>
-          <div className="ask flex-1 ml-2">
+          <div
+            className={`bid flex-1 ml-2 ${
+              currentTicker?.ask !== 0 &&
+              currentTicker?.bidSize !== undefined &&
+              currentTicker?.askSize !== undefined &&
+              currentTicker?.askSize > currentTicker?.bidSize
+                ? "bg-success text-white"
+                : ""
+            }`}
+          >
             <div className="">
               <span className="badge badge-primary">Seller</span>
               <span className="ml-2">{currentTicker?.ask}</span>
