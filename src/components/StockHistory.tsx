@@ -54,6 +54,7 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
   const [filterred, setFilterred] = useState<IHistoryResponse[]>([]);
   const [dailyData, setDailyData] = useState<IHistoryResponse[]>([]);
   const intervalOptions = [
+    { label: "5m", value: "5m" },
     { label: "15m", value: "15m" },
     { label: "30m", value: "30m" },
     { label: "1h", value: "1h" },

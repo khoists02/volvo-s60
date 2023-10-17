@@ -10,35 +10,35 @@ import { addDays } from "date-fns";
 import DailyStock from "../../components/DailyStock";
 import { HOLIDAYS } from "../../constants";
 import format from "date-fns/format";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../config/reducers";
+import { useAppDispatch } from "../../config/store";
+import { getTickerInfo } from "../../reducers/ducks/operators/notificationOperator";
 
 const TickerDetails: FC = () => {
+  const dispatch = useAppDispatch();
   const tickerPr = useParams();
   const id = tickerPr.id;
   const timer = useRef<NodeJS.Timer | null>(null);
   const [tickerStr, setTickerStr] = useState(id?.toUpperCase());
   const current = new Date();
-  const nextDay = addDays(current, 1);
   const [hour, setHour] = useState(current.getHours());
   const [ticker, setTicker] = useState<ITickerInfo | undefined>(undefined);
-  const [loading, setLoading] = useState(false);
+  const { ticker: tickerInfo, loading } = useSelector(
+    (state: IRootState) => state.dailyReducer,
+  );
   useEffect(() => {
-    const getInfo = async () => {
-      setLoading(true);
-      const rs = await axios.get("/info", {
-        params: {
-          ticker: tickerStr,
-        },
-      });
-      setTicker({ ...rs.data, icon: <BlendIcon width={70} height={70} /> });
-      setLoading(false);
-    };
-    getInfo();
+    setTicker({ ...tickerInfo, icon: <BlendIcon width={70} height={70} /> });
+  }, [tickerInfo]);
+  useEffect(() => {
+    dispatch(getTickerInfo(tickerStr as string));
     timer.current = setInterval(
       () => {
         // eslint-disable-next-line no-console
         console.log("current hour", hour);
         setHour(new Date().getHours());
-        if (hour >= 20 || (hour >= 0 && hour <= 5)) getInfo(); // 20PM td - 5PM tmr
+        if (hour >= 20 || (hour >= 0 && hour <= 5))
+          dispatch(getTickerInfo(tickerStr as string)); // 20PM td - 5PM tmr
       },
       1000 * 60 * 5, // 5mn
     );
@@ -54,18 +54,8 @@ const TickerDetails: FC = () => {
         <TickerInfo
           ticker={ticker}
           loading={loading}
-          reload={async () => {
-            setLoading(true);
-            const rs = await axios.get("/info", {
-              params: {
-                ticker: tickerStr,
-              },
-            });
-            setTicker({
-              ...rs.data,
-              icon: <BlendIcon width={70} height={70} />,
-            });
-            setLoading(false);
+          reload={() => {
+            dispatch(getTickerInfo(tickerStr as string));
           }}
         />
       </div>

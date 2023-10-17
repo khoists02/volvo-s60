@@ -50,6 +50,20 @@ const TickerInfo: FC<{
               <span className="">Prev Close</span>
               <span className="ml-2">{ticker?.previousClose}</span>
             </div>
+
+            {/* <div className="font-h4">
+              <span className="">Bid</span>
+              <span className="ml-2">
+                {ticker?.bid} ({ticker?.bidSize})
+              </span>
+            </div>
+
+            <div className="font-h4">
+              <span className="">Ask</span>
+              <span className="ml-2">
+                {ticker?.ask} ({ticker?.askSize})
+              </span>
+            </div> */}
             <div className="d-flex align-items-center">
               <span className="d-inline-block bg-success rounded-pill p-1 mr-1"></span>
               <span className="text-muted">{currentDate.toDateString()}</span>

@@ -90,7 +90,7 @@ const SettingsContainer: FC = () => {
           <div className="col-md-2">
             <span className="">Holidays</span>
           </div>
-          <div className="col-md-5">
+          <div className="col-md-5 p-0">
             <span>
               {HOLIDAYS.map((item) => {
                 return (

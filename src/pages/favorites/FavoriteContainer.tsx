@@ -68,6 +68,8 @@ const FavoriteContainer: FC = () => {
                     <th>Current Price</th>
                     <th>Previous Price</th>
                     <th>Volume</th>
+                    <th>Bid</th>
+                    <th>Ask</th>
                     <th>Type</th>
                     <th>Recommendation Key</th>
                     {/* <th>Recommendation Target</th> */}
@@ -110,8 +112,16 @@ const FavoriteContainer: FC = () => {
                         <td>
                           {convertToInternationalCurrencySystem(f.marketCap)}
                         </td>
+                        <td>
+                          {f.bid} ({f.bidSize})
+                        </td>
+                        <td>
+                          {f.ask} ({f.askSize})
+                        </td>
                         <td>{f.industryDisp}</td>
-                        <td>{f.recommendationKey}</td>
+                        <td>
+                          {f.recommendationKey} {f.recommendationMean}
+                        </td>
                         {/* <td>{f.recommendationMean}</td> */}
                       </tr>
                     );
