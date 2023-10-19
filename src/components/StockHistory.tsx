@@ -22,6 +22,8 @@ import { FORMAT_DISPLAY, FORMAT_QUERY, FilterType } from "../constants";
 import { ITickerInfo } from "../types/ticker";
 import Select from "react-select";
 import { getStyleStock } from "../helpers";
+import { IRootState } from "../config/reducers";
+import { useSelector } from "react-redux";
 
 export interface IStockHistory {
   ticker: string;
@@ -79,6 +81,7 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
   const [selectedType, setSelectedType] = useState<FilterType>(
     FilterType["this-week"],
   );
+  const { account } = useSelector((state: IRootState) => state.accountReducer);
   const [dailyLoading, setDailyLoading] = useState(false);
   useEffect(() => {
     setSelectedDate("");
@@ -645,17 +648,17 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
                         <span>
                           {parseFloat(h.adjclose?.toString()).toFixed(3)}
                         </span>
-                        {/* {min === parseFloat(h.adjclose?.toString()) && (
+                        {account.priceIn >= h.adjclose && (
                           <span className="cursor-pointer badge badge-secondary text-white ml-2">
                             KeyIn
                           </span>
-                        )} */}
+                        )}
 
-                        {/* {max === parseFloat(h.adjclose?.toString()) && (
+                        {account.priceOut <= h.adjclose && (
                           <span className="cursor-pointer badge badge-white text-success ml-2">
                             KeyOut
                           </span>
-                        )} */}
+                        )}
                       </td>
                     </tr>
                     {selectedDate === format(new Date(h.date), "yyyy/MM/dd") &&

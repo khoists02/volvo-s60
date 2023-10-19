@@ -85,6 +85,11 @@ function App() {
   }, [hour, ticker]);
 
   useEffect(() => {
+    window.open(
+      "https://vn.investing.com/central-banks/fed-rate-monitor",
+      "_blank",
+    );
+    window.open("https://finance.yahoo.com/quote/BLND/chart?p=BLND", "_blank");
     dispatch(getAllNoti());
     dispatch(getCountNoti());
 

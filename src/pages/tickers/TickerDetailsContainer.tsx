@@ -17,6 +17,7 @@ import axios from "axios";
 import { IBidAsk } from "../../types/notification";
 import { New } from "../../components/New";
 import { CashFlow } from "../../components/CashFlow";
+import { getAccount } from "../settings/ducks/operators";
 
 const TickerDetails: FC = () => {
   const dispatch = useAppDispatch();
@@ -62,6 +63,7 @@ const TickerDetails: FC = () => {
 
   useEffect(() => {
     dispatch(getTickerInfo(tickerStr as string));
+    dispatch(getAccount("BLND"));
     timer.current = setInterval(
       () => {
         // eslint-disable-next-line no-console
