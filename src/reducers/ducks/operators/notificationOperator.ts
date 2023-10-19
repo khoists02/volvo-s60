@@ -44,6 +44,20 @@ export const getNewsNoti =
     }
   };
 
+export const getCashFlow =
+  (ticker: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(NotificationActions.getCashFlowStart());
+      const response = await axios.get("/cashflow", {
+        params: { ticker, freq: "quarterly" },
+      });
+      dispatch(NotificationActions.getCashFlowSuccess(response.data));
+    } catch (error) {
+      dispatch(NotificationActions.getCashFlowFail());
+    }
+  };
+
 export const getCountNoti = (): AppThunk => async (dispatch) => {
   try {
     dispatch(NotificationActions.getAllStart());

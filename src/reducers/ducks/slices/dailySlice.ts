@@ -25,6 +25,7 @@ const dailySlice = createSlice({
     },
     getDailyDataStart(state) {
       state.dailyLoading = true;
+      state.dailyData = [];
     },
     getDailyDataSuccess(state, action: PayloadAction<IHistoryResponse[]>) {
       state.dailyLoading = false;

@@ -16,6 +16,8 @@ import { BidAndAskPrice } from "../../components/BidAndAksPrice";
 import axios from "axios";
 import { IBidAsk } from "../../types/notification";
 import { New } from "../../components/New";
+import { CashFlow } from "../../components/CashFlow";
+import { getAccount } from "../settings/ducks/operators";
 
 const TickerDetails: FC = () => {
   const dispatch = useAppDispatch();
@@ -32,35 +34,36 @@ const TickerDetails: FC = () => {
   useEffect(() => {
     setTicker({ ...tickerInfo, icon: <BlendIcon width={70} height={70} /> });
 
-    const postBidAsk = async (body: IBidAsk) => {
-      try {
-        await axios.post("/bidasks", body);
-      } catch {}
-    };
+    // const postBidAsk = async (body: IBidAsk) => {
+    //   try {
+    //     await axios.post("/bidasks", body);
+    //   } catch {}
+    // };
 
-    if (tickerInfo) {
-      if (
-        tickerInfo?.ask !== 0 &&
-        tickerInfo?.bid !== 0 &&
-        tickerInfo.bidSize &&
-        tickerInfo.bidSize > 0 &&
-        tickerInfo.bidSize &&
-        tickerInfo.bidSize > 0
-      ) {
-        postBidAsk({
-          ticker: tickerInfo.symbol as string,
-          bid: tickerInfo?.bid as number,
-          ask: tickerInfo?.ask as number,
-          bidSize: tickerInfo?.bidSize as number,
-          askSize: tickerInfo?.askSize as number,
-          updatedAt: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
-        });
-      }
-    }
+    // if (tickerInfo) {
+    //   if (
+    //     tickerInfo?.ask !== 0 &&
+    //     tickerInfo?.bid !== 0 &&
+    //     tickerInfo.bidSize &&
+    //     tickerInfo.bidSize > 0 &&
+    //     tickerInfo.bidSize &&
+    //     tickerInfo.bidSize > 0
+    //   ) {
+    //     postBidAsk({
+    //       ticker: tickerInfo.symbol as string,
+    //       bid: tickerInfo?.bid as number,
+    //       ask: tickerInfo?.ask as number,
+    //       bidSize: tickerInfo?.bidSize as number,
+    //       askSize: tickerInfo?.askSize as number,
+    //       updatedAt: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+    //     });
+    //   }
+    // }
   }, [tickerInfo]);
 
   useEffect(() => {
     dispatch(getTickerInfo(tickerStr as string));
+    dispatch(getAccount("BLND"));
     timer.current = setInterval(
       () => {
         // eslint-disable-next-line no-console
@@ -68,7 +71,7 @@ const TickerDetails: FC = () => {
         setHour(new Date().getHours());
         dispatch(getTickerInfo(tickerStr as string));
       },
-      1000 * 60 * 1, // 1mn
+      1000 * 60 * 5, // 1mn
     );
 
     return () => {
@@ -99,6 +102,10 @@ const TickerDetails: FC = () => {
 
       <div className="col-md-12">
         <StockHistory info={ticker} ticker={tickerStr || ""} />
+      </div>
+
+      <div className="col-md-12">
+        <CashFlow ticker={tickerStr as string} />
       </div>
 
       <div className="col-md-12">

@@ -2,11 +2,19 @@ import axios from "axios";
 import React, { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ITickerAccount } from "../../types/ticker";
-import { HOLIDAYS } from "../../constants";
+import { FED_DAYS, HOLIDAYS } from "../../constants";
 import format from "date-fns/format";
+import { useAppDispatch } from "../../config/store";
+import { getAccount } from "./ducks/operators";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../config/reducers";
 
 const SettingsContainer: FC = () => {
+  const { account, loading } = useSelector(
+    (state: IRootState) => state.accountReducer,
+  );
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [currentAcc, setCurrentAcc] = useState<ITickerAccount>({
     ticker: "",
     balance: "0",
@@ -17,17 +25,18 @@ const SettingsContainer: FC = () => {
     priceOut: 0,
   });
   useEffect(() => {
-    const getCurrentAcc = async () => {
-      const rs = await axios.get("/account", { params: { ticker: "BLND" } });
-      setCurrentAcc(rs.data);
-    };
-
-    getCurrentAcc();
-  }, []);
+    dispatch(getAccount("BLND"));
+  }, [dispatch]);
+  useEffect(() => {
+    setCurrentAcc(account);
+  }, [account]);
   return (
     <div className="card">
-      <div className="card-header">
+      <div className="card-header d-flex align-items-center">
         <h5 className="title">Settings</h5>
+        {loading && (
+          <i className="ph-light ph-spinner ph-xs-size spinner ml-1"></i>
+        )}
       </div>
       <div className="card-body">
         <div className="form-group row">
@@ -102,6 +111,36 @@ const SettingsContainer: FC = () => {
             readOnly
             value={currentAcc?.count}
           />
+        </div>
+
+        <div className="form-group row">
+          <div className="col-md-2">Fed Days</div>
+          <div className="col-md-5 p-0">
+            <div className="d-flex" style={{ flexDirection: "column" }}>
+              <a
+                href="https://vn.investing.com/central-banks/fed-rate-monitor"
+                target="_blank"
+              >
+                https://vn.investing.com/central-banks/fed-rate-monitor
+              </a>
+              <span>
+                {FED_DAYS.map((item) => {
+                  return (
+                    <span
+                      className={`mr-1 mb-1 p-xs badge badge-${
+                        format(new Date(), "yyyy-MM-dd") === item
+                          ? "danger text-white"
+                          : "light"
+                      }`}
+                      key={item}
+                    >
+                      {item}
+                    </span>
+                  );
+                })}
+              </span>
+            </div>
+          </div>
         </div>
 
         <div className="form-group row">

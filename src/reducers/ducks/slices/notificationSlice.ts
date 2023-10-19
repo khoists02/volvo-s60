@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IBidAsk, INotification } from "../../../types/notification";
 import { INew } from "../../../types/ticker";
@@ -10,6 +11,8 @@ const initialState = {
   bidasks: [] as IBidAsk[],
   news: [] as INew[],
   loadingNews: false,
+  cashflow: null as any,
+  loadingCashflow: false,
 };
 
 const notificationSlice = createSlice({
@@ -25,6 +28,16 @@ const notificationSlice = createSlice({
     },
     getAllFail(state) {
       state.loading = false;
+    },
+    getCashFlowStart(state) {
+      state.loadingCashflow = true;
+    },
+    getCashFlowSuccess(state, action) {
+      state.cashflow = action.payload;
+      state.loadingCashflow = false;
+    },
+    getCashFlowFail(state) {
+      state.loadingCashflow = false;
     },
     getCountSuccess(state, action: PayloadAction<number>) {
       state.count = action.payload;
