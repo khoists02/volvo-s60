@@ -650,13 +650,13 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
                         </span>
                         {account.priceIn >= h.adjclose && (
                           <span className="cursor-pointer badge badge-secondary text-white ml-2">
-                            KeyIn
+                            KeyIn {account.priceIn}
                           </span>
                         )}
 
                         {account.priceOut <= h.adjclose && (
                           <span className="cursor-pointer badge badge-white text-success ml-2">
-                            KeyOut
+                            KeyOut {account.priceOut}
                           </span>
                         )}
                       </td>
