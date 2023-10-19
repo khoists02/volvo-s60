@@ -1,6 +1,8 @@
 import React, { FC, useEffect, useState } from "react";
 import { ITickerInfo } from "../types/ticker";
 import { convertToInternationalCurrencySystem } from "../helpers";
+import { addDays, format } from "date-fns";
+import { FED_DAYS, HOLIDAYS } from "../constants";
 
 const TickerInfo: FC<{
   ticker?: ITickerInfo;
@@ -22,8 +24,24 @@ const TickerInfo: FC<{
     <div className="card">
       <div className="card-header d-sm-flex align-items-sm-center py-sm-0">
         <h5 className="py-sm-2 my-sm-1">
-          <div className={`${loading ? "skeleton-box" : ""}`}>
+          <div
+            className={`${
+              loading ? "skeleton-box" : ""
+            } d-flex align-items-center`}
+          >
             <span>{ticker?.shortName}</span>
+            {HOLIDAYS.includes(format(new Date(), "yyyy-MM-dd")) && (
+              <span className="badge badge-success text-white ml-1">
+                Holiday {format(new Date(), "dd-MM-yyyy")}
+              </span>
+            )}
+            {FED_DAYS.includes(
+              format(addDays(new Date(), 1), "yyyy-MM-dd"),
+            ) && (
+              <span className="badge badge-danger text-white ml-1">
+                Danger Next Day {format(addDays(new Date(), 1), "dd-MM-yyyy")}
+              </span>
+            )}
           </div>
         </h5>
         {loading && ticker && (

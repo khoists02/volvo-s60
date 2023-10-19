@@ -26,3 +26,8 @@ export const HOLIDAYS = [
   `${CURRENT_YEAR}-11-23`,
   `${CURRENT_YEAR}-12-25`,
 ];
+
+export const FED_DAYS_STR =
+  "02-11-2023, 14-12-2023, 01-02-2024, 21-03-2024, 02-05-2024, 20-06-2024, 01-08-2024, 26-0-2024, 07-11-2024";
+
+export const FED_DAYS = FED_DAYS_STR.split(",");

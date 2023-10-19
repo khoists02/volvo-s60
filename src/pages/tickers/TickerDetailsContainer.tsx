@@ -30,35 +30,35 @@ const TickerDetails: FC = () => {
   const { ticker: tickerInfo, loading } = useSelector(
     (state: IRootState) => state.dailyReducer,
   );
-  // useEffect(() => {
-  //   setTicker({ ...tickerInfo, icon: <BlendIcon width={70} height={70} /> });
+  useEffect(() => {
+    setTicker({ ...tickerInfo, icon: <BlendIcon width={70} height={70} /> });
 
-  //   const postBidAsk = async (body: IBidAsk) => {
-  //     try {
-  //       await axios.post("/bidasks", body);
-  //     } catch {}
-  //   };
+    // const postBidAsk = async (body: IBidAsk) => {
+    //   try {
+    //     await axios.post("/bidasks", body);
+    //   } catch {}
+    // };
 
-  //   if (tickerInfo) {
-  //     if (
-  //       tickerInfo?.ask !== 0 &&
-  //       tickerInfo?.bid !== 0 &&
-  //       tickerInfo.bidSize &&
-  //       tickerInfo.bidSize > 0 &&
-  //       tickerInfo.bidSize &&
-  //       tickerInfo.bidSize > 0
-  //     ) {
-  //       postBidAsk({
-  //         ticker: tickerInfo.symbol as string,
-  //         bid: tickerInfo?.bid as number,
-  //         ask: tickerInfo?.ask as number,
-  //         bidSize: tickerInfo?.bidSize as number,
-  //         askSize: tickerInfo?.askSize as number,
-  //         updatedAt: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
-  //       });
-  //     }
-  //   }
-  // }, [tickerInfo]);
+    // if (tickerInfo) {
+    //   if (
+    //     tickerInfo?.ask !== 0 &&
+    //     tickerInfo?.bid !== 0 &&
+    //     tickerInfo.bidSize &&
+    //     tickerInfo.bidSize > 0 &&
+    //     tickerInfo.bidSize &&
+    //     tickerInfo.bidSize > 0
+    //   ) {
+    //     postBidAsk({
+    //       ticker: tickerInfo.symbol as string,
+    //       bid: tickerInfo?.bid as number,
+    //       ask: tickerInfo?.ask as number,
+    //       bidSize: tickerInfo?.bidSize as number,
+    //       askSize: tickerInfo?.askSize as number,
+    //       updatedAt: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+    //     });
+    //   }
+    // }
+  }, [tickerInfo]);
 
   useEffect(() => {
     dispatch(getTickerInfo(tickerStr as string));

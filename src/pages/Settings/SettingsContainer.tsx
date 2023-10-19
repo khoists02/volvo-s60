@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ITickerAccount } from "../../types/ticker";
-import { HOLIDAYS } from "../../constants";
+import { FED_DAYS, HOLIDAYS } from "../../constants";
 import format from "date-fns/format";
 
 const SettingsContainer: FC = () => {
@@ -102,6 +102,36 @@ const SettingsContainer: FC = () => {
             readOnly
             value={currentAcc?.count}
           />
+        </div>
+
+        <div className="form-group row">
+          <div className="col-md-2">Fed Days</div>
+          <div className="col-md-5 p-0">
+            <div className="d-flex" style={{ flexDirection: "column" }}>
+              <a
+                href="https://vn.investing.com/central-banks/fed-rate-monitor"
+                target="_blank"
+              >
+                https://vn.investing.com/central-banks/fed-rate-monitor
+              </a>
+              <span>
+                {FED_DAYS.map((item) => {
+                  return (
+                    <span
+                      className={`mr-1 mb-1 p-xs badge badge-${
+                        format(new Date(), "yyyy-MM-dd") === item
+                          ? "danger text-white"
+                          : "light"
+                      }`}
+                      key={item}
+                    >
+                      {item}
+                    </span>
+                  );
+                })}
+              </span>
+            </div>
+          </div>
         </div>
 
         <div className="form-group row">
