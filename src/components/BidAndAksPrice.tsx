@@ -73,7 +73,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker, loading }) => {
               className={`ml-1 d-flex align-items-center badge badge-success text-white`}
             >
               <span>Key In </span>
-              <span className="ml-1">{keyIn}</span>
+              <span className="ml-1">{keyIn.toFixed(2)}</span>
             </span>
           )}
         </div>
