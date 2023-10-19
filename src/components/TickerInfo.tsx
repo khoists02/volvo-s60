@@ -1,8 +1,14 @@
 import React, { FC, useEffect, useState } from "react";
 import { ITickerInfo } from "../types/ticker";
 import { convertToInternationalCurrencySystem } from "../helpers";
-import { addDays, format } from "date-fns";
+import { addDays, format, isBefore } from "date-fns";
 import { FED_DAYS, HOLIDAYS } from "../constants";
+import axios from "axios";
+
+interface ITickerReportDays {
+  label: string;
+  value: string[];
+}
 
 const TickerInfo: FC<{
   ticker?: ITickerInfo;
@@ -11,6 +17,35 @@ const TickerInfo: FC<{
 }> = ({ ticker, loading, reload }) => {
   const currentDate = new Date();
   const [percent, setPercent] = useState<number>(0);
+  const [tickerReportDays, setTickerReportDays] = useState<ITickerReportDays[]>(
+    [],
+  );
+
+  useEffect(() => {
+    const getTickerReportDays = async () => {
+      const rs = await axios.get("/earningdates", {
+        params: { ticker: "BLND" },
+      });
+      if (rs.data) {
+        const keys = Object.keys(rs.data);
+        // eslint-disable-next-line no-console
+        setTickerReportDays(
+          keys.map((k: string) => {
+            return {
+              label: k,
+              value: Object.keys(rs.data[k])
+                .filter((v) => isBefore(new Date(), new Date(parseInt(v, 10))))
+                .map((x) => format(new Date(parseInt(x, 10)), "dd-MM-yyyy")),
+            };
+          }),
+        );
+      }
+    };
+
+    getTickerReportDays();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     if (ticker) {
       const rs =
@@ -42,6 +77,19 @@ const TickerInfo: FC<{
                 Danger Next Day {format(addDays(new Date(), 1), "dd-MM-yyyy")}
               </span>
             )}
+
+            {tickerReportDays.map((t) => {
+              return t.value.includes(
+                format(addDays(new Date(), 1), "dd-MM-yyyy"),
+              ) ? (
+                <div key={t.label}>
+                  <span className="badge badge-secondary text-white ml-1">
+                    Next Day {t.label}{" "}
+                    {format(addDays(new Date(), 1), "dd-MM-yyyy")}
+                  </span>
+                </div>
+              ) : null;
+            })}
           </div>
         </h5>
         {loading && ticker && (
