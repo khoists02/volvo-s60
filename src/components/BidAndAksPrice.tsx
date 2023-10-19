@@ -31,6 +31,16 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker, loading }) => {
     return rs * 100;
   }, [ticker]);
 
+  const keyIn = useMemo(() => {
+    if (!ticker) return 0;
+
+    if (ticker?.ask === 0 || ticker?.bid === 0) return 0;
+    const bid = ticker.bid || 0;
+    const val = (spread / 100) * bid;
+    const rs = bid - val;
+    return rs;
+  }, [ticker, spread]);
+
   return (
     <div className="card">
       <div className="card-header d-flex justify-content-between">
@@ -50,11 +60,20 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker, loading }) => {
           {spread > 0 && (
             <span
               className={`ml-1 d-flex align-items-center badge badge-${
-                spread > 0.5 ? "danger" : "success"
+                spread > 1 ? "danger" : "success"
               } text-white`}
             >
               <span>Spread </span>
-              <span className="ml-1">{spread}%</span>
+              <span className="ml-1">{spread.toFixed(2)}%</span>
+            </span>
+          )}
+
+          {keyIn > 0 && (
+            <span
+              className={`ml-1 d-flex align-items-center badge badge-success text-white`}
+            >
+              <span>Key In </span>
+              <span className="ml-1">{keyIn}</span>
             </span>
           )}
         </div>

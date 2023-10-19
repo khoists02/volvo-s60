@@ -15,74 +15,14 @@ import {
   getCountNoti,
 } from "./reducers/ducks/operators/notificationOperator";
 import axios from "axios";
-import { addDays, format, isSunday } from "date-fns";
-import { HistoryAction } from "./reducers/ducks/slices/historySlice";
 
 function App() {
   const path = useLocation();
   const timer = useRef<NodeJS.Timer | null>(null);
-  const timerTicker = useRef<NodeJS.Timer | null>(null);
   const dispatch = useAppDispatch();
-  const current = new Date();
-  const [hour, setHour] = useState(current.getHours());
   const { entities, loading, count } = useSelector(
     (state: IRootState) => state.notiReducer,
   );
-  const { ticker } = useSelector((state: IRootState) => state.dailyReducer);
-
-  useEffect(() => {
-    const pushNotification = async () => {
-      const prevClose = ticker?.previousClose
-        ? parseFloat(ticker?.previousClose)
-        : 0;
-      const rs = await axios.get("/daily", {
-        params: {
-          ticker: "BLND",
-          start: format(new Date(), "yyyy-MM-dd"),
-          end: format(addDays(new Date(), 1), "yyyy-MM-dd"),
-          interval: "5m",
-        },
-      });
-      const arrays = rs.data?.reverse() || [];
-      if (arrays.length > 0) {
-        const item = arrays[arrays.length - 1];
-        const per = ((parseFloat(item.Close) - prevClose) / prevClose) * 100;
-        if (Math.abs(per) > 5) {
-          // increase or decrease more than (+ or -) 5%
-          const dataRequest = {
-            ticker: "BLND",
-            per: parseFloat(per.toFixed(2)),
-            close: parseFloat(item.Close),
-            updatedAt: `${format(new Date(), "yyyy-MM-dd")} ${format(
-              new Date(),
-              "HH:mm:ss",
-            )}`,
-          };
-          await axios.post("/notifications", dataRequest);
-          // reload
-          dispatch(getAllNoti());
-          dispatch(getCountNoti());
-        }
-      }
-    };
-
-    timerTicker.current = setInterval(
-      () => {
-        // eslint-disable-next-line no-console
-        console.log("current hour", hour);
-        setHour(new Date().getHours());
-        if ((hour >= 20 || (hour >= 0 && hour <= 5)) && !isSunday(new Date()))
-          pushNotification();
-      },
-      1000 * 60 * 5, // 5mn after 20PM - 5AM next day
-    );
-
-    return () => {
-      if (timerTicker.current) clearInterval(timerTicker.current);
-      dispatch(HistoryAction.clear());
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hour, ticker]);
 
   useEffect(() => {
     window.open(
