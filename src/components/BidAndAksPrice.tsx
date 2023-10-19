@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import { ITickerInfo } from "../types/ticker";
 import { useAppDispatch } from "../config/store";
 import { getTickerInfo } from "../reducers/ducks/operators/notificationOperator";
@@ -15,6 +15,22 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker, loading }) => {
   useEffect(() => {
     setCurrentTicker(ticker as ITickerInfo);
   }, [ticker]);
+
+  const spread = useMemo(() => {
+    if (!ticker) return 0;
+
+    if (ticker?.ask === 0 || ticker.bid === 0) return 0;
+
+    let rs = 0;
+
+    const ask = ticker?.ask || 0;
+    const bid = ticker?.bid || 0;
+
+    rs = (ask - bid) / ask;
+
+    return rs * 100;
+  }, [ticker]);
+
   return (
     <div className="card">
       <div className="card-header d-flex justify-content-between">
@@ -31,6 +47,16 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker, loading }) => {
               <i className="ph-light ph-xs-size ph-spinner spinner ml-1"></i>
             )}
           </span>
+          {spread > 0 && (
+            <span
+              className={`ml-1 d-flex align-items-center badge badge-${
+                spread > 0.5 ? "danger" : "success"
+              } text-white`}
+            >
+              <span>Spread </span>
+              <span className="ml-1">{spread}%</span>
+            </span>
+          )}
         </div>
         <i
           onClick={() => setHide(!hide)}
