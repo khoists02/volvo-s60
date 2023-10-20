@@ -18,6 +18,8 @@ import { IBidAsk } from "../../types/notification";
 import { New } from "../../components/New";
 import { CashFlow } from "../../components/CashFlow";
 import { getAccount } from "../settings/ducks/operators";
+import { ErrorAlert } from "../../components/ErrorAlert";
+import { DailyActions } from "../../reducers/ducks/slices/dailySlice";
 
 const TickerDetails: FC = () => {
   const dispatch = useAppDispatch();
@@ -28,9 +30,11 @@ const TickerDetails: FC = () => {
   const current = new Date();
   const [hour, setHour] = useState(current.getHours());
   const [ticker, setTicker] = useState<ITickerInfo | undefined>(undefined);
-  const { ticker: tickerInfo, loading } = useSelector(
-    (state: IRootState) => state.dailyReducer,
-  );
+  const {
+    ticker: tickerInfo,
+    loading,
+    error,
+  } = useSelector((state: IRootState) => state.dailyReducer);
   useEffect(() => {
     setTicker({ ...tickerInfo, icon: <BlendIcon width={70} height={70} /> });
   }, [tickerInfo]);
@@ -55,6 +59,15 @@ const TickerDetails: FC = () => {
   }, [tickerStr, hour]);
   return (
     <div className="row">
+      {error && (
+        <div className="col-md-12">
+          <ErrorAlert
+            message={`Ticker ${tickerStr} ${error}`}
+            onClose={() => dispatch(DailyActions.clearEr())}
+          />
+        </div>
+      )}
+
       <div className="col-md-12">
         <TickerInfo
           ticker={ticker}

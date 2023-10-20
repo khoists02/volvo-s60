@@ -102,7 +102,13 @@ export const getTickerInfo =
       });
       dispatch(DailyActions.getTickerSuccess(response.data as ITickerInfo));
     } catch (error) {
-      dispatch(DailyActions.getTickerFail());
+      // eslint-disable-next-line no-console
+      console.log("error", error);
+      // @ts-ignore
+      dispatch(
+        // @ts-ignore
+        DailyActions.getTickerFail(error?.response?.data || error?.message),
+      );
     }
   };
 

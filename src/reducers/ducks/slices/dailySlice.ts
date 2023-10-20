@@ -7,6 +7,7 @@ const initialState = {
   loading: false as boolean,
   dailyData: [] as IHistoryResponse[],
   dailyLoading: false,
+  error: null,
 };
 
 const dailySlice = createSlice({
@@ -20,8 +21,9 @@ const dailySlice = createSlice({
       state.ticker = action.payload;
       state.loading = false;
     },
-    getTickerFail(state) {
+    getTickerFail(state, action) {
       state.loading = false;
+      state.error = action.payload;
     },
     getDailyDataStart(state) {
       state.dailyLoading = true;
@@ -36,6 +38,9 @@ const dailySlice = createSlice({
     },
     clear(state) {
       state.dailyData = [];
+    },
+    clearEr(state) {
+      state.error = null;
     },
   },
 });
