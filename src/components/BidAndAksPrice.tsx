@@ -2,6 +2,7 @@ import React, { FC, useEffect, useMemo, useState } from "react";
 import { ITickerInfo } from "../types/ticker";
 import { useAppDispatch } from "../config/store";
 import { getTickerInfo } from "../reducers/ducks/operators/notificationOperator";
+import { useNavigate } from "react-router-dom";
 
 interface IBidAndAskPrice {
   ticker?: ITickerInfo;
@@ -10,6 +11,7 @@ interface IBidAndAskPrice {
 
 export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker, loading }) => {
   const [currentTicker, setCurrentTicker] = useState<ITickerInfo | null>(null);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [hide, setHide] = useState(false);
   useEffect(() => {
@@ -74,6 +76,14 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker, loading }) => {
             >
               <span>Key In </span>
               <span className="ml-1">{keyIn.toFixed(2)}</span>
+              <span
+                className="ml-1"
+                onClick={() => {
+                  navigate("/settings");
+                }}
+              >
+                Fast Cal
+              </span>
             </span>
           )}
         </div>
