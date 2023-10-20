@@ -219,6 +219,12 @@ const SettingsContainer: FC = () => {
           >
             Save
           </button>
+          <button
+            className="btn btn-primary ml-2"
+            onClick={() => navigate("/calendars")}
+          >
+            <i className="ph-light ph-xs-size ph-calendar"></i>
+          </button>
           <button className="btn btn-light ml-2" onClick={() => navigate(-1)}>
             Back
           </button>

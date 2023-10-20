@@ -22,6 +22,7 @@ const setupAxiosInterceptors = (): void => {
   };
   const onResponseSuccess = (response: AxiosResponse) => response;
   const onResponseError = async (err: CustomAxiosError) => {
+    console.error(err);
     return Promise.reject(err);
   };
   axios.interceptors.request.use(onRequestSuccess);

@@ -10,6 +10,7 @@ import { getCashFlow } from "../../reducers/ducks/operators/notificationOperator
 import format from "date-fns/format";
 import axios from "axios";
 import { isBefore } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 interface ITickerReportDays {
   label: string;
@@ -17,6 +18,7 @@ interface ITickerReportDays {
 }
 
 const CalendarContainer: FC = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [tickerReportDays, setTickerReportDays] = useState<ITickerReportDays[]>(
     [],
@@ -94,6 +96,12 @@ const CalendarContainer: FC = () => {
 
   return (
     <div className="row">
+      <i
+        className="ml-2 cursor-pointer ph-light ph-sm-size ph-arrow-left font-weight"
+        onClick={() => {
+          navigate(-1);
+        }}
+      ></i>
       <div className="calendar-container">
         <FullCalendar
           viewClassNames="test"

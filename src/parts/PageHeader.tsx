@@ -50,12 +50,17 @@ const PageHeader: FC = () => {
       setCurrentAcc(rs.data);
     };
     const getInfo = async () => {
-      const rs = await axios.get("/info", {
-        params: {
-          ticker: "BLND",
-        },
-      });
-      setTicker({ ...rs.data, icon: <BlendIcon width={70} height={70} /> });
+      try {
+        const rs = await axios.get("/info", {
+          params: {
+            ticker: "BLND",
+          },
+        });
+        setTicker({ ...rs.data, icon: <BlendIcon width={70} height={70} /> });
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      }
     };
     if (tickerPr) {
       getInfo();
