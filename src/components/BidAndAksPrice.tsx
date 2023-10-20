@@ -68,7 +68,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker, loading }) => {
             </span>
           )}
 
-          {keyIn > 0 && (
+          {keyIn > 0 && spread > 0 && spread < 1 && (
             <span
               className={`ml-1 d-flex align-items-center badge badge-success text-white`}
             >
