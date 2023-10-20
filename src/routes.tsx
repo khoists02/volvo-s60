@@ -4,10 +4,12 @@ import SettingRouter from "./pages/settings";
 import { HistoryRoute } from "./pages/tickers";
 import { FavoriteRoute } from "./pages/favorites";
 import { BidAskRoute } from "./pages/bidasks";
+import CalendarRouter from "./pages/calendars";
 
 const AppRoutes = () => {
   return (
     <Routes>
+      <Route path="/calendars" element={<CalendarRouter />} />
       <Route path={HistoryRoute.path} element={HistoryRoute.element} />
       <Route path={FavoriteRoute.path} element={FavoriteRoute.element} />
       <Route path={BidAskRoute.path} element={BidAskRoute.element} />

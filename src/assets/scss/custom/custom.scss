@@ -1626,3 +1626,27 @@ span.pid-no-wrap {
     }
   }
 }
+
+.calendar-container {
+  width: 100%;
+  height: calc(100vh - 200px);
+  padding: 15px;
+}
+
+.fc-today-button {
+  text-transform: capitalize !important;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background: #2196F3 !important;
+  .fc-daygrid-day-number {
+    color: #ffffff !important;
+
+  }
+}
+
+
+.fc-col-header-cell {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
