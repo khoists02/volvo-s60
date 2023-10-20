@@ -13,6 +13,7 @@ const SettingsContainer: FC = () => {
   const { account, loading } = useSelector(
     (state: IRootState) => state.accountReducer,
   );
+  const [cal, setCal] = useState(0);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [currentAcc, setCurrentAcc] = useState<ITickerAccount>({
@@ -164,6 +165,34 @@ const SettingsContainer: FC = () => {
                 );
               })}
             </span>
+          </div>
+        </div>
+
+        <div className="form-group row">
+          <div className="col-md-2">
+            <span className="">Calculator</span>
+          </div>
+          <div className="col-md-5 p-0">
+            <div className="row d-flex align-items-center">
+              <div className="col-md-6">
+                <input
+                  type="number"
+                  className="form-control"
+                  value={cal}
+                  onChange={(e) => {
+                    setCal(parseFloat(e.target.value));
+                  }}
+                />
+              </div>
+              <div className="col-md-6">
+                <input
+                  type="number"
+                  readOnly
+                  className="form-control"
+                  value={cal - cal * 0.1}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
