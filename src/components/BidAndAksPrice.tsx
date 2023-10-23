@@ -1,47 +1,37 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
-import { ITickerInfo } from "../types/ticker";
+import React, { FC, useMemo, useState } from "react";
 import { useAppDispatch } from "../config/store";
-import { getTickerInfo } from "../reducers/ducks/operators/notificationOperator";
+import { getBidAskNoti } from "../reducers/ducks/operators/notificationOperator";
 import { useNavigate } from "react-router-dom";
 
 interface IBidAndAskPrice {
-  ticker?: ITickerInfo;
+  bid: number;
+  bidSize: number;
+  ask: number;
+  askSize: number;
   loading: boolean;
+  ticker: string;
 }
 
-export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker, loading }) => {
-  const [currentTicker, setCurrentTicker] = useState<ITickerInfo | null>(null);
-  const navigate = useNavigate();
+export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
+  bid,
+  bidSize,
+  ask,
+  askSize,
+  loading,
+  ticker,
+}) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [hide, setHide] = useState(false);
-  useEffect(() => {
-    setCurrentTicker(ticker as ITickerInfo);
-  }, [ticker]);
-
   const spread = useMemo(() => {
-    if (!ticker) return 0;
-
-    if (ticker?.ask === 0 || ticker.bid === 0) return 0;
-
-    let rs = 0;
-
-    const ask = ticker?.ask || 0;
-    const bid = ticker?.bid || 0;
-
-    rs = (ask - bid) / ask;
-
-    return rs * 100;
-  }, [ticker]);
+    return ((ask - bid) / ask) * 100;
+  }, [bid, ask]);
 
   const keyIn = useMemo(() => {
-    if (!ticker) return 0;
-
-    if (ticker?.ask === 0 || ticker?.bid === 0) return 0;
-    const bid = ticker.bid || 0;
     const val = (spread / 100) * bid;
     const rs = bid - val;
     return rs;
-  }, [ticker, spread]);
+  }, [spread, bid]);
 
   return (
     <div className="card">
@@ -51,7 +41,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker, loading }) => {
           <span
             className="badge badge-primary d-flex cursor-pointer align-items-center ml-1"
             onClick={() => {
-              dispatch(getTickerInfo(ticker?.symbol as string));
+              dispatch(getBidAskNoti(ticker));
             }}
           >
             <span className="">Reload</span>
@@ -99,22 +89,22 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker, loading }) => {
           <div className="d-flex justify-content-between">
             <div
               className={`bid flex-1 mr-2 ${
-                currentTicker?.bid !== 0 &&
-                currentTicker?.bidSize !== undefined &&
-                currentTicker?.askSize !== undefined &&
-                currentTicker?.bidSize > currentTicker?.askSize
+                bid !== 0 &&
+                bidSize !== undefined &&
+                askSize !== undefined &&
+                bidSize > askSize
                   ? "bg-success text-white p-3"
                   : ""
               }`}
             >
               <div className="">
                 <span className="badge badge-secondary">Buyer</span>
-                <span className="ml-2">{currentTicker?.bid}</span>
+                <span className="ml-2">{bid}</span>
               </div>
 
               <div className="m-b-xxs">
                 <span>Bid Size</span>
-                <span className="ml-2">{currentTicker?.bidSize}</span>
+                <span className="ml-2">{bidSize}</span>
               </div>
 
               <div>
@@ -122,32 +112,32 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker, loading }) => {
                   Giá "Bid" thể hiện mức giá tối đa mà người mua sẵn sàng trả
                   cho một cổ phiếu hoặc chứng khoán khác
                 </p>
-                {(currentTicker?.bid as number) > 0 && (
+                {(bid as number) > 0 && (
                   <p className="text-warning">
                     Tips: Nếu Bid có giá trị hãy luôn đặt giá mua dưới giá Bid
-                    Max {currentTicker?.bid}
+                    Max {bid}
                   </p>
                 )}
               </div>
             </div>
             <div
               className={`bid flex-1 ml-2 ${
-                currentTicker?.ask !== 0 &&
-                currentTicker?.bidSize !== undefined &&
-                currentTicker?.askSize !== undefined &&
-                currentTicker?.askSize > currentTicker?.bidSize
+                ask !== 0 &&
+                bidSize !== undefined &&
+                askSize !== undefined &&
+                askSize > bidSize
                   ? "bg-success text-white p-3"
                   : ""
               }`}
             >
               <div className="">
                 <span className="badge badge-primary">Seller</span>
-                <span className="ml-2">{currentTicker?.ask}</span>
+                <span className="ml-2">{ask}</span>
               </div>
 
               <div className="m-b-xxs">
                 <span>Ask Size</span>
-                <span className="ml-2">{currentTicker?.askSize}</span>
+                <span className="ml-2">{askSize}</span>
               </div>
 
               <div>
@@ -155,10 +145,10 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({ ticker, loading }) => {
                   Giá "Ask" thể hiện mức giá tối thiểu mà người bán sẵn sàng
                   chấp nhận để có được mức bảo đảm tương tự.
                 </p>
-                {(currentTicker?.ask as number) > 0 && (
+                {(ask as number) > 0 && (
                   <p className="text-warning">
                     Tips: Nếu Ask có giá trị hãy luôn đặt giá bán lớn hơn giá
-                    Ask Min {currentTicker?.ask}
+                    Ask Min {ask}
                   </p>
                 )}
               </div>

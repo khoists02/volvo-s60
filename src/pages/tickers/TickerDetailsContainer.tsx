@@ -10,7 +10,10 @@ import format from "date-fns/format";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../config/reducers";
 import { useAppDispatch } from "../../config/store";
-import { getTickerInfo } from "../../reducers/ducks/operators/notificationOperator";
+import {
+  getBidAskNoti,
+  getTickerInfo,
+} from "../../reducers/ducks/operators/notificationOperator";
 // import { BidAndAskPrice } from "../../components/BidAndAksPrice";
 // import axios from "axios";
 // import { IBidAsk } from "../../types/notification";
@@ -20,6 +23,7 @@ import { getAccount } from "../settings/ducks/operators";
 import { ErrorAlert } from "../../components/ErrorAlert";
 import { DailyActions } from "../../reducers/ducks/slices/dailySlice";
 import { TickerIcon } from "../../components/TickerIcon";
+import { BidAndAskPrice } from "../../components/BidAndAksPrice";
 
 const TickerDetails: FC = () => {
   const dispatch = useAppDispatch();
@@ -35,6 +39,9 @@ const TickerDetails: FC = () => {
     loading,
     error,
   } = useSelector((state: IRootState) => state.dailyReducer);
+  const { bidasks, loadingBidAsk } = useSelector(
+    (state: IRootState) => state.notiReducer,
+  );
   useEffect(() => {
     setTicker({
       ...tickerInfo,
@@ -44,6 +51,7 @@ const TickerDetails: FC = () => {
 
   useEffect(() => {
     dispatch(getTickerInfo(tickerStr as string));
+    dispatch(getBidAskNoti(tickerStr as string));
     dispatch(getAccount(tickerStr as string));
     timer.current = setInterval(
       () => {
@@ -86,9 +94,18 @@ const TickerDetails: FC = () => {
         </div>
       )}
       {/* TODO: // comment */}
-      {/* <div className="col-md-12">
-        <BidAndAskPrice loading={loading} ticker={ticker} />
-      </div> */}
+      {bidasks.length > 0 && (
+        <div className="col-md-12">
+          <BidAndAskPrice
+            loading={loadingBidAsk}
+            ticker={tickerStr as string}
+            bid={bidasks[bidasks.length - 1].bid}
+            ask={bidasks[bidasks.length - 1].ask}
+            bidSize={bidasks[bidasks.length - 1].bidSize}
+            askSize={bidasks[bidasks.length - 1].askSize}
+          />
+        </div>
+      )}
 
       <div className="col-md-12">
         <StockHistory info={ticker} ticker={tickerStr || ""} />
