@@ -230,6 +230,7 @@ const SettingsContainer: FC = () => {
                   current: parseFloat(currentAcc.current),
                   priceIn: currentAcc.priceIn,
                   priceOut: currentAcc.priceOut,
+                  ticker: tab,
                   count: parseFloat(
                     (
                       parseFloat(currentAcc.balance) /
