@@ -25,7 +25,7 @@ const CustomerDropdown: FC<ICustomerDropdown> = ({
         onClick={() => setShow(!show)}
       >
         {selected.icon}
-        <div className="me-auto me-lg-1">
+        <div className="me-auto me-lg-1 ml-1">
           <div className="fs-sm text-muted mb-1">{selected.name}</div>
           <div className="fw-semibold">{selected.ticker}</div>
         </div>
@@ -49,7 +49,7 @@ const CustomerDropdown: FC<ICustomerDropdown> = ({
               }  py-2`}
             >
               {op.icon}
-              <div>
+              <div className="ml-1">
                 <div className="fw-semibold">{op.name}</div>
                 <div className="fs-sm text-muted">{op.ticker}</div>
               </div>

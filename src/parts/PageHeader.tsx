@@ -1,22 +1,19 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
-import BlendIcon from "./icons/Bend";
 import axios from "axios";
 import { ITickerAccount, ITickerDropdown, ITickerInfo } from "../types/ticker";
 import { useLocation, useNavigate } from "react-router-dom";
 import CustomerDropdown, { ICustomer } from "../components/CustomerDropdown";
+import { TickerIcon, randomColor } from "../components/TickerIcon";
+import { useAppDispatch } from "../config/store";
+import { getFavorites } from "../reducers/ducks/operators/notificationOperator";
+import { useSelector } from "react-redux";
+import { IRootState } from "../config/reducers";
 
 const PageHeader: FC = () => {
-  const options: ICustomer[] = [
-    {
-      icon: <BlendIcon width={32} height={32} />,
-      ticker: "BLND",
-      name: "Blend Labs, Inc.",
-    },
-  ];
-  const [selected, setSelected] = useState<ICustomer | undefined>(
-    options.find((p) => p.ticker === "BLND"),
-  );
+  const [options, setOptions] = useState<ICustomer[]>([]);
+  const [selected, setSelected] = useState<ICustomer | undefined>();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const path = useLocation();
   const pathArr = path.pathname.split("/").filter((p) => p !== "");
   const tickerPr = pathArr[1] || "";
@@ -28,6 +25,11 @@ const PageHeader: FC = () => {
   const [tickers, setTickers] = useState<ITickerDropdown[]>([]);
   const [currentAcc, setCurrentAcc] = useState<ITickerAccount | null>(null);
   const [ticker, setTicker] = useState<ITickerInfo | undefined>(undefined);
+  const { entities } = useSelector((state: IRootState) => state.historyReducer);
+  useEffect(() => {
+    if (entities.length > 0) return;
+    dispatch(getFavorites());
+  }, [dispatch, entities]);
   useEffect(() => {
     const getSettings = async () => {
       const rs = await axios.get("/settings");
@@ -39,27 +41,28 @@ const PageHeader: FC = () => {
               ...x,
               sub: x.short,
               name: x.short,
-              icon: <BlendIcon width={80} height={80} />,
+              icon: <TickerIcon size="lg" symbol={tickerPr as string} />,
             };
           }),
         ]);
       }
     };
     const getCurrentAcc = async () => {
-      const rs = await axios.get("/account", { params: { ticker: "BLND" } });
+      const rs = await axios.get("/account", { params: { ticker: tickerPr } });
       setCurrentAcc(rs.data);
     };
     const getInfo = async () => {
       try {
+        // TODO: Replace URL later
         const rs = await axios.get("/short", {
           params: {
-            ticker: "BLND",
+            ticker: tickerPr,
           },
         });
         // TODO: Replace content later
         setTicker({
           ...rs.data.content,
-          icon: <BlendIcon width={70} height={70} />,
+          icon: <TickerIcon size="lg" symbol={tickerPr as string} />,
         });
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -72,6 +75,26 @@ const PageHeader: FC = () => {
       getCurrentAcc();
     }
   }, [tickerPr]);
+
+  useEffect(() => {
+    if (entities.length > 0) {
+      const rs = entities.map((e) => {
+        return {
+          icon: (
+            <TickerIcon
+              size="sm"
+              symbol={e.symbol as string}
+              backgroundColor={randomColor()}
+            />
+          ),
+          ticker: e.symbol,
+          name: e.symbol,
+        };
+      }) as ICustomer[];
+      setOptions(rs);
+      setSelected(rs.find((r) => r.ticker === tickerPr));
+    }
+  }, [entities, tickerPr]);
 
   const totalPerc = useMemo(() => {
     if (ticker && currentAcc) {
@@ -91,13 +114,15 @@ const PageHeader: FC = () => {
           id="page_header"
         >
           <div className="d-sm-flex align-items-center justify-content-between mb-3 mb-lg-0 ms-lg-3">
-            <CustomerDropdown
-              options={options}
-              selected={selected as ICustomer}
-              onChange={(value: ICustomer) => {
-                setSelected(value);
-              }}
-            />
+            {options.length > 0 && (
+              <CustomerDropdown
+                options={options}
+                selected={selected as ICustomer}
+                onChange={(value: ICustomer) => {
+                  window.location.href = "/tickers/" + value.ticker;
+                }}
+              />
+            )}
 
             <div
               className="d-flex align-items-center mb-3 mb-lg-0 justify-content-end"
@@ -168,56 +193,6 @@ const PageHeader: FC = () => {
           </div>
         </div>
       </div>
-
-      {/* <div className="page-header-content d-lg-flex border-top">
-						<div className="d-flex">
-							<div className="breadcrumb py-2">
-								<a href="index.html" className="breadcrumb-item"><i className="ph-house"></i></a>
-								<a href="#" className="breadcrumb-item">Home</a>
-								<span className="breadcrumb-item active">Dashboard</span>
-							</div>
-
-							<a href="#breadcrumb_elements" className="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto" data-bs-toggle="collapse">
-								<i className="ph-caret-down collapsible-indicator ph-sm m-1"></i>
-							</a>
-						</div>
-
-						<div className="collapse d-lg-block ms-lg-auto" id="breadcrumb_elements">
-							<div className="d-lg-flex mb-2 mb-lg-0">
-								<a href="#" className="d-flex align-items-center text-body py-2">
-									<i className="ph-lifebuoy me-2"></i>
-									Support
-								</a>
-
-								<div className="dropdown ms-lg-3">
-									<a href="#" className="d-flex align-items-center text-body dropdown-toggle py-2" data-bs-toggle="dropdown">
-										<i className="ph-gear me-2"></i>
-										<span className="flex-1">Settings</span>
-									</a>
-
-									<div className="dropdown-menu dropdown-menu-end w-100 w-lg-auto">
-										<a href="#" className="dropdown-item">
-											<i className="ph-shield-warning me-2"></i>
-											Account security
-										</a>
-										<a href="#" className="dropdown-item">
-											<i className="ph-chart-bar me-2"></i>
-											Analytics
-										</a>
-										<a href="#" className="dropdown-item">
-											<i className="ph-lock-key me-2"></i>
-											Privacy
-										</a>
-										<div className="dropdown-divider"></div>
-										<a href="#" className="dropdown-item">
-											<i className="ph-gear me-2"></i>
-											All settings
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div> */}
     </div>
   );
 };

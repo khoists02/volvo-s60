@@ -2,7 +2,6 @@
 import React, { FC, useState, useEffect, useRef } from "react";
 import TickerInfo from "../../components/TickerInfo";
 import { ITickerInfo } from "../../types/ticker";
-import BlendIcon from "../../parts/icons/Bend";
 import StockHistory from "../../components/StockHistory";
 import { useParams } from "react-router-dom";
 import DailyStock from "../../components/DailyStock";
@@ -12,14 +11,15 @@ import { useSelector } from "react-redux";
 import { IRootState } from "../../config/reducers";
 import { useAppDispatch } from "../../config/store";
 import { getTickerInfo } from "../../reducers/ducks/operators/notificationOperator";
-import { BidAndAskPrice } from "../../components/BidAndAksPrice";
-import axios from "axios";
-import { IBidAsk } from "../../types/notification";
+// import { BidAndAskPrice } from "../../components/BidAndAksPrice";
+// import axios from "axios";
+// import { IBidAsk } from "../../types/notification";
 import { New } from "../../components/New";
 import { CashFlow } from "../../components/CashFlow";
 import { getAccount } from "../settings/ducks/operators";
 import { ErrorAlert } from "../../components/ErrorAlert";
 import { DailyActions } from "../../reducers/ducks/slices/dailySlice";
+import { TickerIcon } from "../../components/TickerIcon";
 
 const TickerDetails: FC = () => {
   const dispatch = useAppDispatch();
@@ -36,12 +36,15 @@ const TickerDetails: FC = () => {
     error,
   } = useSelector((state: IRootState) => state.dailyReducer);
   useEffect(() => {
-    setTicker({ ...tickerInfo, icon: <BlendIcon width={70} height={70} /> });
+    setTicker({
+      ...tickerInfo,
+      icon: <TickerIcon size="lg" symbol={tickerInfo?.symbol as string} />,
+    });
   }, [tickerInfo]);
 
   useEffect(() => {
     dispatch(getTickerInfo(tickerStr as string));
-    dispatch(getAccount("BLND"));
+    dispatch(getAccount(tickerStr as string));
     timer.current = setInterval(
       () => {
         // eslint-disable-next-line no-console

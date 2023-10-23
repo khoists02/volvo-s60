@@ -97,6 +97,7 @@ export const getTickerInfo =
   async (dispatch) => {
     try {
       dispatch(DailyActions.getTickerStart());
+      // TODO: replace URL later
       const response = await axios.get("/short", {
         params: { ticker },
       });

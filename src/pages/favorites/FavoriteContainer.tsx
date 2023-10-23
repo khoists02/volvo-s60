@@ -124,14 +124,17 @@ const FavoriteContainer: FC = () => {
                           <div className={`${loading ? "skeleton-box" : ""}`}>
                             <span>
                               {" "}
-                              {f.currentPrice}
+                              {parseFloat(f.currentPrice).toFixed(3)}
                               <span className="ml-1">({per(f)})</span>
                             </span>
                           </div>
                         </td>
                         <td>
                           <div className={`${loading ? "skeleton-box" : ""}`}>
-                            <span> {f.previousClose}</span>
+                            <span>
+                              {" "}
+                              {parseFloat(f.previousClose).toFixed(3)}
+                            </span>
                           </div>
                         </td>
                         <td>

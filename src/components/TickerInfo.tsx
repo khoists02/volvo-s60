@@ -64,7 +64,7 @@ const TickerInfo: FC<{
               loading ? "skeleton-box" : ""
             } d-flex align-items-center`}
           >
-            <span>{ticker?.shortName}</span>
+            <span>{ticker?.symbol}</span>
             {HOLIDAYS.includes(format(new Date(), "yyyy-MM-dd")) && (
               <span className="badge badge-success text-white ml-1">
                 Holiday {format(new Date(), "dd-MM-yyyy")}
@@ -161,7 +161,11 @@ const TickerInfo: FC<{
               <span className="text-muted ml-1">Market cap</span>
             </span>
             <span className="d-flex align-items-center">
-              <h5 className="mb-0">{ticker?.volume}</h5>
+              <h5 className="mb-0">
+                {convertToInternationalCurrencySystem(
+                  ticker?.volume?.toString(),
+                )}
+              </h5>
               <span className="text-muted ml-1">Vol</span>
             </span>
           </div>
