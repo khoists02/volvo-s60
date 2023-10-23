@@ -25,7 +25,9 @@ const PageHeader: FC = () => {
   const [tickers, setTickers] = useState<ITickerDropdown[]>([]);
   const [currentAcc, setCurrentAcc] = useState<ITickerAccount | null>(null);
   const [ticker, setTicker] = useState<ITickerInfo | undefined>(undefined);
-  const { entities } = useSelector((state: IRootState) => state.historyReducer);
+  const { entities, loading } = useSelector(
+    (state: IRootState) => state.historyReducer,
+  );
   useEffect(() => {
     if (entities.length > 0) return;
     dispatch(getFavorites());
@@ -48,8 +50,15 @@ const PageHeader: FC = () => {
       }
     };
     const getCurrentAcc = async () => {
-      const rs = await axios.get("/account", { params: { ticker: tickerPr } });
-      setCurrentAcc(rs.data);
+      try {
+        const rs = await axios.get("/account", {
+          params: { ticker: tickerPr },
+        });
+        setCurrentAcc(rs.data);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log("error", error);
+      }
     };
     const getInfo = async () => {
       try {
@@ -113,7 +122,9 @@ const PageHeader: FC = () => {
           className="collapse d-lg-block my-lg-auto ms-lg-auto w-100"
           id="page_header"
         >
-          <div className="d-sm-flex align-items-center justify-content-between mb-3 mb-lg-0 ms-lg-3">
+          <div
+            className={`d-sm-flex align-items-center justify-content-between mb-3 mb-lg-0 ms-lg-3`}
+          >
             {options.length > 0 && (
               <CustomerDropdown
                 options={options}
@@ -122,6 +133,10 @@ const PageHeader: FC = () => {
                   window.location.href = "/tickers/" + value.ticker;
                 }}
               />
+            )}
+
+            {loading && (
+              <i className="ph-light ph-spinner ph-md-size spinner mr-2"></i>
             )}
 
             <div
