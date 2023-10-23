@@ -56,11 +56,13 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
               } text-white`}
             >
               <span>Spread </span>
-              <span className="ml-1">{spread.toFixed(2)}%</span>
+              <span className="ml-1">
+                {spread.toFixed(2)}% - {spread / 1000}
+              </span>
             </span>
           )}
 
-          {keyIn > 0 && spread > 0 && spread < 1 && (
+          {keyIn > 0 && spread > 0 && spread < 5 && (
             <span
               className={`ml-1 d-flex align-items-center badge badge-success text-white`}
             >
@@ -87,16 +89,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
       {!hide && (
         <div className="card-body animated fadeInUp">
           <div className="d-flex justify-content-between">
-            <div
-              className={`bid flex-1 mr-2 ${
-                bid !== 0 &&
-                bidSize !== undefined &&
-                askSize !== undefined &&
-                bidSize > askSize
-                  ? "bg-success text-white p-3"
-                  : ""
-              }`}
-            >
+            <div className={`bid flex-1 mr-2`}>
               <div className="">
                 <span className="badge badge-secondary">Buyer</span>
                 <span className="ml-2">{bid}</span>
@@ -120,16 +113,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
                 )}
               </div>
             </div>
-            <div
-              className={`bid flex-1 ml-2 ${
-                ask !== 0 &&
-                bidSize !== undefined &&
-                askSize !== undefined &&
-                askSize > bidSize
-                  ? "bg-success text-white p-3"
-                  : ""
-              }`}
-            >
+            <div className={`bid flex-1 ml-2 `}>
               <div className="">
                 <span className="badge badge-primary">Seller</span>
                 <span className="ml-2">{ask}</span>
