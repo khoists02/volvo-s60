@@ -97,10 +97,13 @@ export const getTickerInfo =
   async (dispatch) => {
     try {
       dispatch(DailyActions.getTickerStart());
-      const response = await axios.get("/info", {
+      const response = await axios.get("/short", {
         params: { ticker },
       });
-      dispatch(DailyActions.getTickerSuccess(response.data as ITickerInfo));
+      // TODO: replace content later
+      dispatch(
+        DailyActions.getTickerSuccess(response.data.content as ITickerInfo),
+      );
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log("error", error);

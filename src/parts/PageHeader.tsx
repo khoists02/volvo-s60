@@ -51,12 +51,16 @@ const PageHeader: FC = () => {
     };
     const getInfo = async () => {
       try {
-        const rs = await axios.get("/info", {
+        const rs = await axios.get("/short", {
           params: {
             ticker: "BLND",
           },
         });
-        setTicker({ ...rs.data, icon: <BlendIcon width={70} height={70} /> });
+        // TODO: Replace content later
+        setTicker({
+          ...rs.data.content,
+          icon: <BlendIcon width={70} height={70} />,
+        });
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log(error);

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import {
   subWeeks,
   startOfWeek,
@@ -82,6 +82,10 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
     FilterType["this-week"],
   );
   const { account } = useSelector((state: IRootState) => state.accountReducer);
+
+  const { ticker: tickerInfo } = useSelector(
+    (state: IRootState) => state.dailyReducer,
+  );
   const [dailyLoading, setDailyLoading] = useState(false);
   useEffect(() => {
     setSelectedDate("");
@@ -274,6 +278,17 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
     }
   }, [selectedDate, selectedInterval, ticker]);
 
+  const closePer = useCallback(
+    (close: number) => {
+      return tickerInfo?.previousClose
+        ? ((close - parseFloat(tickerInfo?.previousClose || "0")) /
+            parseFloat(tickerInfo?.previousClose || "1")) *
+            100
+        : 0;
+    },
+    [tickerInfo],
+  );
+
   return (
     <div className="card">
       <div className="card-header">
@@ -457,7 +472,7 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
             <div className="table-light">
               <div className="d-flex align-items-center p-tb-xs w-100 font-weight font-h4">
                 <span className="text-secondary">
-                  Current: {info?.currentPrice}
+                  Current: {parseFloat(info?.currentPrice || "0").toFixed(3)}
                 </span>
                 <span className="text-primary ml-2">Avg: {expectedTrated}</span>
                 <span className="text-success ml-2">Max: {max.toFixed(2)}</span>
@@ -569,7 +584,7 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
       </div>
       <div className="card-body">
         <div className="table-responsive">
-          <table className="table text-nowrap">
+          <table className="table text-nowrap no-border">
             <thead>
               <tr>
                 <th></th>
@@ -613,7 +628,7 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
                         }
                       }}
                     >
-                      <td className="d-flex align-items-center border-none">
+                      <td className="d-flex align-items-center">
                         {(selectedType === FilterType["this-week"] ||
                           selectedType === FilterType["last-month"] ||
                           selectedType === FilterType["this-month"] ||
@@ -678,7 +693,12 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
                             <td>{h.open.toFixed(2)}</td>
                             <td>{h.high.toFixed(2)}</td>
                             <td>{h.low.toFixed(2)}</td>
-                            <td>{h.close.toFixed(3)}</td>
+                            <td>
+                              <span> {h.close.toFixed(3)}</span>
+                              <span className="ml-1">
+                                ({closePer(h.close).toFixed(2)}%)
+                              </span>
+                            </td>
                             <th></th>
                           </tr>
                         );

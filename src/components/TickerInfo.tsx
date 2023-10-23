@@ -102,7 +102,9 @@ const TickerInfo: FC<{
           <div id="tickets-status">{ticker?.icon}</div>
           <div className="ml-1">
             <div className="d-flex align-items-center">
-              <h5 className="mb-0">{ticker?.currentPrice}</h5>
+              <h5 className="mb-0">
+                {parseFloat(ticker?.currentPrice || "0").toFixed(3)}
+              </h5>
               <i
                 className={`ph-light ph-arrow-${
                   percent >= 0 ? "up" : "down"
@@ -118,7 +120,9 @@ const TickerInfo: FC<{
 
             <div className="font-h4">
               <span className="">Prev Close</span>
-              <span className="ml-2">{ticker?.previousClose}</span>
+              <span className="ml-2">
+                {parseFloat(ticker?.previousClose || "0").toFixed(3)}
+              </span>
             </div>
 
             <div className="d-flex align-items-center">

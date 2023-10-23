@@ -82,10 +82,10 @@ const TickerDetails: FC = () => {
           <DailyStock ticker={tickerStr || ""} />
         </div>
       )}
-
-      <div className="col-md-12">
+      {/* TODO: // comment */}
+      {/* <div className="col-md-12">
         <BidAndAskPrice loading={loading} ticker={ticker} />
-      </div>
+      </div> */}
 
       <div className="col-md-12">
         <StockHistory info={ticker} ticker={tickerStr || ""} />

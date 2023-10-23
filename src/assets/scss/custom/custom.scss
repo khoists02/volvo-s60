@@ -1650,3 +1650,9 @@ span.pid-no-wrap {
   padding-top: 10px !important;
   padding-bottom: 10px !important;
 }
+
+.no-border {
+  td {
+    border-top: none !important;
+  }
+}
