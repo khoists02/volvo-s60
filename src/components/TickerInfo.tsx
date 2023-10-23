@@ -23,28 +23,34 @@ const TickerInfo: FC<{
 
   useEffect(() => {
     const getTickerReportDays = async () => {
-      const rs = await axios.get("/earningdates", {
-        params: { ticker: "BLND" },
-      });
-      if (rs.data) {
-        const keys = Object.keys(rs.data);
+      try {
+        const rs = await axios.get("/earningdates", {
+          params: { ticker: ticker?.symbol },
+        });
+        if (rs.data) {
+          const keys = Object.keys(rs.data);
+          // eslint-disable-next-line no-console
+          setTickerReportDays(
+            keys.map((k: string) => {
+              return {
+                label: k,
+                value: Object.keys(rs.data[k])
+                  .filter((v) =>
+                    isBefore(new Date(), new Date(parseInt(v, 10))),
+                  )
+                  .map((x) => format(new Date(parseInt(x, 10)), "dd-MM-yyyy")),
+              };
+            }),
+          );
+        }
+      } catch (e) {
         // eslint-disable-next-line no-console
-        setTickerReportDays(
-          keys.map((k: string) => {
-            return {
-              label: k,
-              value: Object.keys(rs.data[k])
-                .filter((v) => isBefore(new Date(), new Date(parseInt(v, 10))))
-                .map((x) => format(new Date(parseInt(x, 10)), "dd-MM-yyyy")),
-            };
-          }),
-        );
+        console.log(e);
       }
     };
-
-    getTickerReportDays();
+    if (ticker) getTickerReportDays();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [ticker]);
 
   useEffect(() => {
     if (ticker) {
