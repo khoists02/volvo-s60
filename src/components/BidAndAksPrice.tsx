@@ -1,7 +1,6 @@
 import React, { FC, useMemo, useState } from "react";
 import { useAppDispatch } from "../config/store";
 import { getBidAskNoti } from "../reducers/ducks/operators/notificationOperator";
-import { useNavigate } from "react-router-dom";
 
 interface IBidAndAskPrice {
   bid: number;
@@ -21,7 +20,6 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
   ticker,
 }) => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const [hide, setHide] = useState(false);
   const spread = useMemo(() => {
     return ((ask - bid) / ask) * 100;
@@ -57,7 +55,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
             >
               <span>Spread </span>
               <span className="ml-1">
-                {spread.toFixed(2)}% - {spread / 1000}
+                {spread.toFixed(2)}% - {(spread / 1000).toFixed(2)}
               </span>
             </span>
           )}
@@ -68,14 +66,6 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
             >
               <span>Key In </span>
               <span className="ml-1">{keyIn.toFixed(2)}</span>
-              <span
-                className="ml-1"
-                onClick={() => {
-                  navigate("/settings");
-                }}
-              >
-                Fast Cal
-              </span>
             </span>
           )}
         </div>
