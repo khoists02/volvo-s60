@@ -71,22 +71,29 @@ const CalendarContainer: FC = () => {
 
   useEffect(() => {
     const getTickerReportDays = async () => {
-      const rs = await axios.get("/earningdates", {
-        params: { ticker: "BLND" },
-      });
-      if (rs.data) {
-        const keys = Object.keys(rs.data);
+      try {
+        const rs = await axios.get("/earningdates", {
+          params: { ticker: "BLND" },
+        });
+        if (rs.data) {
+          const keys = Object.keys(rs.data);
+          // eslint-disable-next-line no-console
+          setTickerReportDays(
+            keys.map((k: string) => {
+              return {
+                label: k,
+                value: Object.keys(rs.data[k])
+                  .filter((v) =>
+                    isBefore(new Date(), new Date(parseInt(v, 10))),
+                  )
+                  .map((x) => format(new Date(parseInt(x, 10)), "yyyy-MM-dd")),
+              };
+            }),
+          );
+        }
+      } catch (error) {
         // eslint-disable-next-line no-console
-        setTickerReportDays(
-          keys.map((k: string) => {
-            return {
-              label: k,
-              value: Object.keys(rs.data[k])
-                .filter((v) => isBefore(new Date(), new Date(parseInt(v, 10))))
-                .map((x) => format(new Date(parseInt(x, 10)), "yyyy-MM-dd")),
-            };
-          }),
-        );
+        console.log({ error });
       }
     };
 
