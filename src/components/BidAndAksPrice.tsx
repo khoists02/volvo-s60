@@ -31,9 +31,22 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
     return rs;
   }, [spread, bid]);
 
+  const keyOut = useMemo(() => {
+    const val = (spread / 100) * ask;
+    const rs = ask - val;
+    return rs;
+  }, [spread, ask]);
+
   const timeToBuy = useMemo(() => {
     if (spread >= 0 && spread <= 5) {
       return (bidSize - askSize) / bidSize;
+    }
+    return 0;
+  }, [spread, bidSize, askSize]);
+
+  const timeToSell = useMemo(() => {
+    if (spread >= 0 && spread <= 5) {
+      return (askSize - bidSize) / askSize;
     }
     return 0;
   }, [spread, bidSize, askSize]);
@@ -71,14 +84,29 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
             <span
               className={`ml-1 d-flex align-items-center badge badge-success text-white`}
             >
-              <span>Calculator Key</span>
+              <span>Calculator KeyIn</span>
               <span className="ml-1">{keyIn.toFixed(2)}</span>
+            </span>
+          )}
+
+          {keyOut > 0 && spread >= 0 && spread <= 5 && (
+            <span
+              className={`ml-1 d-flex align-items-center badge badge-danger text-white`}
+            >
+              <span>Calculator KeyOut</span>
+              <span className="ml-1">{keyOut.toFixed(2)}</span>
             </span>
           )}
 
           {timeToBuy >= 0.5 && (
             <span className="ml-1 d-flex align-items-center badge badge-success text-white">
               Buy Now
+            </span>
+          )}
+
+          {timeToSell >= 0.5 && (
+            <span className="ml-1 d-flex align-items-center badge badge-danger text-white">
+              Sell Now
             </span>
           )}
         </div>
@@ -94,7 +122,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
           <div className="d-flex justify-content-between">
             <div className={`bid flex-1 mr-2`}>
               <div className="">
-                <span className="badge badge-secondary">Buyer</span>
+                <span className="badge badge-success">Buyer</span>
                 <span className="ml-2">{bid}</span>
               </div>
 
@@ -118,7 +146,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
             </div>
             <div className={`bid flex-1 ml-2 `}>
               <div className="">
-                <span className="badge badge-primary">Seller</span>
+                <span className="badge badge-danger">Seller</span>
                 <span className="ml-2">{ask}</span>
               </div>
 
