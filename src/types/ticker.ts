@@ -96,6 +96,7 @@ export interface ITickerInfo {
   boardRisk?: number;
   auditRisk?: number;
   industryDisp?: string;
+  uuid?: string;
 }
 
 export interface ITickerDropdown {

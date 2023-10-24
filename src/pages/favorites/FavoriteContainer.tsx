@@ -9,6 +9,8 @@ import { useAppDispatch } from "../../config/store";
 import { getFavorites } from "../../reducers/ducks/operators/notificationOperator";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../config/reducers";
+import { FormModal } from "../../components/FormModal";
+import axios from "axios";
 
 const FavoriteContainer: FC = () => {
   const navigate = useNavigate();
@@ -17,7 +19,9 @@ const FavoriteContainer: FC = () => {
     (state: IRootState) => state.historyReducer,
   );
   const [favorites, setFavorites] = useState<ITickerInfo[]>([]);
+  const [showAddModal, setShowAddModal] = useState(false);
   const dispatch = useAppDispatch();
+  const [newTicker, setNewTicker] = useState("");
   useEffect(() => {
     dispatch(getFavorites());
   }, [dispatch]);
@@ -48,26 +52,79 @@ const FavoriteContainer: FC = () => {
     ).toFixed(2)}%`;
   };
 
+  const createModalForm = (): React.ReactElement => {
+    return (
+      <div className="form-group row align-items-center">
+        <div className="form-label col-md-3">
+          <label htmlFor="">Ticker</label>
+        </div>
+        <div className="form-label col-md-5">
+          <input
+            type="text"
+            className="form-control"
+            value={newTicker}
+            onChange={(e) => setNewTicker(e.target.value)}
+            name="newTicker"
+          />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="row">
+      {showAddModal && (
+        <FormModal
+          size="lg"
+          show={showAddModal}
+          onClose={() => {
+            setShowAddModal(false);
+            setNewTicker("");
+          }}
+          onConfirm={async () => {
+            try {
+              await axios.post("/favorites", { ticker: newTicker });
+              setShowAddModal(false);
+              dispatch(getFavorites());
+            } catch (error) {
+              // eslint-disable-next-line no-console
+              console.log("error", error);
+              setShowAddModal(false);
+            }
+          }}
+          okButton="Add"
+          cancelButton="Cancel"
+          title="Add New Favorite"
+          disabledConfirmBtn={newTicker === ""}
+          children={createModalForm()}
+        />
+      )}
       <div className="col-lg-12">
         <div className="card">
           <div className="card-header d-flex justify-content-between align-items-center">
             <h5>Favorites</h5>
+            <div className="d-flex">
+              <button
+                className={`btn btn-primary ${
+                  loading ? "cursor-not-allowed" : "cursor-pointer"
+                } d-flex align-items-center`}
+                onClick={() => {
+                  if (!loading) dispatch(getFavorites());
+                }}
+              >
+                {loading && (
+                  <i className="ph-light ph-spinner ph-xs-size spinner mr-2"></i>
+                )}
+                <span>Reload</span>
+              </button>
 
-            <span
-              className={`badge badge-primary ${
-                loading ? "cursor-not-allowed" : "cursor-pointer"
-              } d-flex align-items-center`}
-              onClick={() => {
-                if (!loading) dispatch(getFavorites());
-              }}
-            >
-              {loading && (
-                <i className="ph-light ph-spinner ph-xs-size spinner mr-2"></i>
-              )}
-              <span>Reload</span>
-            </span>
+              <button
+                className="btn btn-primary ml-2"
+                onClick={() => setShowAddModal(true)}
+              >
+                Add New
+              </button>
+            </div>
           </div>
           <div className="card-body">
             <div className="table-responsive">
@@ -175,6 +232,22 @@ const FavoriteContainer: FC = () => {
                               e.preventDefault();
                               e.stopPropagation();
                               navigate(`/bidasks/${f.symbol}`);
+                            }}
+                          ></i>
+
+                          <i
+                            className="ph-light ph-sm-size ph-trash
+                            cursor-pointer ml-2 text-danger"
+                            onClick={async (e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              try {
+                                await axios.delete("/favorites?id=" + f.uuid);
+                                dispatch(getFavorites());
+                              } catch (error) {
+                                // eslint-disable-next-line no-console
+                                console.log("error", error);
+                              }
                             }}
                           ></i>
                         </td>

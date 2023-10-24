@@ -33,7 +33,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
 
   const keyOut = useMemo(() => {
     const val = (spread / 100) * ask;
-    const rs = ask - val;
+    const rs = ask + val;
     return rs;
   }, [spread, ask]);
 
