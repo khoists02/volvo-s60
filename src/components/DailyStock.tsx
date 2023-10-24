@@ -78,7 +78,8 @@ const DailyStock: FC<IDailyStock> = ({ ticker }) => {
           <>
             <h5 className="title d-flex align-items-center">
               <span>
-                {ticker} {tickerInfo?.previousClose}
+                {ticker}{" "}
+                {parseFloat(tickerInfo?.previousClose || "0").toFixed(3)}
               </span>
               <span
                 className="cursor-pointer badge badge-primary ml-2 mr-2"
@@ -91,7 +92,6 @@ const DailyStock: FC<IDailyStock> = ({ ticker }) => {
               {(loading || dailyLoading) && (
                 <i className="ph-light ph-spinner ph-xs-size spinner"></i>
               )}
-              <span className="ml-2">Interval: 5m</span>
             </h5>
 
             <h5 onClick={() => setHide(!hide)}>
