@@ -61,7 +61,7 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
     { label: "30m", value: "30m" },
     { label: "1h", value: "1h" },
   ];
-  const [selectedInterval, setSelectedInterval] = useState("15m");
+  const [selectedInterval, setSelectedInterval] = useState("1h");
   const [daysFilter, setDaysFilter] = useState([
     "MON",
     "TUES",
