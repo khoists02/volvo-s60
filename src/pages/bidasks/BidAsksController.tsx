@@ -71,37 +71,51 @@ const BidAsksController: FC = () => {
     <div className="row">
       <div className="col-md-12 mb-1">
         <div className="card">
-          <div className="card-header d-flex align-items-center">
+          <div className="card-header d-flex align-items-center justify-content-between">
             <h5 className="title">
               Bid v Asks {isCreate ? "Create" : "Listing"}
             </h5>
-            <span
-              className="ml-1 badge badge-primary text-white cursor-pointer"
-              onClick={() => setIsCreate(true)}
-            >
-              Create
-            </span>
-
-            <span
-              className="cursor-pointer badge badge-primary ml-2 mr-2 d-flex align-items-center"
-              onClick={() => {
-                dispatch(getBidAskNoti(tickerStr as string));
-              }}
-            >
-              <span>Reload</span>
-              {loadingBidAsk && (
-                <i className="ph-light ph-spinner ml-1 ph-xs-size spinner"></i>
-              )}
-            </span>
-
-            <span
-              className="cursor-pointer badge badge-light ml-1 d-flex align-items-center"
-              onClick={() => {
-                navigate(-1);
-              }}
-            >
-              <span>Back</span>
-            </span>
+            <div className="d-flex">
+              <button className="ml-2 btn btn-primary text-white cursor-pointer">
+                All
+              </button>
+              <button className="ml-2 btn btn-primary text-white cursor-pointer">
+                Today
+              </button>
+              <button
+                className="ml-2 btn btn-primary text-white cursor-pointer"
+                onClick={() => setIsCreate(true)}
+              >
+                Create
+              </button>
+              <button
+                className="cursor-pointer btn btn-primary ml-2 d-flex align-items-center"
+                onClick={() => {
+                  dispatch(getBidAskNoti(tickerStr as string));
+                }}
+              >
+                <span>Reload</span>
+                {loadingBidAsk && (
+                  <i className="ph-light ph-spinner ml-2 ph-xs-size spinner"></i>
+                )}
+              </button>
+              <button
+                className="cursor-pointer btn btn-light ml-2 d-flex align-items-center"
+                onClick={() => {
+                  navigate(-1);
+                }}
+              >
+                <span>Back</span>
+              </button>
+              <button
+                className="cursor-pointer btn btn-secondary ml-2 d-flex align-items-center"
+                onClick={() => {
+                  navigate(`/tickers/${tickerStr}`);
+                }}
+              >
+                <span>Details</span>
+              </button>
+            </div>
           </div>
           <div className="card-body">
             {isCreate && (
@@ -190,10 +204,8 @@ const BidAsksController: FC = () => {
                   <thead>
                     <tr>
                       <th>Ticker</th>
-                      <th>Ask</th>
-                      <th>Ask Size</th>
                       <th>Bid</th>
-                      <th>Bid Size</th>
+                      <th>Ask</th>
                       <th>Updated At</th>
                     </tr>
                   </thead>
@@ -202,10 +214,12 @@ const BidAsksController: FC = () => {
                       return (
                         <tr key={item.id}>
                           <td>{item.ticker}</td>
-                          <td>{item.ask}</td>
-                          <td>{item.askSize}</td>
-                          <td>{item.bid}</td>
-                          <td>{item.bidSize}</td>
+                          <td>
+                            {item.bid} x {item.bidSize}
+                          </td>
+                          <td>
+                            {item.ask} x {item.askSize}
+                          </td>
                           <td>{item.updatedAt}</td>
                         </tr>
                       );

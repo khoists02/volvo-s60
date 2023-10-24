@@ -31,6 +31,13 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
     return rs;
   }, [spread, bid]);
 
+  const timeToBuy = useMemo(() => {
+    if (spread >= 0 && spread <= 5) {
+      return (bidSize - askSize) / bidSize;
+    }
+    return 0;
+  }, [spread, bidSize, askSize]);
+
   return (
     <div className="card">
       <div className="card-header d-flex justify-content-between">
@@ -60,12 +67,18 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
             </span>
           )}
 
-          {keyIn > 0 && spread > 0 && spread < 5 && (
+          {keyIn > 0 && spread >= 0 && spread <= 5 && (
             <span
               className={`ml-1 d-flex align-items-center badge badge-success text-white`}
             >
-              <span>Key In </span>
+              <span>Calculator Key</span>
               <span className="ml-1">{keyIn.toFixed(2)}</span>
+            </span>
+          )}
+
+          {timeToBuy >= 0.5 && (
+            <span className="ml-1 d-flex align-items-center badge badge-success text-white">
+              Buy Now
             </span>
           )}
         </div>
