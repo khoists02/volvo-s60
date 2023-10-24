@@ -55,7 +55,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
             >
               <span>Spread </span>
               <span className="ml-1">
-                {spread.toFixed(2)}% - {(spread / 1000).toFixed(2)}
+                {spread.toFixed(2)}% - {(spread / 100).toFixed(2)}
               </span>
             </span>
           )}
