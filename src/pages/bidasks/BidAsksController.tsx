@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../config/store";
 import { getBidAskNoti } from "../../reducers/ducks/operators/notificationOperator";
@@ -31,7 +31,7 @@ const BidAsksController: FC = () => {
   const [isToday, setIsToday] = useState(true);
   const [isCreate, setIsCreate] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-
+  const [selectedId, setSelectedId] = useState("");
   const { bidasks, loadingBidAsk } = useSelector(
     (state: IRootState) => state.notiReducer,
   );
@@ -71,10 +71,18 @@ const BidAsksController: FC = () => {
   const handleSave = async () => {
     try {
       setCreateLoading(true);
-      await axios.post("/bidasks", {
-        ...data,
-        updatedAt: format(new Date(), "yyyy-MM-dd HH:mm"),
-      });
+      if (data.id) {
+        await axios.put("/bidasks", {
+          ...data,
+          updatedAt: format(new Date(), "yyyy-MM-dd HH:mm"),
+        });
+      } else {
+        await axios.post("/bidasks", {
+          ...data,
+          updatedAt: format(new Date(), "yyyy-MM-dd HH:mm"),
+        });
+      }
+
       setCreateLoading(false);
       setIsCreate(false);
       dispatch(getBidAskNoti(tickerStr as string));
@@ -85,21 +93,36 @@ const BidAsksController: FC = () => {
     }
   };
 
+  const title = useMemo(() => {
+    if (isCreate) {
+      if (data.id) return "Update";
+      return "Create";
+    }
+    return "Listing";
+  }, [isCreate, data]);
+
   return (
     <div className="row">
       {showConfirmDelete && (
         <ConfirmDeleteModal
           show={showConfirmDelete}
           onClose={() => setShowConfirmDelete(false)}
-          onConfirm={() => {}}
+          onConfirm={async () => {
+            try {
+              await axios.delete(`/bidasks?id=${selectedId}`);
+              setShowConfirmDelete(false);
+              dispatch(getBidAskNoti(tickerStr as string));
+            } catch (error) {
+              // eslint-disable-next-line no-console
+              console.log({ error });
+            }
+          }}
         />
       )}
       <div className="col-md-12 mb-1">
         <div className="card">
           <div className="card-header d-flex align-items-center justify-content-between">
-            <h5 className="title">
-              Bid v Asks {isCreate ? "Create" : "Listing"}
-            </h5>
+            <h5 className="title">Bid v Asks {title}</h5>
             {!isCreate && (
               <div className="d-flex">
                 <button
@@ -120,7 +143,10 @@ const BidAsksController: FC = () => {
                 </button>
                 <button
                   className="ml-2 btn btn-primary text-white cursor-pointer"
-                  onClick={() => setIsCreate(true)}
+                  onClick={() => {
+                    setIsCreate(true);
+                    setData(initModel);
+                  }}
                 >
                   Create
                 </button>
@@ -222,7 +248,10 @@ const BidAsksController: FC = () => {
                     type="button"
                     onClick={handleSave}
                   >
-                    Create
+                    {createLoading && (
+                      <i className="ph-light ph-spinner ph-sm-size spinner mr-2"></i>
+                    )}
+                    {title}
                   </button>
                 </div>
               </div>
@@ -253,11 +282,32 @@ const BidAsksController: FC = () => {
                           <td>{item.updatedAt}</td>
                           <td>
                             <i
+                              className="ph-light ph-sm-size ph-note-pencil
+                            cursor-pointer"
+                              onClick={async (e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                try {
+                                  const rs = await axios.get(
+                                    "/bidasks/" + item.id,
+                                  );
+                                  // eslint-disable-next-line no-console
+                                  console.log({ rs });
+                                  setData(rs.data as IBidAsk);
+                                  setIsCreate(true);
+                                } catch (error) {
+                                  // eslint-disable-next-line no-console
+                                  console.log({ error });
+                                }
+                              }}
+                            ></i>
+                            <i
                               className="ph-light ph-sm-size ph-trash
                             cursor-pointer ml-2 text-danger"
                               onClick={async (e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
+                                setSelectedId(item.id as string);
                                 setShowConfirmDelete(true);
                               }}
                             ></i>

@@ -1656,3 +1656,15 @@ span.pid-no-wrap {
     border-top: none !important;
   }
 }
+
+tr {
+  td:last-child {
+    text-align: right !important;
+  }
+}
+
+thead {
+  th:last-child {
+    text-align: right !important;
+  }
+}

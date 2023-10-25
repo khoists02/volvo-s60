@@ -2,6 +2,10 @@ import React, { FC, useMemo, useState } from "react";
 import { useAppDispatch } from "../config/store";
 import { getBidAskNoti } from "../reducers/ducks/operators/notificationOperator";
 import { useNavigate } from "react-router-dom";
+import { BidAskCreateModal } from "./BidAskCreateModal";
+import { IBidAsk } from "../types/notification";
+import { format } from "date-fns";
+import axios from "axios";
 
 interface IBidAndAskPrice {
   bid: number;
@@ -23,6 +27,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [hide, setHide] = useState(false);
+  const [showBidAskModal, setShowBidAskModal] = useState(false);
   const spread = useMemo(() => {
     return ((ask - bid) / ask) * 100;
   }, [bid, ask]);
@@ -55,11 +60,32 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
 
   return (
     <div className="card">
+      {showBidAskModal && (
+        <BidAskCreateModal
+          show={showBidAskModal}
+          onClose={() => setShowBidAskModal(false)}
+          ticker={ticker}
+          onConfirm={async (model: IBidAsk) => {
+            try {
+              await axios.post("/bidasks", {
+                ...model,
+                updatedAt: format(new Date(), "yyyy-MM-dd HH:mm"),
+              });
+              dispatch(getBidAskNoti(ticker as string));
+              setShowBidAskModal(false);
+            } catch (error) {
+              // eslint-disable-next-line no-console
+              console.log({ error });
+              setShowBidAskModal(false);
+            }
+          }}
+        />
+      )}
       <div className="card-header d-flex justify-content-between">
-        <div className="d-flex">
+        <div className="d-flex align-items-center">
           <h5 className="title">Bid v Ask</h5>
           <span
-            className="badge badge-primary d-flex cursor-pointer align-items-center ml-1"
+            className="badge badge-primary d-flex cursor-pointer align-items-center ml-2"
             onClick={() => {
               dispatch(getBidAskNoti(ticker));
             }}
@@ -115,8 +141,15 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
         <span className="d-flex align-items-center">
           <button
             type="button"
-            onClick={() => navigate("/bidasks/" + ticker)}
+            onClick={() => setShowBidAskModal(true)}
             className="btn btn-primary"
+          >
+            Create Fast
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/bidasks/" + ticker)}
+            className="btn btn-primary ml-2"
           >
             Go to Bid Ask
           </button>
