@@ -14,6 +14,7 @@ interface IBidAndAskPrice {
   askSize: number;
   loading: boolean;
   ticker: string;
+  updatedAt: string;
 }
 
 export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
@@ -23,6 +24,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
   askSize,
   loading,
   ticker,
+  updatedAt,
 }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -84,6 +86,12 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
       <div className="card-header d-flex justify-content-between">
         <div className="d-flex align-items-center">
           <h5 className="title">Bid v Ask</h5>
+
+          <span className="ml-2 d-flex align-items-center badge badge-warning text-white">
+            <i className="ph-light ph-sm-size ph-calendar mr-2"></i>
+            <span>{updatedAt}</span>
+          </span>
+
           <span
             className="badge badge-primary d-flex cursor-pointer align-items-center ml-2"
             onClick={() => {

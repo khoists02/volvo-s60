@@ -22,7 +22,7 @@ import { CashFlow } from "../../components/CashFlow";
 import { getAccount } from "../settings/ducks/operators";
 import { ErrorAlert } from "../../components/ErrorAlert";
 import { DailyActions } from "../../reducers/ducks/slices/dailySlice";
-import { TickerIcon } from "../../components/TickerIcon";
+import { TickerIcon, randomColor } from "../../components/TickerIcon";
 import { BidAndAskPrice } from "../../components/BidAndAksPrice";
 
 const TickerDetails: FC = () => {
@@ -45,7 +45,13 @@ const TickerDetails: FC = () => {
   useEffect(() => {
     setTicker({
       ...tickerInfo,
-      icon: <TickerIcon size="lg" symbol={tickerInfo?.symbol as string} />,
+      icon: (
+        <TickerIcon
+          size="lg"
+          symbol={tickerInfo?.symbol as string}
+          backgroundColor={randomColor()}
+        />
+      ),
     });
   }, [tickerInfo]);
 
@@ -97,6 +103,7 @@ const TickerDetails: FC = () => {
       {bidasks.length > 0 && (
         <div className="col-md-12">
           <BidAndAskPrice
+            updatedAt={bidasks[bidasks.length - 1].updatedAt as string}
             loading={loadingBidAsk}
             ticker={tickerStr as string}
             bid={bidasks[bidasks.length - 1].bid}

@@ -42,7 +42,13 @@ const PageHeader: FC = () => {
               ...x,
               sub: x.short,
               name: x.short,
-              icon: <TickerIcon size="lg" symbol={tickerPr as string} />,
+              icon: (
+                <TickerIcon
+                  size="lg"
+                  symbol={tickerPr as string}
+                  backgroundColor={randomColor()}
+                />
+              ),
             };
           }),
         ]);
@@ -70,7 +76,13 @@ const PageHeader: FC = () => {
         // TODO: Replace content later
         setTicker({
           ...rs.data.content,
-          icon: <TickerIcon size="lg" symbol={tickerPr as string} />,
+          icon: (
+            <TickerIcon
+              size="lg"
+              symbol={tickerPr as string}
+              backgroundColor={randomColor()}
+            />
+          ),
         });
       } catch (error) {
         // eslint-disable-next-line no-console
