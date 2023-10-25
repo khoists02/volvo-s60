@@ -20,7 +20,9 @@ const setupAxiosInterceptors = (): void => {
   const onRequestSuccess = (config: InternalAxiosRequestConfig) => {
     return config;
   };
-  const onResponseSuccess = (response: AxiosResponse) => response;
+  const onResponseSuccess = (response: AxiosResponse) => {
+    return response;
+  };
   const onResponseError = async (err: CustomAxiosError) => {
     console.error(err);
     return Promise.reject(err);

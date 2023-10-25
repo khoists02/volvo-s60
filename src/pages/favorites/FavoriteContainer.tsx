@@ -41,7 +41,7 @@ const FavoriteContainer: FC = () => {
   }, []);
 
   useEffect(() => {
-    setFavorites(entities);
+    if (entities) setFavorites(entities);
   }, [entities]);
 
   const per = (item: ITickerInfo) => {

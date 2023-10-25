@@ -29,7 +29,7 @@ const PageHeader: FC = () => {
     (state: IRootState) => state.historyReducer,
   );
   useEffect(() => {
-    if (entities.length > 0) return;
+    if (entities?.length > 0) return;
     dispatch(getFavorites());
   }, [dispatch, entities]);
   useEffect(() => {
@@ -86,7 +86,7 @@ const PageHeader: FC = () => {
   }, [tickerPr]);
 
   useEffect(() => {
-    if (entities.length > 0) {
+    if (entities?.length > 0) {
       const rs = entities.map((e) => {
         return {
           icon: (
