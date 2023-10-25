@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { IBidAsk } from "../../types/notification";
 import format from "date-fns/format";
 import axios from "axios";
+import { ConfirmDeleteModal } from "../../components/ConfirmDeleteModal";
 
 const initModel: IBidAsk = {
   ask: 0,
@@ -23,15 +24,32 @@ const BidAsksController: FC = () => {
   const navigate = useNavigate();
   const tickerPr = useParams();
   const [data, setData] = useState<IBidAsk>(initModel);
+  const [filtered, setFiltered] = useState<IBidAsk[]>([]);
   const id = tickerPr.id;
   const [tickerStr, setTickerStr] = useState(id?.toUpperCase());
   const [createLoading, setCreateLoading] = useState(false);
-
+  const [isToday, setIsToday] = useState(true);
   const [isCreate, setIsCreate] = useState(false);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
   const { bidasks, loadingBidAsk } = useSelector(
     (state: IRootState) => state.notiReducer,
   );
+
+  useEffect(() => {
+    if (isToday) {
+      const dateFormat = format(new Date(), "yyyy-MM-dd");
+      const rs: IBidAsk[] = [];
+      const clone = [...bidasks];
+      clone.forEach((cl) => {
+        const date = cl.updatedAt?.split(" ")[0];
+        if (date === dateFormat) rs.push(cl);
+      });
+      setFiltered(rs);
+    } else {
+      setFiltered(bidasks);
+    }
+  }, [bidasks, isToday]);
 
   useEffect(() => {
     dispatch(getBidAskNoti(tickerStr as string));
@@ -69,53 +87,72 @@ const BidAsksController: FC = () => {
 
   return (
     <div className="row">
+      {showConfirmDelete && (
+        <ConfirmDeleteModal
+          show={showConfirmDelete}
+          onClose={() => setShowConfirmDelete(false)}
+          onConfirm={() => {}}
+        />
+      )}
       <div className="col-md-12 mb-1">
         <div className="card">
           <div className="card-header d-flex align-items-center justify-content-between">
             <h5 className="title">
               Bid v Asks {isCreate ? "Create" : "Listing"}
             </h5>
-            <div className="d-flex">
-              <button className="ml-2 btn btn-primary text-white cursor-pointer">
-                All
-              </button>
-              <button className="ml-2 btn btn-primary text-white cursor-pointer">
-                Today
-              </button>
-              <button
-                className="ml-2 btn btn-primary text-white cursor-pointer"
-                onClick={() => setIsCreate(true)}
-              >
-                Create
-              </button>
-              <button
-                className="cursor-pointer btn btn-primary ml-2 d-flex align-items-center"
-                onClick={() => {
-                  dispatch(getBidAskNoti(tickerStr as string));
-                }}
-              >
-                <span>Reload</span>
-                {loadingBidAsk && (
-                  <i className="ph-light ph-spinner ml-2 ph-xs-size spinner"></i>
-                )}
-              </button>
-              <button
-                className="cursor-pointer btn btn-light ml-2 d-flex align-items-center"
-                onClick={() => {
-                  navigate(-1);
-                }}
-              >
-                <span>Back</span>
-              </button>
-              <button
-                className="cursor-pointer btn btn-secondary ml-2 d-flex align-items-center"
-                onClick={() => {
-                  navigate(`/tickers/${tickerStr}`);
-                }}
-              >
-                <span>Details</span>
-              </button>
-            </div>
+            {!isCreate && (
+              <div className="d-flex">
+                <button
+                  onClick={() => setIsToday(!isToday)}
+                  className={`ml-2 btn btn-${
+                    !isToday ? "primary" : "light"
+                  } text-${!isToday ? "white" : ""} cursor-pointer`}
+                >
+                  All
+                </button>
+                <button
+                  className={`ml-2 btn btn-${
+                    isToday ? "primary" : "light"
+                  } text-${isToday ? "white" : ""} cursor-pointer`}
+                  onClick={() => setIsToday(!isToday)}
+                >
+                  Today
+                </button>
+                <button
+                  className="ml-2 btn btn-primary text-white cursor-pointer"
+                  onClick={() => setIsCreate(true)}
+                >
+                  Create
+                </button>
+                <button
+                  className="cursor-pointer btn btn-primary ml-2 d-flex align-items-center"
+                  onClick={() => {
+                    dispatch(getBidAskNoti(tickerStr as string));
+                  }}
+                >
+                  <span>Reload</span>
+                  {loadingBidAsk && (
+                    <i className="ph-light ph-spinner ml-2 ph-xs-size spinner"></i>
+                  )}
+                </button>
+                <button
+                  className="cursor-pointer btn btn-light ml-2 d-flex align-items-center"
+                  onClick={() => {
+                    navigate(-1);
+                  }}
+                >
+                  <span>Back</span>
+                </button>
+                <button
+                  className="cursor-pointer btn btn-secondary ml-2 d-flex align-items-center"
+                  onClick={() => {
+                    navigate(`/tickers/${tickerStr}`);
+                  }}
+                >
+                  <span>Details</span>
+                </button>
+              </div>
+            )}
           </div>
           <div className="card-body">
             {isCreate && (
@@ -207,10 +244,11 @@ const BidAsksController: FC = () => {
                       <th>Bid</th>
                       <th>Ask</th>
                       <th>Updated At</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {bidasks.map((item) => {
+                    {filtered.map((item) => {
                       return (
                         <tr key={item.id}>
                           <td>{item.ticker}</td>
@@ -221,6 +259,17 @@ const BidAsksController: FC = () => {
                             {item.ask} x {item.askSize}
                           </td>
                           <td>{item.updatedAt}</td>
+                          <td>
+                            <i
+                              className="ph-light ph-sm-size ph-trash
+                            cursor-pointer ml-2 text-danger"
+                              onClick={async (e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setShowConfirmDelete(true);
+                              }}
+                            ></i>
+                          </td>
                         </tr>
                       );
                     })}

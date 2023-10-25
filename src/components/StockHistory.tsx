@@ -73,7 +73,6 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
     format(new Date(), "yyyy/MM/dd"),
   );
   const [isGrow, setIsGrow] = useState(false);
-  const [isDown, setIsDown] = useState(false);
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [compareType, setCompareType] = useState<"current" | "prev">("current");
@@ -206,7 +205,7 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
     setFilterred(rs.reverse());
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isGrow, isDown, histories, info, specificDay, daysFilter]);
+  }, [isGrow, histories, info, specificDay, daysFilter]);
 
   const expectedTrated = useMemo(() => {
     if (histories.length > 0) {
@@ -322,28 +321,6 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
                 )}{" "}
               </span>
               <input checked={isGrow} type="checkbox" className="ml-1" />
-            </span>
-
-            <span
-              className="d-flex align-items-center mr-1 cursor-pointer"
-              onClick={() => {
-                setIsDown(!isDown);
-              }}
-            >
-              <span>
-                Down{" "}
-                {isDown && (
-                  <span>
-                    ({filterred.length}/{histories.length})
-                  </span>
-                )}{" "}
-              </span>
-              <input
-                readOnly
-                checked={isDown}
-                type="checkbox"
-                className="ml-1"
-              />
             </span>
 
             <button

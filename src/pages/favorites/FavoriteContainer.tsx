@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { IRootState } from "../../config/reducers";
 import { FormModal } from "../../components/FormModal";
 import axios from "axios";
+import { ConfirmDeleteModal } from "../../components/ConfirmDeleteModal";
 
 const FavoriteContainer: FC = () => {
   const navigate = useNavigate();
@@ -20,7 +21,9 @@ const FavoriteContainer: FC = () => {
   );
   const [favorites, setFavorites] = useState<ITickerInfo[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const dispatch = useAppDispatch();
+  const [selectedId, setSelectedId] = useState("");
   const [newTicker, setNewTicker] = useState("");
   useEffect(() => {
     dispatch(getFavorites());
@@ -73,6 +76,24 @@ const FavoriteContainer: FC = () => {
 
   return (
     <div className="row">
+      {showConfirmDelete && (
+        <ConfirmDeleteModal
+          show={showConfirmDelete}
+          onClose={() => setShowConfirmDelete(false)}
+          onConfirm={async () => {
+            if (!selectedId) return;
+            try {
+              await axios.delete("/favorites?id=" + selectedId);
+              dispatch(getFavorites());
+              setShowConfirmDelete(false);
+            } catch (error) {
+              // eslint-disable-next-line no-console
+              console.log("error", error);
+              setShowConfirmDelete(false);
+            }
+          }}
+        />
+      )}
       {showAddModal && (
         <FormModal
           size="lg"
@@ -241,13 +262,8 @@ const FavoriteContainer: FC = () => {
                             onClick={async (e) => {
                               e.preventDefault();
                               e.stopPropagation();
-                              try {
-                                await axios.delete("/favorites?id=" + f.uuid);
-                                dispatch(getFavorites());
-                              } catch (error) {
-                                // eslint-disable-next-line no-console
-                                console.log("error", error);
-                              }
+                              setSelectedId(f.uuid || "");
+                              setShowConfirmDelete(true);
                             }}
                           ></i>
                         </td>
