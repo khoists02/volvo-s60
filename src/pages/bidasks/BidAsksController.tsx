@@ -143,14 +143,6 @@ const BidAsksController: FC = () => {
                 >
                   <span>Back</span>
                 </button>
-                <button
-                  className="cursor-pointer btn btn-secondary ml-2 d-flex align-items-center"
-                  onClick={() => {
-                    navigate(`/tickers/${tickerStr}`);
-                  }}
-                >
-                  <span>Details</span>
-                </button>
               </div>
             )}
           </div>

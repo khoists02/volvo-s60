@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import LogoIcon from "../assets/images/logo_icon.svg";
 import LogoTxtLight from "../assets/images/logo_text_light.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { IRootState } from "../config/reducers";
 
@@ -9,6 +9,7 @@ const Navbar: FC<{ show: boolean; toggle: (show: boolean) => void }> = ({
   show,
   toggle,
 }) => {
+  const navigate = useNavigate();
   const { count, loading } = useSelector(
     (state: IRootState) => state.notiReducer,
   );
@@ -35,7 +36,24 @@ const Navbar: FC<{ show: boolean; toggle: (show: boolean) => void }> = ({
           </Link>
         </div>
         <div className="flex-1"></div>
-        <ul className="nav flex-row justify-content-end order-1 order-lg-2">
+        <ul className="nav flex-row justify-content-end align-items-center order-1 order-lg-2">
+          <li className="nav-item">
+            <span
+              className="cursor-pointer"
+              onClick={() => navigate("/calendars")}
+            >
+              <i className="ph-light ph-sm-size ph-calendar"></i>
+            </span>
+          </li>
+
+          <li className="nav-item">
+            <span
+              className="cursor-pointer ml-2"
+              onClick={() => navigate("/settings")}
+            >
+              <i className="ph-light ph-gear ml-1 cursor-pointer ph-sm-size"></i>
+            </span>
+          </li>
           <li className="nav-item">
             <span
               className="navbar-nav-link navbar-nav-link-icon rounded-pill"

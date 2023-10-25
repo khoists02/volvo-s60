@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { ITickerAccount, ITickerDropdown, ITickerInfo } from "../types/ticker";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import CustomerDropdown, { ICustomer } from "../components/CustomerDropdown";
 import { TickerIcon, randomColor } from "../components/TickerIcon";
 import { useAppDispatch } from "../config/store";
@@ -12,7 +12,6 @@ import { IRootState } from "../config/reducers";
 const PageHeader: FC = () => {
   const [options, setOptions] = useState<ICustomer[]>([]);
   const [selected, setSelected] = useState<ICustomer | undefined>();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const path = useLocation();
   const pathArr = path.pathname.split("/").filter((p) => p !== "");
@@ -139,10 +138,7 @@ const PageHeader: FC = () => {
               <i className="ph-light ph-spinner ph-md-size spinner mr-2"></i>
             )}
 
-            <div
-              className="d-flex align-items-center mb-3 mb-lg-0 justify-content-end"
-              style={{ width: 250 }}
-            >
+            <div className="d-flex align-items-center mb-3 mb-lg-0 justify-content-end">
               <div className="bg-opacity-10 text-primary lh-1 rounded-pill p-2">
                 <i
                   className={`ph-light ph-md-size ph-trend-${
@@ -179,12 +175,6 @@ const PageHeader: FC = () => {
                   )}
                 </div>
               </div>
-              <i
-                className="ph-light ph-gear ml-1 cursor-pointer ph-sm-size"
-                onClick={() => {
-                  navigate("/settings");
-                }}
-              ></i>
             </div>
             {/* <div className="vr d-none d-sm-block flex-shrink-0 my-2 mx-3"></div>
 

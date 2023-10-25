@@ -1,6 +1,7 @@
 import React, { FC, useMemo, useState } from "react";
 import { useAppDispatch } from "../config/store";
 import { getBidAskNoti } from "../reducers/ducks/operators/notificationOperator";
+import { useNavigate } from "react-router-dom";
 
 interface IBidAndAskPrice {
   bid: number;
@@ -20,6 +21,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
   ticker,
 }) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [hide, setHide] = useState(false);
   const spread = useMemo(() => {
     return ((ask - bid) / ask) * 100;
@@ -110,12 +112,21 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
             </span>
           )}
         </div>
-        <i
-          onClick={() => setHide(!hide)}
-          className={`cursor-pointer ph-light ph-sm-size ph-arrow-${
-            !hide ? "right" : "down"
-          } font-weight`}
-        ></i>
+        <span className="d-flex align-items-center">
+          <button
+            type="button"
+            onClick={() => navigate("/bidasks/" + ticker)}
+            className="btn btn-primary"
+          >
+            Go to Bid Ask
+          </button>
+          <i
+            onClick={() => setHide(!hide)}
+            className={`cursor-pointer ml-2 ph-light ph-sm-size ph-arrow-${
+              !hide ? "right" : "down"
+            } font-weight`}
+          ></i>
+        </span>
       </div>
       {!hide && (
         <div className="card-body animated fadeInUp">
