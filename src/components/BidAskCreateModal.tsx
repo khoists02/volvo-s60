@@ -37,61 +37,57 @@ export const BidAskCreateModal: FC<IBidAskCreateModal> = ({
       <Modal.Body>
         <div className="row">
           <div className="col-md-12 mb-1">
-            <div className="from-group row">
+            <div className="from-group row align-items-center">
               <div className="col-md-2 form-label">Bid</div>
               <div className="col-md-6">
-                <input
-                  name="bid"
-                  type="number"
-                  onChange={handleInputChange}
-                  value={model.bid}
-                  className="form-control"
-                />
+                <div className="row">
+                  <div className="col-md-6">
+                    <input
+                      name="bid"
+                      type="number"
+                      onChange={handleInputChange}
+                      value={model.bid}
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <input
+                      type="number"
+                      name="bidSize"
+                      value={model.bidSize}
+                      onChange={handleInputChange}
+                      className="form-control"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           <div className="col-md-12 mb-1">
-            <div className="from-group row">
-              <div className="col-md-2 form-label">Bid Size</div>
-              <div className="col-md-6">
-                <input
-                  type="number"
-                  name="bidSize"
-                  value={model.bidSize}
-                  onChange={handleInputChange}
-                  className="form-control"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="col-md-12 mb-1">
-            <div className="from-group row">
+            <div className="from-group row align-items-center">
               <div className="col-md-2 form-label">Ask</div>
               <div className="col-md-6">
-                <input
-                  type="number"
-                  name="ask"
-                  value={model.ask}
-                  onChange={handleInputChange}
-                  className="form-control"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="col-md-12 mb-1">
-            <div className="from-group row">
-              <div className="col-md-2 form-label">Ask Size</div>
-              <div className="col-md-6">
-                <input
-                  type="number"
-                  value={model.askSize}
-                  onChange={handleInputChange}
-                  name="askSize"
-                  className="form-control"
-                />
+                <div className="row">
+                  <div className="col-md-6">
+                    <input
+                      type="number"
+                      name="ask"
+                      value={model.ask}
+                      onChange={handleInputChange}
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <input
+                      type="number"
+                      value={model.askSize}
+                      onChange={handleInputChange}
+                      name="askSize"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

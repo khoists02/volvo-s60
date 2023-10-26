@@ -24,6 +24,7 @@ import { ErrorAlert } from "../../components/ErrorAlert";
 import { DailyActions } from "../../reducers/ducks/slices/dailySlice";
 import { TickerIcon, randomColor } from "../../components/TickerIcon";
 import { BidAndAskPrice } from "../../components/BidAndAksPrice";
+import { PlayBlock } from "../../components/PlayBlock";
 
 const TickerDetails: FC = () => {
   const dispatch = useAppDispatch();
@@ -102,15 +103,22 @@ const TickerDetails: FC = () => {
       {/* TODO: // comment */}
       {bidasks.length > 0 && (
         <div className="col-md-12">
-          <BidAndAskPrice
-            updatedAt={bidasks[bidasks.length - 1].updatedAt as string}
-            loading={loadingBidAsk}
-            ticker={tickerStr as string}
-            bid={bidasks[bidasks.length - 1].bid}
-            ask={bidasks[bidasks.length - 1].ask}
-            bidSize={bidasks[bidasks.length - 1].bidSize}
-            askSize={bidasks[bidasks.length - 1].askSize}
-          />
+          <div className="row">
+            <div className="col-md-6">
+              <BidAndAskPrice
+                updatedAt={bidasks[bidasks.length - 1].updatedAt as string}
+                loading={loadingBidAsk}
+                ticker={tickerStr as string}
+                bid={bidasks[bidasks.length - 1].bid}
+                ask={bidasks[bidasks.length - 1].ask}
+                bidSize={bidasks[bidasks.length - 1].bidSize}
+                askSize={bidasks[bidasks.length - 1].askSize}
+              />
+            </div>
+            <div className="col-md-6">
+              <PlayBlock ticker={ticker?.symbol as string} />
+            </div>
+          </div>
         </div>
       )}
 

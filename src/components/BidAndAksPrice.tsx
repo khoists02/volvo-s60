@@ -88,7 +88,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
           <h5 className="title">Bid v Ask</h5>
 
           <span className="ml-2 d-flex align-items-center badge badge-warning text-white">
-            <i className="ph-light ph-sm-size ph-calendar mr-2"></i>
+            <i className="ph-light ph-xs-size ph-calendar mr-2"></i>
             <span>{updatedAt}</span>
           </span>
 
@@ -173,14 +173,11 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
         <div className="card-body animated fadeInUp">
           <div className="d-flex justify-content-between">
             <div className={`bid flex-1 mr-2`}>
-              <div className="">
+              <div className="mb-1">
                 <span className="badge badge-success">Buyer</span>
-                <span className="ml-2">{bid}</span>
-              </div>
-
-              <div className="m-b-xxs">
-                <span>Bid Size</span>
-                <span className="ml-2">{bidSize}</span>
+                <span className="ml-2">
+                  {bid} x {bidSize}
+                </span>
               </div>
 
               <div>
@@ -197,14 +194,11 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
               </div>
             </div>
             <div className={`bid flex-1 ml-2 `}>
-              <div className="">
+              <div className="mb-1">
                 <span className="badge badge-danger">Seller</span>
-                <span className="ml-2">{ask}</span>
-              </div>
-
-              <div className="m-b-xxs">
-                <span>Ask Size</span>
-                <span className="ml-2">{askSize}</span>
+                <span className="ml-2">
+                  {ask} x {askSize}
+                </span>
               </div>
 
               <div>
