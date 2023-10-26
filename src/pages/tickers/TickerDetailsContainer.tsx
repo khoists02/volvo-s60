@@ -104,7 +104,7 @@ const TickerDetails: FC = () => {
       {bidasks.length > 0 && (
         <div className="col-md-12">
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-md-8">
               <BidAndAskPrice
                 updatedAt={bidasks[bidasks.length - 1].updatedAt as string}
                 loading={loadingBidAsk}
@@ -115,7 +115,7 @@ const TickerDetails: FC = () => {
                 askSize={bidasks[bidasks.length - 1].askSize}
               />
             </div>
-            <div className="col-md-6">
+            <div className="col-md-4">
               <PlayBlock ticker={ticker?.symbol as string} />
             </div>
           </div>
