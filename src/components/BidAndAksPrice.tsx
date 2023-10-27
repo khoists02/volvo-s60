@@ -173,7 +173,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
         </span>
       </div>
       {!hide && (
-        <div className="card-body animated fadeInUp">
+        <div className="card-body animated fadeInUp" style={{ height: 135 }}>
           <div className="d-flex justify-content-between">
             <div className={`bid flex-1 mr-2`}>
               <div className="mb-1">

@@ -631,7 +631,12 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
                           {format(new Date(h.date), "dd-MM-yyyy")}
                         </span>
                       </td>
-                      <td>{format(new Date(h.date), "dd/MM/yyyy HH:mm:ss")}</td>
+                      <td>
+                        <span className="d-flex align-items-center badge badge-warning text-white mr-1">
+                          <i className="ph-light ph-xxs-size ph-calendar mr-2"></i>
+                          {format(new Date(h.date), "dd/MM/yyyy HH:mm:ss")}
+                        </span>
+                      </td>
                       <td>{h.open.toFixed(2)}</td>
                       <td>{h.high.toFixed(2)}</td>
                       <td>{h.low.toFixed(2)}</td>
