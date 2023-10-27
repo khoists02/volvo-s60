@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from "react";
+import React, { FC, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useAppDispatch } from "../config/store";
 import { getBidAskNoti } from "../reducers/ducks/operators/notificationOperator";
 import { useNavigate } from "react-router-dom";
@@ -29,6 +29,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
   edit,
 }) => {
   const dispatch = useAppDispatch();
+  const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const [hide, setHide] = useState(false);
   const [showBidAskModal, setShowBidAskModal] = useState(false);
@@ -62,8 +63,21 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
     return 0;
   }, [spread, bidSize, askSize]);
 
+  useLayoutEffect(() => {
+    if (ref.current) {
+      const height = ref.current.clientHeight;
+      const scroll = ref.current.scrollHeight;
+      if (scroll > height) {
+        const newRowHeight = Math.ceil(scroll / 100);
+        // –> update this grid item { h: newRowHeight }
+        // eslint-disable-next-line no-console
+        console.log({ newRowHeight });
+      }
+    }
+  }, [ref]);
+
   return (
-    <div className={`card ${edit ? "edit" : ""}`}>
+    <div className={`card ${edit ? "edit" : ""}`} ref={ref}>
       {showBidAskModal && (
         <BidAskCreateModal
           show={showBidAskModal}
