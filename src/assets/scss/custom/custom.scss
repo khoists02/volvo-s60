@@ -1,5 +1,6 @@
 @import "./common/index.scss";
 
+
 // show scrollbar for macos
 ::-webkit-scrollbar {
   -webkit-appearance: none;
@@ -1666,5 +1667,12 @@ tr {
 thead {
   th:last-child {
     text-align: right !important;
+  }
+}
+
+.card {
+  &.edit {
+    height: 100%;
+    overflow: auto;
   }
 }

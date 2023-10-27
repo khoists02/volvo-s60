@@ -4,6 +4,8 @@ import LogoTxtLight from "../assets/images/logo_text_light.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { IRootState } from "../config/reducers";
+import { PlaysAction } from "../reducers/ducks/slices/playsSlice";
+import { useAppDispatch } from "../config/store";
 
 const Navbar: FC<{ show: boolean; toggle: (show: boolean) => void }> = ({
   show,
@@ -13,6 +15,9 @@ const Navbar: FC<{ show: boolean; toggle: (show: boolean) => void }> = ({
   const { count, loading } = useSelector(
     (state: IRootState) => state.notiReducer,
   );
+  const { edit } = useSelector((state: IRootState) => state.playsReducer);
+  //
+  const dispatch = useAppDispatch();
   return (
     <div className="navbar navbar-dark navbar-expand-lg navbar-static border-bottom border-bottom-white border-opacity-10">
       <div className="container-fluid">
@@ -38,6 +43,16 @@ const Navbar: FC<{ show: boolean; toggle: (show: boolean) => void }> = ({
         <div className="flex-1"></div>
         <ul className="nav flex-row justify-content-end align-items-center order-1 order-lg-2">
           <li className="nav-item">
+            <i
+              className={`ph-light ph-sm-size ${
+                edit ? "ph-floppy-disk-back" : "ph-note-pencil"
+              } cursor-pointer`}
+              onClick={() => {
+                dispatch(PlaysAction.toggle());
+              }}
+            ></i>
+          </li>
+          <li className="nav-item ml-2">
             <span
               className="cursor-pointer"
               onClick={() => navigate("/calendars")}

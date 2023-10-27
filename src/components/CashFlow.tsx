@@ -9,13 +9,14 @@ import { format } from "date-fns";
 
 interface ICashFlow {
   ticker: string;
+  edit?: boolean;
 }
 
 interface ICashFlowResponse {
   date: number;
 }
 
-export const CashFlow: FC<ICashFlow> = ({ ticker }) => {
+export const CashFlow: FC<ICashFlow> = ({ ticker, edit }) => {
   const dispatch = useAppDispatch();
   const [hide, setHide] = useState(false);
   const { loadingCashflow, cashflow } = useSelector(
@@ -53,7 +54,7 @@ export const CashFlow: FC<ICashFlow> = ({ ticker }) => {
   };
 
   return (
-    <div className="card">
+    <div className={`card ${edit ? "edit" : ""}`}>
       <div className="card-header d-flex algin-items-center justify-content-between">
         <div className="d-flex">
           <h5 className="title">CashFlow - {ticker}</h5>

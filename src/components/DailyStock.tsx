@@ -11,9 +11,10 @@ import {
 
 interface IDailyStock {
   ticker: string;
+  edit?: boolean;
 }
 
-const DailyStock: FC<IDailyStock> = ({ ticker }) => {
+const DailyStock: FC<IDailyStock> = ({ ticker, edit }) => {
   const timer = useRef<NodeJS.Timer | null>(null);
   const currentDate = new Date();
   const nextDate = addDays(addHours(currentDate, 0), 1);
@@ -72,7 +73,7 @@ const DailyStock: FC<IDailyStock> = ({ ticker }) => {
   }, [hour]);
 
   return (
-    <div className="card">
+    <div className={`card ${edit ? "edit" : ""}`}>
       <div className="card-header d-flex align-items-center justify-content-between">
         {openMarket && (
           <>

@@ -10,9 +10,10 @@ import format from "date-fns/format";
 
 interface IPlayBlock {
   ticker: string;
+  edit?: boolean;
 }
 
-export const PlayBlock: FC<IPlayBlock> = ({ ticker }) => {
+export const PlayBlock: FC<IPlayBlock> = ({ ticker, edit }) => {
   const dispatch = useAppDispatch();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [done, setDone] = useState(false);
@@ -83,7 +84,7 @@ export const PlayBlock: FC<IPlayBlock> = ({ ticker }) => {
           onConfirm={(model) => handleConfirm(model)}
         />
       )}
-      <div className="card">
+      <div className={`card ${edit ? "edit" : ""}`}>
         <div className="card-header d-flex  justify-content-between">
           <div className="d-flex align-items-center">
             <h5 className="title">Plays </h5>

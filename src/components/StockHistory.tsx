@@ -28,6 +28,7 @@ import { useSelector } from "react-redux";
 export interface IStockHistory {
   ticker: string;
   info?: ITickerInfo;
+  edit?: boolean;
 }
 
 export interface IHistoryResponse {
@@ -50,7 +51,7 @@ const startDayOfWeek = addHours(
   startOfWeek(lastWeekFromCurrent, { weekStartsOn: 1 }),
   0,
 );
-const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
+const StockHistory: FC<IStockHistory> = ({ ticker, info, edit }) => {
   const [showAdvanced, setShowAdvanced] = useState(true);
   const [histories, setHistories] = useState<IHistoryResponse[]>([]);
   const [filterred, setFilterred] = useState<IHistoryResponse[]>([]);
@@ -289,7 +290,7 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info }) => {
   );
 
   return (
-    <div className="card">
+    <div className={`card ${edit ? "edit" : ""}`}>
       <div className="card-header">
         <div className="d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">

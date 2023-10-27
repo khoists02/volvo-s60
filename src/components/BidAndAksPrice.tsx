@@ -15,6 +15,7 @@ interface IBidAndAskPrice {
   loading: boolean;
   ticker: string;
   updatedAt: string;
+  edit?: boolean;
 }
 
 export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
@@ -25,6 +26,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
   loading,
   ticker,
   updatedAt,
+  edit,
 }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -61,7 +63,7 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
   }, [spread, bidSize, askSize]);
 
   return (
-    <div className="card">
+    <div className={`card ${edit ? "edit" : ""}`}>
       {showBidAskModal && (
         <BidAskCreateModal
           show={showBidAskModal}

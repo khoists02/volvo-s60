@@ -14,7 +14,8 @@ const TickerInfo: FC<{
   ticker?: ITickerInfo;
   reload?: () => void;
   loading: boolean;
-}> = ({ ticker, loading, reload }) => {
+  edit?: boolean;
+}> = ({ ticker, loading, reload, edit }) => {
   const currentDate = new Date();
   const [percent, setPercent] = useState<number>(0);
   const [tickerReportDays, setTickerReportDays] = useState<ITickerReportDays[]>(
@@ -62,7 +63,7 @@ const TickerInfo: FC<{
     }
   }, [ticker]);
   return (
-    <div className="card">
+    <div className={`card ${edit ? "edit" : ""}`}>
       <div className="card-header d-sm-flex align-items-sm-center py-sm-0">
         <h5 className="py-sm-2 my-sm-1">
           <div

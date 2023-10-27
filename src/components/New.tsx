@@ -6,9 +6,10 @@ import { getNewsNoti } from "../reducers/ducks/operators/notificationOperator";
 
 interface INew {
   ticker: string;
+  edit?: boolean;
 }
 
-export const New: FC<INew> = ({ ticker }) => {
+export const New: FC<INew> = ({ ticker, edit }) => {
   const dispatch = useAppDispatch();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -21,7 +22,7 @@ export const New: FC<INew> = ({ ticker }) => {
     dispatch(getNewsNoti(ticker as string));
   }, [dispatch, ticker]);
   return (
-    <div className="card">
+    <div className={`card ${edit ? "edit" : ""}`}>
       <div className="card-header d-flex algin-items-center justify-content-between">
         <div>
           <h5 className="title">News - {ticker}</h5>

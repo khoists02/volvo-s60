@@ -4,6 +4,7 @@ import { PlayResponse } from "../../../types/plays";
 const initialState = {
   entities: [] as PlayResponse[],
   loading: false as boolean,
+  edit: false,
 };
 
 const playsSlice = createSlice({
@@ -19,6 +20,9 @@ const playsSlice = createSlice({
     },
     getAllFail(state) {
       state.loading = false;
+    },
+    toggle(state) {
+      state.edit = !state.edit;
     },
   },
 });
