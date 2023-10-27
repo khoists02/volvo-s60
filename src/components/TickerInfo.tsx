@@ -159,7 +159,7 @@ const TickerInfo: FC<{
           <div className="bg-opacity-10 text-primary lh-1 rounded-pill p-2">
             <i className="ph-light ph-lg-size ph-currency-circle-dollar"></i>
           </div>
-          <div className="ml-1 text-right" style={{ width: 200 }}>
+          <div className="ml-1 text-right">
             <span className="d-flex align-items-center">
               <h5 className="mb-0">
                 {convertToInternationalCurrencySystem(ticker?.marketCap)}
