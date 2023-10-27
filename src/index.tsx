@@ -6,6 +6,8 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import store from "./config/store";
 import setupAxiosInterceptors from "./config/axios-interceptor";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
@@ -16,7 +18,9 @@ root.render(
     <React.StrictMode>
       <React.Suspense fallback={<span>Loading...</span>}>
         <Provider store={store}>
-          <App />
+          <DndProvider backend={HTML5Backend}>
+            <App />
+          </DndProvider>
         </Provider>
       </React.Suspense>
     </React.StrictMode>

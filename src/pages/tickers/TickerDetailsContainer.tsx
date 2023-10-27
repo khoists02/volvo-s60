@@ -25,6 +25,50 @@ import { DailyActions } from "../../reducers/ducks/slices/dailySlice";
 import { TickerIcon, randomColor } from "../../components/TickerIcon";
 import { BidAndAskPrice } from "../../components/BidAndAksPrice";
 import { PlayBlock } from "../../components/PlayBlock";
+import { useDrag } from "react-dnd";
+import { useDrop } from "react-dnd";
+
+interface IDraggable {
+  children: React.ReactElement;
+  className: string;
+}
+
+interface IDroppable {
+  children: React.ReactElement;
+}
+
+export const DroppableContainer: FC<IDroppable> = ({ children }) => {
+  // @ts-ignore
+  const [{ canDrop, isOver }, drop] = useDrop(() => ({
+    accept: "image",
+    drop: () => ({ name: "name of this drop target" }),
+  }));
+
+  // eslint-disable-next-line no-console
+  console.log({ canDrop, isOver });
+
+  return <div ref={drop}>{children}</div>;
+};
+
+export const DraggableContainer: FC<IDraggable> = ({ children, className }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [{ isDragging }, drag] = useDrag({
+    type: "image",
+    item: () => {
+      // eslint-disable-next-line
+      return {};
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    collect: (monitor: any) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+  return (
+    <div className={className} ref={drag}>
+      {children}
+    </div>
+  );
+};
 
 const TickerDetails: FC = () => {
   const dispatch = useAppDispatch();
@@ -76,64 +120,65 @@ const TickerDetails: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tickerStr, hour]);
   return (
-    <div className="row">
-      {error && (
+    <DroppableContainer>
+      <div className="row">
+        {error && (
+          <div className="col-md-12">
+            <ErrorAlert
+              message={`Ticker ${tickerStr} ${error}`}
+              onClose={() => dispatch(DailyActions.clearEr())}
+            />
+          </div>
+        )}
+
         <div className="col-md-12">
-          <ErrorAlert
-            message={`Ticker ${tickerStr} ${error}`}
-            onClose={() => dispatch(DailyActions.clearEr())}
+          <TickerInfo
+            ticker={ticker}
+            loading={loading}
+            reload={() => {
+              dispatch(getTickerInfo(tickerStr as string));
+            }}
           />
         </div>
-      )}
-
-      <div className="col-md-12">
-        <TickerInfo
-          ticker={ticker}
-          loading={loading}
-          reload={() => {
-            dispatch(getTickerInfo(tickerStr as string));
-          }}
-        />
-      </div>
-      {!HOLIDAYS.includes(format(new Date(), "yyyy-MM-dd")) && (
-        <div className="col-md-12 m-tb-sm">
-          <DailyStock ticker={tickerStr || ""} />
-        </div>
-      )}
-      {/* TODO: // comment */}
-      {bidasks.length > 0 && (
-        <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-8">
-              <BidAndAskPrice
-                updatedAt={bidasks[bidasks.length - 1].updatedAt as string}
-                loading={loadingBidAsk}
-                ticker={tickerStr as string}
-                bid={bidasks[bidasks.length - 1].bid}
-                ask={bidasks[bidasks.length - 1].ask}
-                bidSize={bidasks[bidasks.length - 1].bidSize}
-                askSize={bidasks[bidasks.length - 1].askSize}
-              />
-            </div>
-            <div className="col-md-4">
-              <PlayBlock ticker={ticker?.symbol as string} />
+        {!HOLIDAYS.includes(format(new Date(), "yyyy-MM-dd")) && (
+          <div className="col-md-12 m-tb-sm">
+            <DailyStock ticker={tickerStr || ""} />
+          </div>
+        )}
+        {/* TODO: // comment */}
+        {bidasks.length > 0 && (
+          <div className="col-md-12">
+            <div className="row">
+              <div className="col-md-8">
+                <BidAndAskPrice
+                  updatedAt={bidasks[bidasks.length - 1].updatedAt as string}
+                  loading={loadingBidAsk}
+                  ticker={tickerStr as string}
+                  bid={bidasks[bidasks.length - 1].bid}
+                  ask={bidasks[bidasks.length - 1].ask}
+                  bidSize={bidasks[bidasks.length - 1].bidSize}
+                  askSize={bidasks[bidasks.length - 1].askSize}
+                />
+              </div>
+              <div className="col-md-4">
+                <PlayBlock ticker={ticker?.symbol as string} />
+              </div>
             </div>
           </div>
+        )}
+
+        <div className="col-md-12">
+          <StockHistory info={ticker} ticker={tickerStr || ""} />
         </div>
-      )}
 
-      <div className="col-md-12">
-        <StockHistory info={ticker} ticker={tickerStr || ""} />
+        <div className="col-md-12">
+          <CashFlow ticker={tickerStr as string} />
+        </div>
+        <DraggableContainer className="col-md-12">
+          <New ticker={tickerStr as string} />
+        </DraggableContainer>
       </div>
-
-      <div className="col-md-12">
-        <CashFlow ticker={tickerStr as string} />
-      </div>
-
-      <div className="col-md-12">
-        <New ticker={tickerStr as string} />
-      </div>
-    </div>
+    </DroppableContainer>
   );
 };
 
