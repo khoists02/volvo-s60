@@ -84,67 +84,70 @@ export const BidAndAskPrice: FC<IBidAndAskPrice> = ({
         />
       )}
       <div className="card-header d-flex justify-content-between">
-        <div className="d-flex align-items-center">
-          <h5 className="title">Bid v Ask</h5>
+        <div className="">
+          <div className="d-flex align-items-center">
+            <h5 className="title">Bid v Ask</h5>
 
-          <span className="ml-2 d-flex align-items-center badge badge-warning text-white">
-            <i className="ph-light ph-xs-size ph-calendar mr-2"></i>
-            <span>{updatedAt}</span>
-          </span>
-
-          <span
-            className="badge badge-primary d-flex cursor-pointer align-items-center ml-2"
-            onClick={() => {
-              dispatch(getBidAskNoti(ticker));
-            }}
-          >
-            <span className="">Reload</span>
-            {loading && (
-              <i className="ph-light ph-xs-size ph-spinner spinner ml-1"></i>
-            )}
-          </span>
-          {spread > 0 && (
-            <span
-              className={`ml-1 d-flex align-items-center badge badge-${
-                spread > 1 ? "danger" : "success"
-              } text-white`}
+            <button
+              className="btn btn-primary d-flex cursor-pointer align-items-center ml-2"
+              onClick={() => {
+                dispatch(getBidAskNoti(ticker));
+              }}
             >
-              <span>Spread </span>
-              <span className="ml-1">
-                {spread.toFixed(2)}% - {(spread / 100).toFixed(2)}
+              <span className="">Reload</span>
+              {loading && (
+                <i className="ph-light ph-xs-size ph-spinner spinner ml-1"></i>
+              )}
+            </button>
+          </div>
+          <div className="mt-1 d-flex align-items-center">
+            <span className="d-flex align-items-center badge badge-warning text-white">
+              <i className="ph-light ph-xs-size ph-calendar mr-2"></i>
+              <span>{updatedAt}</span>
+            </span>
+            {spread > 0 && (
+              <span
+                className={`ml-1 d-flex align-items-center badge badge-${
+                  spread > 1 ? "danger" : "success"
+                } text-white`}
+              >
+                <span>Spread </span>
+                <span className="ml-1">
+                  {spread.toFixed(2)}% - {(spread / 100).toFixed(2)}
+                </span>
               </span>
-            </span>
-          )}
+            )}
 
-          {keyIn > 0 && spread >= 0 && spread <= 5 && (
-            <span
-              className={`ml-1 d-flex align-items-center badge badge-success text-white`}
-            >
-              <span>Calculator KeyIn</span>
-              <span className="ml-1">{keyIn.toFixed(2)}</span>
-            </span>
-          )}
+            {keyIn > 0 && spread >= 0 && spread <= 5 && (
+              <span
+                className={`ml-1 d-flex align-items-center badge badge-success text-white`}
+              >
+                <span>Calculator KeyIn</span>
+                <span className="ml-1">{keyIn.toFixed(2)}</span>
+              </span>
+            )}
 
-          {keyOut > 0 && spread >= 0 && spread <= 5 && (
-            <span
-              className={`ml-1 d-flex align-items-center badge badge-danger text-white`}
-            >
-              <span>Calculator KeyOut</span>
-              <span className="ml-1">{keyOut.toFixed(2)}</span>
-            </span>
-          )}
+            {keyOut > 0 && spread >= 0 && spread <= 5 && (
+              <span
+                className={`ml-1 d-flex align-items-center badge badge-danger text-white`}
+              >
+                <span>Calculator KeyOut</span>
+                <span className="ml-1">{keyOut.toFixed(2)}</span>
+              </span>
+            )}
 
-          {timeToBuy >= 0.5 && (
-            <span className="ml-1 d-flex align-items-center badge badge-success text-white">
-              Buy Now
-            </span>
-          )}
+            {timeToBuy >= 0.5 && (
+              <span className="ml-1 d-flex align-items-center badge badge-success text-white">
+                Buy Now
+              </span>
+            )}
 
-          {timeToSell >= 0.5 && (
-            <span className="ml-1 d-flex align-items-center badge badge-danger text-white">
-              Sell Now
-            </span>
-          )}
+            {timeToSell >= 0.5 && (
+              <span className="ml-1 d-flex align-items-center badge badge-danger text-white">
+                Sell Now
+              </span>
+            )}
+          </div>
         </div>
         <span className="d-flex align-items-center">
           <button

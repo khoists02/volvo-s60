@@ -37,15 +37,15 @@ export const PlayBlock: FC<IPlayBlock> = ({ ticker }) => {
           <div className="d-flex align-items-center">
             <h5 className="title">Plays </h5>
             <div>
-              <span
-                className="badge badge-primary cursor-pointer ml-2"
+              <button
+                className="btn btn-primary ml-2"
                 onClick={() => dispatch(getAllByTicker(ticker as string))}
               >
                 {loading && (
                   <i className="ph-light ph-spinner ph-xs-size spinner mr-2"></i>
                 )}
                 <span>Reload</span>
-              </span>
+              </button>
             </div>
           </div>
           <button
