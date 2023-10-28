@@ -49,7 +49,11 @@ export const PlayBlock: FC<IPlayBlock> = ({ ticker, edit, currentPrice }) => {
         setShowCreateModal(false);
         setDone(false);
       } else {
-        await axios.put("/plays/" + data.id, data);
+        await axios.put("/plays/" + data.id, {
+          ...data,
+          doneAt: format(new Date(), "dd-MM-yyyy HH:mm:ss"),
+          currentPrice: currentPrice,
+        });
         setShowCreateModal(false);
       }
       dispatch(getAllByTicker(ticker as string, done));
