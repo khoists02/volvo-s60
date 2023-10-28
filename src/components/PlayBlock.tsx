@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { useAppDispatch } from "../config/store";
 import { getAllByTicker } from "../reducers/ducks/operators/playsOperator";
 import { IRootState } from "../config/reducers";
@@ -7,15 +7,18 @@ import { CreatePlayModal } from "./CreatePlayModal";
 import { PlayResponse } from "../types/plays";
 import axios from "axios";
 import format from "date-fns/format";
+import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
 
 interface IPlayBlock {
   ticker: string;
   edit?: boolean;
+  currentPrice?: number;
 }
 
-export const PlayBlock: FC<IPlayBlock> = ({ ticker, edit }) => {
+export const PlayBlock: FC<IPlayBlock> = ({ ticker, edit, currentPrice }) => {
   const dispatch = useAppDispatch();
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [done, setDone] = useState(false);
   const { entities, loading } = useSelector(
     (state: IRootState) => state.playsReducer,
@@ -59,9 +62,26 @@ export const PlayBlock: FC<IPlayBlock> = ({ ticker, edit }) => {
     }
   };
 
+  const total = useCallback(
+    (item: PlayResponse) => {
+      if (!currentPrice || !item.inPrice) return 0;
+      const per = (currentPrice - item.inPrice) / currentPrice;
+      return per * 100;
+    },
+    [currentPrice],
+  );
+
   const markItDone = async (model: PlayResponse) => {
     try {
-      await axios.put("/plays/" + model.id, { ...model, done: true });
+      if (!model.price) return;
+      const t = model.price + (total(model) / 100) * model.price;
+      await axios.put("/plays/" + model.id, {
+        ...model,
+        done: true,
+        total: t,
+        doneAt: format(new Date(), "dd-MM-yyyy HH:mm:ss"),
+        currentPrice: currentPrice,
+      });
       setDone(true);
       dispatch(getAllByTicker(ticker as string, true));
     } catch (error) {
@@ -70,8 +90,52 @@ export const PlayBlock: FC<IPlayBlock> = ({ ticker, edit }) => {
     }
   };
 
+  const deletePlay = async (id: string) => {
+    try {
+      await axios.delete("/plays/" + id);
+      setShowDeleteModal(false);
+      dispatch(getAllByTicker(ticker as string, true));
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+      setShowDeleteModal(false);
+    }
+  };
+
+  const lossNumber = useCallback(
+    (item: PlayResponse, current?: number) => {
+      if (!current || current === 0 || !item.inPrice) return 0;
+      const loss = item.inPrice - item.inPrice * 0.1;
+      if (current <= loss) {
+        // loss here
+        markItDone(item);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
+  useEffect(() => {
+    if (entities.length > 0) {
+      const doneLs = entities.filter((x) => !x.done);
+      doneLs.forEach((d) => {
+        lossNumber(d, currentPrice);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPrice, entities]);
+
   return (
     <>
+      {showDeleteModal && (
+        <ConfirmDeleteModal
+          show={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          onConfirm={() => {
+            deletePlay(selected?.id as string);
+          }}
+        />
+      )}
       {showCreateModal && (
         <CreatePlayModal
           ticker={ticker}
@@ -102,20 +166,24 @@ export const PlayBlock: FC<IPlayBlock> = ({ ticker, edit }) => {
           </div>
           <div className="d-flex">
             <button
-              className={`btn btn-${done ? "primary" : "light"} mr-1`}
+              className={`btn btn-${
+                !done ? "primary" : "success"
+              } mr-1 text-white`}
               onClick={() => setDone(!done)}
             >
-              {done ? "Done" : "Not Done"}
+              {done ? "Done" : "Current Plays"}
             </button>
-            <button
-              className="btn btn-primary"
-              onClick={() => {
-                setShowCreateModal(true);
-                setSelected(null);
-              }}
-            >
-              Create play
-            </button>
+            {!done && (
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setShowCreateModal(true);
+                  setSelected(null);
+                }}
+              >
+                Create play
+              </button>
+            )}
           </div>
         </div>
 
@@ -126,13 +194,49 @@ export const PlayBlock: FC<IPlayBlock> = ({ ticker, edit }) => {
                 className="d-flex justify-content-between align-items-center mb-1"
                 key={x.id}
               >
-                <div className="price">${x.price}</div>
+                <div className="d-flex">
+                  <div className="price">${x.price}</div>
+                  <div className="in-price ml-2">
+                    <span>In: ${x.inPrice}</span>
+                    {currentPrice && x.inPrice && (
+                      <span
+                        className={`mr-1 ml-1 text-${
+                          total(x) > 0 ? "success" : "danger"
+                        }`}
+                      >
+                        ({total(x) > 0 && "+"}
+                        {(currentPrice - x.inPrice).toFixed(3)})
+                      </span>
+                    )}
+                  </div>
+
+                  {total(x) !== 0 && (
+                    <span
+                      className={`ml-1 text-${
+                        total(x) > 0 ? "success" : "danger"
+                      }`}
+                    >
+                      ({total(x) > 0 && "+"} {total(x).toFixed(3)})%
+                    </span>
+                  )}
+                </div>
+
                 <div className="d-flex flex-center">
+                  {total(x) !== 0 && x.price && (
+                    <span
+                      className={`mr-1 text-${
+                        total(x) > 0 ? "success" : "danger"
+                      }`}
+                    >
+                      Total: {(x.price + (total(x) / 100) * x.price).toFixed(3)}
+                    </span>
+                  )}
+
                   <span className="d-flex align-items-center badge badge-warning text-white mr-1">
                     <i className="ph-light ph-xxs-size ph-calendar mr-2"></i>
-                    <span>{x.playedAt}</span>
+                    <span>{done ? x.doneAt : x.playedAt}</span>
                   </span>
-                  {!x.done && (
+                  {!done && (
                     <span
                       className="badge badge-success mr-1 cursor-pointer"
                       onClick={() => markItDone(x)}
@@ -141,15 +245,27 @@ export const PlayBlock: FC<IPlayBlock> = ({ ticker, edit }) => {
                     </span>
                   )}
 
-                  <i
-                    className="ph-light ph-sm-size ph-note-pencil cursor-pointer"
-                    onClick={() => {
-                      setSelected(x);
-                      setTimeout(() => {
-                        setShowCreateModal(true);
-                      }, 1);
-                    }}
-                  ></i>
+                  {!done && (
+                    <i
+                      className="ph-light ph-sm-size ph-note-pencil cursor-pointer"
+                      onClick={() => {
+                        setSelected(x);
+                        setTimeout(() => {
+                          setShowCreateModal(true);
+                        }, 1);
+                      }}
+                    ></i>
+                  )}
+
+                  {done && (
+                    <i
+                      className="ph-light ph-sm-size ph-trash cursor-pointer ml-1 text-danger"
+                      onClick={() => {
+                        setSelected(x);
+                        setShowDeleteModal(true);
+                      }}
+                    ></i>
+                  )}
                 </div>
               </div>
             );

@@ -1671,8 +1671,11 @@ thead {
 }
 
 .card {
-  &.editd {
-    height: 100%;
-    overflow: auto;
-  }
+  // &.editd {
+  //   height: 100%;
+  //   overflow: auto;
+  // }
+
+  height: 100%;
+  overflow: auto;
 }

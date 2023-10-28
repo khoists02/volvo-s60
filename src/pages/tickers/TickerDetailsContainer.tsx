@@ -285,7 +285,13 @@ const TickerDetails: FC = () => {
           </div>
 
           <div key="play">
-            <PlayBlock ticker={ticker?.symbol as string} edit={edit} />
+            <PlayBlock
+              ticker={ticker?.symbol as string}
+              currentPrice={
+                ticker?.currentPrice ? parseFloat(ticker?.currentPrice) : 0
+              }
+              edit={edit}
+            />
           </div>
 
           <div key="history">

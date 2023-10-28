@@ -7,4 +7,6 @@ export interface PlayResponse {
   total?: number;
   done?: boolean;
   virtual?: boolean;
+  doneAt?: string;
+  currentPrice?: number;
 }
