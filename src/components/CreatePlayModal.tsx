@@ -61,6 +61,8 @@ export const CreatePlayModal: FC<ICreatePlayModal> = ({
                   min={0}
                   value={model.price}
                   onChange={handleInputChange}
+                  readOnly={!!model.id}
+                  disabled={!!model.id}
                   name="price"
                   className="form-control"
                 />
@@ -74,6 +76,8 @@ export const CreatePlayModal: FC<ICreatePlayModal> = ({
                   type="number"
                   min={0}
                   value={model.inPrice}
+                  readOnly={!!model.id}
+                  disabled={!!model.id}
                   onChange={handleInputChange}
                   name="inPrice"
                   className="form-control"
@@ -118,8 +122,8 @@ export const CreatePlayModal: FC<ICreatePlayModal> = ({
                   value={model.cfd}
                   onChange={handleInputChange}
                   name="cfd"
-                  readOnly={model.id !== ""}
-                  disabled={model.id !== ""}
+                  readOnly={!!model.id}
+                  disabled={!!model.id}
                   className="form-control"
                 />
               </div>
