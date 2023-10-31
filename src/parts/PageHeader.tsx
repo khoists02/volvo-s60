@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { FC, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { ITickerAccount, ITickerDropdown, ITickerInfo } from "../types/ticker";
@@ -16,10 +17,10 @@ const PageHeader: FC = () => {
   const path = useLocation();
   const pathArr = path.pathname.split("/").filter((p) => p !== "");
   const tickerPr = pathArr[1] || "";
-  const USDollar = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
+  // const USDollar = new Intl.NumberFormat("en-US", {
+  //   style: "currency",
+  //   currency: "USD",
+  // });
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [tickers, setTickers] = useState<ITickerDropdown[]>([]);
   const [currentAcc, setCurrentAcc] = useState<ITickerAccount | null>(null);
@@ -116,18 +117,21 @@ const PageHeader: FC = () => {
     }
   }, [entities, tickerPr]);
 
-  const totalPerc = useMemo(() => {
-    if (ticker && currentAcc) {
-      return (
-        (parseFloat(ticker.currentPrice) - parseFloat(currentAcc.current)) /
-        parseFloat(currentAcc.current)
-      );
-    }
-    return 0;
-  }, [ticker, currentAcc]);
+  // const totalPerc = useMemo(() => {
+  //   if (ticker && currentAcc) {
+  //     return (
+  //       (parseFloat(ticker.currentPrice) - parseFloat(currentAcc.current)) /
+  //       parseFloat(currentAcc.current)
+  //     );
+  //   }
+  //   return 0;
+  // }, [ticker, currentAcc]);
 
   return (
-    <div className="page-header page-header-light shadow">
+    <div
+      className="page-header page-header-light shadow"
+      style={{ minHeight: 70 }}
+    >
       <div className="page-header-content d-lg-flex">
         <div
           className="collapse d-lg-block my-lg-auto ms-lg-auto w-100"
@@ -151,14 +155,14 @@ const PageHeader: FC = () => {
             )}
 
             <div className="d-flex align-items-center mb-3 mb-lg-0 justify-content-end">
-              <div className="bg-opacity-10 text-primary lh-1 rounded-pill p-2">
+              {/* <div className="bg-opacity-10 text-primary lh-1 rounded-pill p-2">
                 <i
                   className={`ph-light ph-md-size ph-trend-${
                     totalPerc < 0 ? "down" : "up"
                   } text-${totalPerc < 0 ? "danger" : "success"}`}
                 ></i>
-              </div>
-              <div className="ml-1 flex-1 p-tb-xxs">
+              </div> */}
+              {/* <div className="ml-1 flex-1 p-tb-xxs">
                 <h5 className="mb-0">
                   {USDollar.format(parseFloat(currentAcc?.balance || "") || 0)}
                 </h5>
@@ -186,7 +190,7 @@ const PageHeader: FC = () => {
                     2,
                   )}
                 </div>
-              </div>
+              </div> */}
             </div>
             {/* <div className="vr d-none d-sm-block flex-shrink-0 my-2 mx-3"></div>
 
