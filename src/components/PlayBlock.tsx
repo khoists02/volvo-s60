@@ -69,7 +69,8 @@ export const PlayBlock: FC<IPlayBlock> = ({ ticker, edit, currentPrice }) => {
   const total = useCallback(
     (item: PlayResponse) => {
       if (!currentPrice || !item.inPrice) return 0;
-      const per = (currentPrice - item.inPrice) / currentPrice;
+      const per =
+        ((currentPrice - item.inPrice) / currentPrice) * (item.cfd || 1);
       return per * 100;
     },
     [currentPrice],
@@ -108,10 +109,18 @@ export const PlayBlock: FC<IPlayBlock> = ({ ticker, edit, currentPrice }) => {
 
   const lossNumber = useCallback(
     (item: PlayResponse, current?: number) => {
-      if (!current || current === 0 || !item.inPrice) return 0;
-      const loss = item.inPrice - item.inPrice * 0.1;
-      if (current <= loss) {
-        // loss here
+      if (
+        !current ||
+        current === 0 ||
+        !item.inPrice ||
+        !item.lossPrice ||
+        !item.winPrice
+      )
+        return 0;
+      const loss = item.lossPrice || 0;
+      const win = item.winPrice || 0;
+      if (current <= loss || current >= win) {
+        // done
         markItDone(item);
       }
     },
@@ -235,6 +244,10 @@ export const PlayBlock: FC<IPlayBlock> = ({ ticker, edit, currentPrice }) => {
                       Total: {(x.price + (total(x) / 100) * x.price).toFixed(3)}
                     </span>
                   )}
+
+                  <span className="badge badge-warning mr-1">
+                    CFD X {x.cfd || 1}
+                  </span>
 
                   <span className="d-flex align-items-center badge badge-warning text-white mr-1">
                     <i className="ph-light ph-xxs-size ph-calendar mr-2"></i>

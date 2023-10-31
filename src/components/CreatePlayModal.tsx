@@ -23,6 +23,9 @@ export const CreatePlayModal: FC<ICreatePlayModal> = ({
     ticker: ticker,
     price: 0,
     inPrice: 0,
+    winPrice: 0,
+    lossPrice: 0,
+    cfd: 1,
     playedAt: "",
     virtual: false,
     done: false,
@@ -73,6 +76,50 @@ export const CreatePlayModal: FC<ICreatePlayModal> = ({
                   value={model.inPrice}
                   onChange={handleInputChange}
                   name="inPrice"
+                  className="form-control"
+                />
+              </div>
+            </div>
+
+            <div className="from-group mb-2 row align-items-center">
+              <label className="col-md-3 label">Loss Price</label>
+              <div className="col-md-5">
+                <input
+                  type="number"
+                  min={0}
+                  value={model.lossPrice}
+                  onChange={handleInputChange}
+                  name="lossPrice"
+                  className="form-control"
+                />
+              </div>
+            </div>
+
+            <div className="from-group mb-2 row align-items-center">
+              <label className="col-md-3 label">Win Price</label>
+              <div className="col-md-5">
+                <input
+                  type="number"
+                  min={0}
+                  value={model.winPrice}
+                  onChange={handleInputChange}
+                  name="winPrice"
+                  className="form-control"
+                />
+              </div>
+            </div>
+
+            <div className="from-group mb-2 row align-items-center">
+              <label className="col-md-3 label">Cfd X</label>
+              <div className="col-md-5">
+                <input
+                  type="number"
+                  min={0}
+                  value={model.cfd}
+                  onChange={handleInputChange}
+                  name="cfd"
+                  readOnly={model.id !== ""}
+                  disabled={model.id !== ""}
                   className="form-control"
                 />
               </div>

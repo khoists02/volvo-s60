@@ -1,11 +1,11 @@
-import axios from "axios";
+// import axios from "axios";
 import React, { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ITickerAccount } from "../../types/ticker";
+// import { ITickerAccount } from "../../types/ticker";
 import { FED_DAYS, HOLIDAYS } from "../../constants";
 import format from "date-fns/format";
-import { useAppDispatch } from "../../config/store";
-import { getAccount } from "./ducks/operators";
+// import { useAppDispatch } from "../../config/store";
+// import { getAccount } from "./ducks/operators";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../config/reducers";
 
@@ -13,30 +13,30 @@ const SettingsContainer: FC = () => {
   const { account, loading } = useSelector(
     (state: IRootState) => state.accountReducer,
   );
-  const [tab, setTab] = useState("BLND");
+  // const [tab, setTab] = useState("BLND");
   const [cal, setCal] = useState(0);
   const [out, setOut] = useState(0);
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const [currentAcc, setCurrentAcc] = useState<ITickerAccount>({
-    ticker: "",
-    balance: "0",
-    current: "0",
-    id: "",
-    count: 0,
-    priceIn: 0,
-    priceOut: 0,
-  });
+  // const dispatch = useAppDispatch();
+  // const [currentAcc, setCurrentAcc] = useState<ITickerAccount>({
+  //   ticker: "",
+  //   balance: "0",
+  //   current: "0",
+  //   id: "",
+  //   count: 0,
+  //   priceIn: 0,
+  //   priceOut: 0,
+  // });
+  // useEffect(() => {
+  //   dispatch(getAccount(tab));
+  // }, [dispatch, tab]);
   useEffect(() => {
-    dispatch(getAccount(tab));
-  }, [dispatch, tab]);
-  useEffect(() => {
-    setCurrentAcc(account);
+    // setCurrentAcc(account);
     setCal(account.priceIn);
   }, [account]);
   return (
     <>
-      <ul className="nav nav-tabs nav-tabs-highlight nav-justified">
+      {/* <ul className="nav nav-tabs nav-tabs-highlight nav-justified">
         <li className="nav-item">
           <a
             href="#"
@@ -55,7 +55,7 @@ const SettingsContainer: FC = () => {
             LAZR
           </a>
         </li>
-      </ul>
+      </ul> */}
       <div className="card">
         <div className="card-header d-flex align-items-center">
           <h5 className="title">Settings</h5>
@@ -64,7 +64,7 @@ const SettingsContainer: FC = () => {
           )}
         </div>
         <div className="card-body">
-          <div className="form-group row">
+          {/* <div className="form-group row">
             <label htmlFor="balance" className="col-md-2">
               Balance
             </label>
@@ -136,7 +136,7 @@ const SettingsContainer: FC = () => {
               readOnly
               value={currentAcc?.count}
             />
-          </div>
+          </div> */}
 
           <div className="form-group row">
             <div className="col-md-2">Fed Days</div>
@@ -194,7 +194,7 @@ const SettingsContainer: FC = () => {
 
           <div className="form-group row">
             <div className="col-md-2">
-              <span className="">Calculator</span>
+              <span className="">Calculator In</span>
             </div>
             <div className="col-md-5 p-0">
               <div className="row d-flex align-items-center">
@@ -222,7 +222,7 @@ const SettingsContainer: FC = () => {
 
           <div className="form-group row">
             <div className="col-md-2">
-              <span className="">Out</span>
+              <span className="">Calculator Out</span>
             </div>
             <div className="col-md-5 p-0">
               <div className="row d-flex align-items-center">
@@ -249,7 +249,7 @@ const SettingsContainer: FC = () => {
           </div>
 
           <div className="form-group">
-            <button
+            {/* <button
               className="btn btn-primary"
               type="button"
               onClick={async () => {
@@ -271,9 +271,9 @@ const SettingsContainer: FC = () => {
               }}
             >
               Save
-            </button>
+            </button> */}
             <button
-              className="btn btn-primary ml-2"
+              className="btn btn-primary"
               onClick={() => navigate("/calendars")}
             >
               <i className="ph-light ph-xs-size ph-calendar"></i>
