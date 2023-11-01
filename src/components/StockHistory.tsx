@@ -81,8 +81,6 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info, edit }) => {
   const [selectedType, setSelectedType] = useState<FilterType>(
     FilterType["this-week"],
   );
-  const { account } = useSelector((state: IRootState) => state.accountReducer);
-
   const { ticker: tickerInfo } = useSelector(
     (state: IRootState) => state.dailyReducer,
   );
@@ -646,17 +644,6 @@ const StockHistory: FC<IStockHistory> = ({ ticker, info, edit }) => {
                         <span>
                           {parseFloat(h.adjclose?.toString()).toFixed(3)}
                         </span>
-                        {account.priceIn >= h.adjclose && (
-                          <span className="cursor-pointer badge badge-secondary text-white ml-2">
-                            KeyIn {account.priceIn}
-                          </span>
-                        )}
-
-                        {account.priceOut <= h.adjclose && (
-                          <span className="cursor-pointer badge badge-white text-success ml-2">
-                            KeyOut {account.priceOut}
-                          </span>
-                        )}
                       </td>
                     </tr>
                     {selectedDate === format(new Date(h.date), "yyyy/MM/dd") &&
