@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { FC, useState, useEffect, useRef } from "react";
+import React, { FC, useState, useEffect, useRef, useMemo } from "react";
 import TickerInfo from "../../components/TickerInfo";
 import { ITickerInfo } from "../../types/ticker";
 import StockHistory from "../../components/StockHistory";
@@ -166,9 +166,6 @@ const TickerDetails: FC = () => {
   );
   const { edit } = useSelector((state: IRootState) => state.playsReducer);
 
-  // useEffect(() => {
-  //   setInitLay(layout);
-  // }, []);
   useEffect(() => {
     const ls = [...initLayout];
     if (edit) {
@@ -227,6 +224,45 @@ const TickerDetails: FC = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tickerStr, hour]);
+
+  const handleLayoutChange = (arr: Layout[]) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setInitLay(arr as any);
+    localStorage.setItem("layout", JSON.stringify(arr));
+  };
+
+  const keys = useMemo(() => {
+    return initLayout.map((m) => m.i);
+  }, [initLayout]);
+
+  const showInfo = useMemo(() => {
+    return keys.includes("info");
+  }, [keys]);
+
+  const showDaily = useMemo(() => {
+    return keys.includes("daily");
+  }, [keys]);
+
+  const showHistory = useMemo(() => {
+    return keys.includes("history");
+  }, [keys]);
+
+  const showBid = useMemo(() => {
+    return keys.includes("bid");
+  }, [keys]);
+
+  const showPlay = useMemo(() => {
+    return keys.includes("play");
+  }, [keys]);
+
+  const showCashFlow = useMemo(() => {
+    return keys.includes("cashfow");
+  }, [keys]);
+
+  const showNew = useMemo(() => {
+    return keys.includes("new");
+  }, [keys]);
+
   return (
     <>
       {error && (
@@ -239,23 +275,52 @@ const TickerDetails: FC = () => {
           </div>
         </div>
       )}
-      <DroppableContainer>
-        <ResponsiveGridLayout
-          // isBounded={true}
-          layout={initLayout}
-          onLayoutChange={(l) => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            setInitLay(l as any);
-            localStorage.setItem("layout", JSON.stringify(l));
-          }}
-          compactType="horizontal"
-          cols={12}
-          rowHeight={100}
-          style={{ width: "100%" }}
-          verticalCompact={false}
-          isBounded={true}
-        >
-          <div key="info">
+      {!edit && (
+        <div className="row mb-2 mt-2">
+          <div className="col-md-12 d-flex justify-content-end">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => {
+                handleLayoutChange(layout);
+              }}
+            >
+              Reset Layout
+            </button>
+          </div>
+        </div>
+      )}
+
+      <ResponsiveGridLayout
+        layout={initLayout}
+        onLayoutChange={(l) => handleLayoutChange(l)}
+        compactType="horizontal"
+        cols={12}
+        rowHeight={100}
+        style={{ width: "100%" }}
+        verticalCompact={false}
+        isBounded={true}
+      >
+        {showInfo && (
+          <div key="info" className="pos-r">
+            {edit && (
+              <i
+                className="ph-light ph-sm-size ph-x cursor-pointer text-white bg-danger"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const cl = [...initLayout].filter((x) => x.i !== "info");
+                  handleLayoutChange(cl);
+                }}
+                style={{
+                  position: "absolute",
+                  right: 10,
+                  top: 10,
+                  zIndex: 1000,
+                }}
+              ></i>
+            )}
+
             <TickerInfo
               ticker={ticker}
               loading={loading}
@@ -265,13 +330,50 @@ const TickerDetails: FC = () => {
               }}
             />
           </div>
-          {!HOLIDAYS.includes(format(new Date(), "yyyy-MM-dd")) && (
-            <div key="daily">
-              <DailyStock ticker={tickerStr || ""} edit={edit} />
-            </div>
-          )}
-          {/* TODO: // comment */}
-          <div key="bid">
+        )}
+
+        {!HOLIDAYS.includes(format(new Date(), "yyyy-MM-dd")) && showDaily && (
+          <div key="daily" className="pos-r">
+            {edit && (
+              <i
+                className="ph-light ph-sm-size ph-x cursor-pointer text-white bg-danger"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setInitLay(initLayout.filter((x) => x.i !== "daily"));
+                }}
+                style={{
+                  position: "absolute",
+                  right: 10,
+                  top: 10,
+                  zIndex: 1000,
+                }}
+              ></i>
+            )}
+
+            <DailyStock ticker={tickerStr || ""} edit={edit} />
+          </div>
+        )}
+        {/* TODO: // comment */}
+        {showBid && (
+          <div key="bid" className="pos-r">
+            {edit && (
+              <i
+                className="ph-light ph-sm-size ph-x cursor-pointer text-white bg-danger"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setInitLay(initLayout.filter((x) => x.i !== "bid"));
+                }}
+                style={{
+                  position: "absolute",
+                  right: 10,
+                  top: 10,
+                  zIndex: 1000,
+                }}
+              ></i>
+            )}
+
             <BidAndAskPrice
               updatedAt={bidasks[bidasks.length - 1]?.updatedAt as string}
               loading={loadingBidAsk}
@@ -283,8 +385,27 @@ const TickerDetails: FC = () => {
               edit={edit}
             />
           </div>
+        )}
 
-          <div key="play">
+        {showPlay && (
+          <div key="play" className="pos-r">
+            {edit && (
+              <i
+                className="ph-light ph-sm-size ph-x cursor-pointer text-white bg-danger"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setInitLay(initLayout.filter((x) => x.i !== "play"));
+                }}
+                style={{
+                  position: "absolute",
+                  right: 10,
+                  top: 10,
+                  zIndex: 1000,
+                }}
+              ></i>
+            )}
+
             <PlayBlock
               ticker={ticker?.symbol as string}
               currentPrice={
@@ -293,19 +414,77 @@ const TickerDetails: FC = () => {
               edit={edit}
             />
           </div>
+        )}
 
-          <div key="history">
+        {showHistory && (
+          <div key="history" className="pos-r">
+            {edit && (
+              <i
+                className="ph-light ph-sm-size ph-x cursor-pointer text-white bg-danger"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setInitLay(initLayout.filter((x) => x.i !== "history"));
+                }}
+                style={{
+                  position: "absolute",
+                  right: 10,
+                  top: 10,
+                  zIndex: 1000,
+                }}
+              ></i>
+            )}
+
             <StockHistory info={ticker} ticker={tickerStr || ""} edit={edit} />
           </div>
+        )}
 
-          <div className="" key="cashfow">
+        {showCashFlow && (
+          <div key="cashfow" className="pos-r">
+            {edit && (
+              <i
+                className="ph-light ph-sm-size ph-x cursor-pointer text-white bg-danger"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setInitLay(initLayout.filter((x) => x.i !== "cashfow"));
+                }}
+                style={{
+                  position: "absolute",
+                  right: 10,
+                  top: 10,
+                  zIndex: 1000,
+                }}
+              ></i>
+            )}
+
             <CashFlow ticker={tickerStr as string} edit={edit} />
           </div>
-          <div key="new">
+        )}
+
+        {showNew && (
+          <div key="new" className="pos-r">
+            {edit && (
+              <i
+                className="ph-light ph-sm-size ph-x cursor-pointer text-white bg-danger"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setInitLay(initLayout.filter((x) => x.i !== "new"));
+                }}
+                style={{
+                  position: "absolute",
+                  right: 10,
+                  top: 10,
+                  zIndex: 1000,
+                }}
+              ></i>
+            )}
+
             <New ticker={tickerStr as string} edit={edit} />
           </div>
-        </ResponsiveGridLayout>
-      </DroppableContainer>
+        )}
+      </ResponsiveGridLayout>
     </>
   );
 };
