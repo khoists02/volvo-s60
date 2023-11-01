@@ -171,7 +171,7 @@ export const PlayBlock: FC<IPlayBlock> = ({ ticker, edit, currentPrice }) => {
                 onClick={() => dispatch(getAllByTicker(ticker as string, done))}
               >
                 {loading && (
-                  <i className="ph-light ph-spinner ph-xs-size spinner mr-2"></i>
+                  <i className="ph-light ph-spinner ph-sm-size spinner mr-2"></i>
                 )}
                 <span>Reload</span>
               </button>
@@ -184,7 +184,7 @@ export const PlayBlock: FC<IPlayBlock> = ({ ticker, edit, currentPrice }) => {
               } mr-1 text-white`}
               onClick={() => setDone(!done)}
             >
-              {done ? "Done" : "Current Plays"}
+              <i className={`ph-light ph-sm-size ph-funnel`}></i>
             </button>
             {!done && (
               <button
@@ -194,7 +194,7 @@ export const PlayBlock: FC<IPlayBlock> = ({ ticker, edit, currentPrice }) => {
                   setSelected(null);
                 }}
               >
-                Create play
+                Create
               </button>
             )}
           </div>
